@@ -1,0 +1,2 @@
+rootProject.name = "ApnaOnlines Vendor"
+include ':app'

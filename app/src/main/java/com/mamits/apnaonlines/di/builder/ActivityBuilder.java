@@ -1,0 +1,60 @@
+package com.mamits.apnaonlines.di.builder;
+
+
+import com.mamits.apnaonlines.di.module.activity.DashboardActivityModule;
+import com.mamits.apnaonlines.di.module.activity.MainActivityModule;
+import com.mamits.apnaonlines.di.module.activity.RegisterActivityModule;
+import com.mamits.apnaonlines.di.module.fragment.DashboardFragmentModule;
+import com.mamits.apnaonlines.di.module.fragment.HomeModule;
+import com.mamits.apnaonlines.di.module.fragment.OrderDetailModule;
+import com.mamits.apnaonlines.di.module.fragment.OrdersModule;
+import com.mamits.apnaonlines.di.module.fragment.PaymentsModule;
+import com.mamits.apnaonlines.di.scope.ActivityScope;
+import com.mamits.apnaonlines.di.scope.FragmentScope;
+import com.mamits.apnaonlines.ui.activity.DashboardActivity;
+import com.mamits.apnaonlines.ui.activity.MainActivity;
+import com.mamits.apnaonlines.ui.activity.RegisterActivity;
+import com.mamits.apnaonlines.ui.fragment.DashboardFragment;
+import com.mamits.apnaonlines.ui.fragment.dashboard.HomeFragment;
+import com.mamits.apnaonlines.ui.fragment.dashboard.PaymentFragment;
+import com.mamits.apnaonlines.ui.fragment.orders.OrderDetailsFragment;
+import com.mamits.apnaonlines.ui.fragment.orders.OrdersFragment;
+
+import dagger.Module;
+import dagger.android.ContributesAndroidInjector;
+
+@Module
+public abstract class ActivityBuilder {
+
+    @ContributesAndroidInjector(modules = {MainActivityModule.class})
+    @ActivityScope
+    abstract MainActivity bindMainActivity();
+
+    @ContributesAndroidInjector(modules = {RegisterActivityModule.class})
+    @ActivityScope
+    abstract RegisterActivity bindRegisterActivity();
+
+    @ContributesAndroidInjector(modules = {DashboardActivityModule.class})
+    @ActivityScope
+    abstract DashboardActivity bindDashboardActivity();
+
+    @ContributesAndroidInjector(modules = {DashboardFragmentModule.class})
+    @FragmentScope
+    abstract DashboardFragment bindDashboardFragment();
+
+    @ContributesAndroidInjector(modules = {HomeModule.class})
+    @FragmentScope
+    abstract HomeFragment bindHomeFragment();
+
+    @ContributesAndroidInjector(modules = {OrdersModule.class})
+    @FragmentScope
+    abstract OrdersFragment bindOrdersFragment();
+
+    @ContributesAndroidInjector(modules = {OrderDetailModule.class})
+    @FragmentScope
+    abstract OrderDetailsFragment bindOrderDetailFragment();
+
+    @ContributesAndroidInjector(modules = {PaymentsModule.class})
+    @FragmentScope
+    abstract PaymentFragment bindPaymentsFragment();
+}

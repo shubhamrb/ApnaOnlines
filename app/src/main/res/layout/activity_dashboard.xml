@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="dashboardView"
+            type="com.mamits.apnaonlines.viewmodel.activity.DashboardActivityViewModel" />
+    </data>
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".ui.activity.DashboardActivity">
+
+        <RelativeLayout
+            android:id="@+id/mainView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_20sdp">
+
+                <ImageView
+                    android:id="@+id/btn_toggle"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:src="@drawable/ic_menu" />
+
+                <com.mamits.apnaonlines.ui.customviews.CustomTextView
+                    android:id="@+id/btn_forgot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_toEndOf="@id/btn_toggle"
+                    android:paddingBottom="@dimen/_4sdp"
+                    android:text="@string/app_name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    app:fontName="Raleway-Regular.ttf" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/btn_search"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/search" />
+
+                    <ImageView
+                        android:id="@+id/btn_notification"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/notification" />
+
+                    <ImageView
+                        android:id="@+id/btn_profile"
+                        android:layout_width="@dimen/_27sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/profile" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <fragment
+                android:id="@+id/nav_host_fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/toolbar"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/mobile_navigation" />
+        </RelativeLayout>
+
+        <include
+            android:id="@+id/nav_drawer"
+            layout="@layout/nav_drawer_layout"
+            bind:dashboardView="@{dashboardView}" />
+    </androidx.drawerlayout.widget.DrawerLayout>
+</layout>

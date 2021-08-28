@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "361589678327",
+    "project_id": "mponline-f9ab3",
+    "storage_bucket": "mponline-f9ab3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:361589678327:android:8b2f55950179bb96dd73f2",
+        "android_client_info": {
+          "package_name": "com.mamits.apnaonlines"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "361589678327-99jp5l6iampstuc8uiqa1c4j1kcfju89.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvjtVJYyt9qc2okg1IzrD40GS_ANOcnSU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "361589678327-99jp5l6iampstuc8uiqa1c4j1kcfju89.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
