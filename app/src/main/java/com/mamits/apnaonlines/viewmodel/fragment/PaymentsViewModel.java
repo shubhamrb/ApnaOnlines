@@ -21,10 +21,10 @@ public class PaymentsViewModel extends BaseViewModel<PaymentsNavigator> {
         super(dataManager, schedulerProvider);
     }
 
-    public void fetchPayments(Activity mActivity, String pType) {
+    public void fetchPayments(Activity mActivity) {
 
         if (NetworkUtils.isNetworkConnected(mActivity)) {
-            getmDataManger().fetchPayments(mActivity, getmDataManger().getAccessToken(), pType, new ResponseListener() {
+            getmDataManger().fetchPayments(mActivity, getmDataManger().getAccessToken(), new ResponseListener() {
                 @Override
                 public void onSuccess(JsonObject jsonObject) {
                     try {

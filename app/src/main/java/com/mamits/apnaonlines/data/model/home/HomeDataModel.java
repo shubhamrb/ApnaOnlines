@@ -24,6 +24,17 @@ public class HomeDataModel implements Serializable {
     @SerializedName("totalcomplete")
     private int totalcomplete;
 
+    @SerializedName("paytoadmin")
+    private int paytoadmin;
+
+    public int getPaytoadmin() {
+        return paytoadmin;
+    }
+
+    public void setPaytoadmin(int paytoadmin) {
+        this.paytoadmin = paytoadmin;
+    }
+
     public int getTotalorder() {
         return totalorder;
     }
@@ -81,6 +92,7 @@ public class HomeDataModel implements Serializable {
                 ", totalpending=" + totalpending +
                 ", totalcancel=" + totalcancel +
                 ", totalcomplete=" + totalcomplete +
+                ", paytoadmin=" + paytoadmin +
                 '}';
     }
 }

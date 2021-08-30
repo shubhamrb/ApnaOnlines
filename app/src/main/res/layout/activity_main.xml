@@ -20,6 +20,7 @@
             android:layout_width="@dimen/_150sdp"
             android:layout_height="@dimen/_100sdp"
             android:layout_marginTop="@dimen/_20sdp"
+            android:layout_centerHorizontal="true"
             android:src="@drawable/logo" />
 
         <LinearLayout
@@ -57,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="@dimen/_5sdp"
                     android:paddingTop="@dimen/_5sdp"
-                    android:text="@string/mobile_no"
+                    android:text="@string/mobile_no_or_email"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_8ssp"
                     app:fontName="Raleway-Light.ttf" />
@@ -68,13 +69,12 @@
                     android:layout_height="wrap_content"
                     android:alpha="0.7"
                     android:background="@null"
-                    android:hint="@string/_91"
+                    android:hint="@string/mobile_no_or_email"
                     android:padding="@dimen/_5sdp"
-                    android:inputType="phone"
+                    android:inputType="text"
                     android:textColor="@color/black"
                     android:textColorHint="@color/text_hint"
                     android:textSize="@dimen/_17ssp"
-                    android:maxLength="10"
                     app:fontName="Raleway-Light.ttf" />
             </LinearLayout>
 

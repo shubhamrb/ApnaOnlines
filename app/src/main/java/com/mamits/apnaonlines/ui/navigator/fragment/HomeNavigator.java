@@ -6,7 +6,6 @@ import com.mamits.apnaonlines.ui.navigator.base.BaseNavigator;
 
 public interface HomeNavigator extends BaseNavigator {
 
-
     void showProgressBars();
 
     void checkInternetConnection(String message);

@@ -1,66 +1,93 @@
 package com.mamits.apnaonlines.ui.fragment.dashboard;
 
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
+import android.app.Activity;
+import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.mamits.apnaonlines.BR;
 import com.mamits.apnaonlines.R;
+import com.mamits.apnaonlines.databinding.FragmentInboxBinding;
+import com.mamits.apnaonlines.ui.base.BaseFragment;
+import com.mamits.apnaonlines.ui.navigator.fragment.InboxNavigator;
+import com.mamits.apnaonlines.viewmodel.fragment.InboxViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link InboxFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class InboxFragment extends Fragment {
+import javax.inject.Inject;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class InboxFragment extends BaseFragment<FragmentInboxBinding, InboxViewModel> implements InboxNavigator, View.OnClickListener {
+    private String TAG = "InboxFragment";
+    private FragmentInboxBinding binding;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    @Inject
+    InboxViewModel mViewModel;
+    private Context mContext;
+    private Gson mGson;
 
-    public InboxFragment() {
-        // Required empty public constructor
-    }
+    @Override
+    public void onClick(View v) {
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment InboxFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static InboxFragment newInstance(String param1, String param2) {
-        InboxFragment fragment = new InboxFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public InboxViewModel getMyViewModel() {
+        return mViewModel;
+    }
+
+    @Override
+    protected void initView(View view, boolean isRefresh) {
+        binding = getViewDataBinding();
+        mViewModel = getMyViewModel();
+        mViewModel.setNavigator(this);
+        if (getActivity() != null) {
+            mContext = getActivity();
+        } else if (getBaseActivity() != null) {
+            mContext = getBaseActivity();
+        } else if (view.getContext() != null) {
+            mContext = view.getContext();
+        }
+        if (isRefresh) {
+            mViewModel.fetchData((Activity) mContext);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_inbox, container, false);
+    public int getBindingVariable() {
+        return BR.inboxView;
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.fragment_inbox;
+    }
+
+    @Override
+    public void showProgressBars() {
+
+    }
+
+    @Override
+    public void checkInternetConnection(String message) {
+
+    }
+
+    @Override
+    public void hideProgressBars() {
+
+    }
+
+    @Override
+    public void checkValidation(int errorCode, String message) {
+
+    }
+
+    @Override
+    public void throwable(Throwable throwable) {
+
+    }
+
+    @Override
+    public void onSuccessHomeData(JsonObject jsonObject) {
+
     }
 }

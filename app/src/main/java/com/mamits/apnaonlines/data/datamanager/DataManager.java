@@ -46,12 +46,42 @@ public class DataManager implements IDataManager {
 
     @Override
     public void fetchOrders(Activity mActivity, String accessToken, int status, ResponseListener responseListener) {
-        mApiHelper.fetchOrders(mActivity, accessToken,status, responseListener);
+        mApiHelper.fetchOrders(mActivity, accessToken, status, responseListener);
     }
 
     @Override
-    public void fetchPayments(Activity mActivity, String accessToken, String pType, ResponseListener responseListener) {
-        mApiHelper.fetchPayments(mActivity, accessToken,pType, responseListener);
+    public void fetchPayments(Activity mActivity, String accessToken, ResponseListener responseListener) {
+        mApiHelper.fetchPayments(mActivity, accessToken, responseListener);
+    }
+
+    @Override
+    public void fetchTransactions(Activity mActivity, String accessToken, String pType, ResponseListener responseListener) {
+        mApiHelper.fetchTransactions(mActivity, accessToken, pType, responseListener);
+    }
+
+    @Override
+    public void fetchHelp(Activity mActivity, String accessToken, ResponseListener responseListener) {
+        mApiHelper.fetchHelp(mActivity, accessToken, responseListener);
+    }
+
+    @Override
+    public void sendOtp(Activity mActivity, String number, ResponseListener responseListener) {
+        mApiHelper.sendOtp(mActivity, number, responseListener);
+    }
+
+    @Override
+    public void verifyOtp(Activity mActivity, String number, String otp, ResponseListener responseListener) {
+        mApiHelper.verifyOtp(mActivity, number, otp, responseListener);
+    }
+
+    @Override
+    public void updatePin(Activity mActivity, String number, String newPin, ResponseListener responseListener) {
+        mApiHelper.updatePin(mActivity, number, newPin, responseListener);
+    }
+
+    @Override
+    public void updateOrderStatus(Activity mActivity, String accessToken, String status, int order_id, String time, String type, String order_amount, ResponseListener responseListener) {
+        mApiHelper.updateOrderStatus(mActivity,accessToken ,status, order_id, time, type, order_amount, responseListener);
     }
 
     @Override

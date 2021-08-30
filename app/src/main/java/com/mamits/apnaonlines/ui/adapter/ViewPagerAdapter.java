@@ -12,7 +12,7 @@ import com.mamits.apnaonlines.ui.fragment.dashboard.PaymentFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.ServicesFragment;
 
 
-public class ViewPagerAdapter extends FragmentPagerAdapter {
+public class ViewPagerAdapter extends FragmentPagerAdapter  {
 
     public ViewPagerAdapter(FragmentManager fm, int page) {
         super(fm, page);

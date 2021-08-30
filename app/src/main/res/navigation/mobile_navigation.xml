@@ -15,4 +15,14 @@
         android:name="com.mamits.apnaonlines.ui.fragment.orders.OrderDetailsFragment"
         tools:layout="@layout/fragment_order_details"/>
 
+    <fragment
+        android:id="@+id/nav_transactions"
+        android:name="com.mamits.apnaonlines.ui.fragment.dashboard.drawer.TransactionsFragment"
+        tools:layout="@layout/fragment_transactions" />
+
+    <fragment
+        android:id="@+id/nav_help"
+        android:name="com.mamits.apnaonlines.ui.fragment.dashboard.drawer.HelpSupportFragment"
+        tools:layout="@layout/fragment_help_support" />
+
 </navigation>

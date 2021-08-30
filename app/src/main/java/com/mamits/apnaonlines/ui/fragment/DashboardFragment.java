@@ -111,4 +111,5 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
     public void throwable(Throwable throwable) {
 
     }
+
 }

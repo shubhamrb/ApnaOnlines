@@ -1,6 +1,7 @@
 package com.mamits.apnaonlines.data.model.orders;
 
 import com.google.gson.annotations.SerializedName;
+import com.mamits.apnaonlines.data.model.login.UserDataModel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -70,8 +71,8 @@ public class OrdersDataModel implements Serializable {
     @SerializedName("products")
     ProductDataModel products;
 
-    @SerializedName("storedetail")
-    StoreDetailDataModel storedetail;
+    @SerializedName("users")
+    UserDataModel users;
 
     public int getStatus() {
         return status;
@@ -241,12 +242,12 @@ public class OrdersDataModel implements Serializable {
         this.products = products;
     }
 
-    public StoreDetailDataModel getStoredetail() {
-        return storedetail;
+    public UserDataModel getUsers() {
+        return users;
     }
 
-    public void setStoredetail(StoreDetailDataModel storedetail) {
-        this.storedetail = storedetail;
+    public void setUsers(UserDataModel users) {
+        this.users = users;
     }
 
     @Override
@@ -273,7 +274,7 @@ public class OrdersDataModel implements Serializable {
                 ", created_at='" + created_at + '\'' +
                 ", updated_at='" + updated_at + '\'' +
                 ", products=" + products +
-                ", storedetail=" + storedetail +
+                ", users=" + users +
                 '}';
     }
 }

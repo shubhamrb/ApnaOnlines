@@ -69,6 +69,17 @@ public class ProductDataModel implements Serializable {
     @SerializedName("updated_at")
     String updated_at;
 
+    @SerializedName("product_image")
+    String product_image;
+
+    public String getProduct_image() {
+        return product_image;
+    }
+
+    public void setProduct_image(String product_image) {
+        this.product_image = product_image;
+    }
+
     public int getId() {
         return id;
     }
@@ -261,6 +272,7 @@ public class ProductDataModel implements Serializable {
                 ", IsActive=" + IsActive +
                 ", created_at='" + created_at + '\'' +
                 ", updated_at='" + updated_at + '\'' +
+                ", product_image='" + product_image + '\'' +
                 '}';
     }
 }

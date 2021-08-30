@@ -46,17 +46,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="-5dp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_toEndOf="@id/rl_name_code"
-                android:layout_marginTop="-5dp">
+                android:layout_toEndOf="@id/rl_name_code">
 
                 <com.mamits.apnaonlines.ui.customviews.CustomTextView
                     android:id="@+id/user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:layout_toStartOf="@id/btn_close"
+                    android:singleLine="true"
                     android:text="Manish Kumar"
                     android:textColor="@color/sky_blue"
                     android:textSize="@dimen/_14ssp"
@@ -143,10 +143,27 @@
                 android:background="@color/divider" />
 
             <com.mamits.apnaonlines.ui.customviews.CustomTextView
+                android:id="@+id/btn_transactions"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:gravity="center_vertical"
-                android:text="Payments"
+                android:text="Transactions"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12ssp"
+                app:fontName="Raleway-Regular.ttf" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@color/divider" />
+
+            <com.mamits.apnaonlines.ui.customviews.CustomTextView
+                android:id="@+id/btn_help"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:gravity="center_vertical"
+                android:text="Help and Support"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12ssp"
                 app:fontName="Raleway-Regular.ttf" />

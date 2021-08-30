@@ -16,4 +16,10 @@ public interface MainActivityNavigator extends BaseNavigator {
     void checkInternetConnection(String message);
 
     void onSuccessUserLogin(JsonObject jsonObject);
+
+    void onSuccessSendOtp(JsonObject jsonObject, boolean isResend);
+
+    void onSuccessVerifyOtp(JsonObject jsonObject, String number);
+
+    void onSuccessPinUpdated(JsonObject jsonObject, String number);
 }

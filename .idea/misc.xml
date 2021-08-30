@@ -5,28 +5,38 @@
       <map>
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/drawable/completed_order_box_layout.xml" value="0.19907407407407407" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/drawable/denied_order_box_layout.xml" value="0.19907407407407407" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/drawable/help_support_box_layout.xml" value="0.21388888888888888" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/drawable/ic_bottom_arrow.xml" value="0.21095890410958903" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/drawable/ic_menu.xml" value="0.240625" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/drawable/payment_recieved_box_layout.xml" value="0.19907407407407407" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/drawable/pending_order_box_layout.xml" value="0.19907407407407407" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/drawable/spinner_layout.xml" value="0.21388888888888888" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/drawable/square_box_layout.xml" value="0.19907407407407407" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/drawable/total_amount_box_layout.xml" value="0.19907407407407407" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/drawable/total_order_box_layout.xml" value="0.21388888888888888" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/accept_order_bottomsheet.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/activity_dashboard.xml" value="0.17" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/activity_register.xml" value="0.21331521739130435" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/change_pin_bottomsheet.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/forgot_otp_bottomsheet.xml" value="0.21014492753623187" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/form_item.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/fragment_dashboard.xml" value="0.19953703703703704" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/fragment_help_support.xml" value="0.19953703703703704" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/fragment_home.xml" value="0.25" />
-        <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/fragment_order_details.xml" value="0.18703703703703703" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/fragment_inbox.xml" value="0.19953703703703704" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/fragment_order_details.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/fragment_orders.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/fragment_payment.xml" value="0.19953703703703704" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/fragment_transactions.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/login_otp_bottomsheet.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/nav_drawer_layout.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/orders_filter.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/orders_list_item.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/payments_filter.xml" value="0.19953703703703704" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/progress_dialog.xml" value="0.20153985507246377" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/send_otp_bottomsheet.xml" value="0.25" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/layout/spinner_layout.xml" value="0.19953703703703704" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/menu/menu.xml" value="0.22447916666666667" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.12604166666666666" />
       </map>

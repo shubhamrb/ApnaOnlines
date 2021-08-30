@@ -12,5 +12,17 @@ public interface IApiHelper {
 
     void fetchOrders(Activity mActivity, String accessToken, int status, ResponseListener responseListener);
 
-    void fetchPayments(Activity mActivity, String accessToken, String pType, ResponseListener responseListener);
+    void fetchPayments(Activity mActivity, String accessToken, ResponseListener responseListener);
+
+    void fetchTransactions(Activity mActivity, String accessToken, String pType, ResponseListener responseListener);
+
+    void fetchHelp(Activity mActivity, String accessToken, ResponseListener responseListener);
+
+    void sendOtp(Activity mActivity, String number, ResponseListener responseListener);
+
+    void verifyOtp(Activity mActivity, String number, String otp, ResponseListener responseListener);
+
+    void updatePin(Activity mActivity, String number, String newPin, ResponseListener responseListener);
+
+    void updateOrderStatus(Activity mActivity, String accessToken, String status, int order_id, String time, String type, String order_amount, ResponseListener responseListener);
 }

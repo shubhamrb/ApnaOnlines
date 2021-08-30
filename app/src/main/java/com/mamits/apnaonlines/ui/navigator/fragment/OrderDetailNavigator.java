@@ -17,4 +17,5 @@ public interface OrderDetailNavigator extends BaseNavigator {
 
     void throwable(Throwable throwable);
 
+    void onSuccessOrderStatusUpdated(JsonObject jsonObject, String status);
 }

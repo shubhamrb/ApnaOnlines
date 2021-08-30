@@ -14,11 +14,22 @@ public class UserDataModel implements Serializable {
     @SerializedName("Phone")
     private String Phone;
 
+    @SerializedName("email")
+    private String email;
+
     @SerializedName("IsVerify")
     private int IsVerify;
 
     @SerializedName("IsActive")
     private int IsActive;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public int getId() {
         return id;
@@ -66,6 +77,7 @@ public class UserDataModel implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", Phone='" + Phone + '\'' +
+                ", email='" + email + '\'' +
                 ", IsVerify=" + IsVerify +
                 ", IsActive=" + IsActive +
                 '}';

@@ -9,6 +9,9 @@ public class OrderDetailDataModel implements Serializable {
     @SerializedName("name")
     String name;
 
+    @SerializedName("value")
+    String value;
+
     @SerializedName("filedata")
     FileDataModel filedata;
 
@@ -18,6 +21,14 @@ public class OrderDetailDataModel implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public FileDataModel getFiledata() {
@@ -32,6 +43,7 @@ public class OrderDetailDataModel implements Serializable {
     public String toString() {
         return "OrderDetailDataModel{" +
                 "name='" + name + '\'' +
+                ", value='" + value + '\'' +
                 ", filedata=" + filedata +
                 '}';
     }

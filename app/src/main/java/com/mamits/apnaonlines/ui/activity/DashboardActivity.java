@@ -3,6 +3,7 @@ package com.mamits.apnaonlines.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import com.mamits.apnaonlines.BR;
@@ -75,6 +77,8 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
         binding.btnToggle.setOnClickListener(this);
         binding.navDrawer.btnClose.setOnClickListener(this);
         binding.navDrawer.btnLogout.setOnClickListener(this);
+        binding.navDrawer.btnTransactions.setOnClickListener(this);
+        binding.navDrawer.btnHelp.setOnClickListener(this);
 
         /*set user data*/
         String[] nameSplit = mViewModel.getmDataManger().getUsername().split(" ");
@@ -116,12 +120,30 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
 
     @Override
     public void onClick(View v) {
+        NavDestination navDestination= mNavController.getCurrentDestination();
+
+        NavOptions options = new NavOptions.Builder()
+                .setEnterAnim(R.anim.slide_out_right)
+                .setExitAnim(R.anim.slide_in).setPopEnterAnim(0).setPopExitAnim(R.anim.slide_out1)
+                .build();
         switch (v.getId()) {
             case R.id.btn_toggle:
                 binding.drawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.btn_close:
                 binding.drawerLayout.closeDrawers();
+                break;
+            case R.id.btn_transactions:
+                binding.drawerLayout.closeDrawers();
+                if (navDestination!=null && navDestination.getId()!=R.id.nav_transactions){
+                    mNavController.navigate(R.id.nav_transactions, null, options);
+                }
+                break;
+            case R.id.btn_help:
+                binding.drawerLayout.closeDrawers();
+                if (navDestination!=null && navDestination.getId()!=R.id.nav_help) {
+                    mNavController.navigate(R.id.nav_help, null, options);
+                }
                 break;
             case R.id.btn_logout:
 

@@ -12,6 +12,7 @@ import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.data.model.home.HomeDataModel;
 import com.mamits.apnaonlines.databinding.FragmentHomeBinding;
 import com.mamits.apnaonlines.ui.base.BaseFragment;
+import com.mamits.apnaonlines.ui.fragment.DashboardFragment;
 import com.mamits.apnaonlines.ui.navigator.fragment.HomeNavigator;
 import com.mamits.apnaonlines.viewmodel.fragment.HomeViewModel;
 
@@ -100,8 +101,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
                 binding.txtOrderReject.setText(model.getTotalreject() + "");
                 binding.txtPendingOrder.setText(model.getTotalpending() + "");
                 binding.txtOrderComplete.setText(model.getTotalcomplete() + "");
+                binding.txtPayNow.setText("₹ " + model.getPaytoadmin() + "");
 
-                binding.txtPayNow.setText(model.getTotalcancel() + "");
             } else {
                 int messageId = jsonObject.get("messageId").getAsInt();
                 String message = jsonObject.get("message").getAsString();

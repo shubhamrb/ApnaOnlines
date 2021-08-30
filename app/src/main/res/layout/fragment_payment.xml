@@ -31,19 +31,6 @@
                 android:textSize="@dimen/_15ssp"
                 app:fontName="Raleway-Medium.ttf" />
 
-            <com.mamits.apnaonlines.ui.customviews.CustomTextView
-                android:id="@+id/txt_filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:drawableEnd="@drawable/ic_bottom_arrow"
-                android:text="All"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp" />
-
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_payments"
                 android:layout_width="match_parent"

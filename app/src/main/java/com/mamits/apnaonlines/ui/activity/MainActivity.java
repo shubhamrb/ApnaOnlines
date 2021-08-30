@@ -1,7 +1,9 @@
 package com.mamits.apnaonlines.ui.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -16,6 +18,8 @@ import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.data.model.login.LoginDataModel;
 import com.mamits.apnaonlines.databinding.ActivityMainBinding;
 import com.mamits.apnaonlines.ui.base.BaseActivity;
+import com.mamits.apnaonlines.ui.customviews.CustomInputEditText;
+import com.mamits.apnaonlines.ui.customviews.CustomTextView;
 import com.mamits.apnaonlines.ui.navigator.activity.MainActivityNavigator;
 import com.mamits.apnaonlines.ui.utils.constants.AppConstant;
 import com.mamits.apnaonlines.viewmodel.activity.MainActivityViewModel;
@@ -34,6 +38,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
     ActivityMainBinding binding;
     private BottomSheetDialog changePinDialog, forgotPinDialog, loginOtpDialog;
     private Gson mGson;
+    private CustomTextView txt_resend;
 
     @Override
     public int getBindingVariable() {
@@ -51,7 +56,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
         mViewModel = getMyViewModel();
         mViewModel.setNavigator(this);
 
-        if (mViewModel.getmDataManger().getCurrentUserId()!=-1){
+        if (mViewModel.getmDataManger().getCurrentUserId() != -1) {
             Intent dashboardIntent = new Intent(this, DashboardActivity.class);
             startActivity(dashboardIntent);
             finishAffinity();
@@ -122,9 +127,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_reg:
-                Intent intent = new Intent(this, RegisterActivity.class);
-                startActivity(intent);
-                finish();
+                String url = "https://apnaonlines.com/register";
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browserIntent);
                 break;
             case R.id.btn_login:
                 String number = binding.etNumber.getText().toString();
@@ -138,20 +143,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
                 break;
             case R.id.btn_forgot:
                 showForgotOtpBottomDialog();
-                break;
-            case R.id.btn_verify:
-                if (forgotPinDialog != null && forgotPinDialog.isShowing()) {
-                    forgotPinDialog.dismiss();
-                }
-                showChangePinBottomDialog();
-                break;
-            case R.id.btn_login_verify:
-                if (loginOtpDialog != null && loginOtpDialog.isShowing()) {
-                    loginOtpDialog.dismiss();
-                }
-                Intent dashboardIntent = new Intent(this, DashboardActivity.class);
-                startActivity(dashboardIntent);
-                finishAffinity();
                 break;
         }
     }
@@ -182,31 +173,198 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
         });
     }
 
-    private void showChangePinBottomDialog() {
-        changePinDialog = new BottomSheetDialog(this);
-        changePinDialog.setContentView(R.layout.change_pin_bottomsheet);
-        changePinDialog.show();
-    }
-
     private void showForgotOtpBottomDialog() {
-        forgotPinDialog = new BottomSheetDialog(this);
-        forgotPinDialog.setContentView(R.layout.forgot_otp_bottomsheet);
-        RelativeLayout btn_verify = forgotPinDialog.findViewById(R.id.btn_verify);
+        if (forgotPinDialog == null) {
+            forgotPinDialog = new BottomSheetDialog(this);
+            forgotPinDialog.setContentView(R.layout.send_otp_bottomsheet);
+            forgotPinDialog.setCanceledOnTouchOutside(false);
+            RelativeLayout btn_send_otp = forgotPinDialog.findViewById(R.id.btn_send_otp);
+            CustomInputEditText et_number = forgotPinDialog.findViewById(R.id.et_number);
 
-        if (btn_verify != null) {
-            btn_verify.setOnClickListener(this);
+            if (btn_send_otp != null) {
+                btn_send_otp.setOnClickListener(v -> {
+                    String number = et_number.getText().toString();
+                    if (number.length() < 10) {
+                        Toast.makeText(this, "Invalid mobile no.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    sendOtp(number, false);
+                });
+            }
+            forgotPinDialog.setOnDismissListener(dialog -> {
+                forgotPinDialog = null;
+            });
+            forgotPinDialog.show();
         }
-        forgotPinDialog.show();
     }
 
-    private void showLoginOtpBottomDialog() {
-        loginOtpDialog = new BottomSheetDialog(this);
-        loginOtpDialog.setContentView(R.layout.login_otp_bottomsheet);
+    private void sendOtp(String number, boolean isResend) {
+        mViewModel.sendOtp(this, number, isResend);
+    }
 
-        RelativeLayout btn_login_verify = loginOtpDialog.findViewById(R.id.btn_login_verify);
-        if (btn_login_verify != null) {
-            btn_login_verify.setOnClickListener(this);
+    @Override
+    public void onSuccessSendOtp(JsonObject jsonObject, boolean isResend) {
+        if (jsonObject != null) {
+            if (jsonObject.get("status").getAsBoolean()) {
+                String number = jsonObject.get("data").getAsJsonObject().get("phone_number").getAsString();
+                Toast.makeText(this, "OTP sent to your registered number.", Toast.LENGTH_SHORT).show();
+                if (!isResend && forgotPinDialog != null && forgotPinDialog.isShowing()) {
+                    forgotPinDialog.dismiss();
+                }
+                startTimer();
+
+                showVerifyOtpBottomDialog(number);
+            } else {
+                int messageId = jsonObject.get("messageId").getAsInt();
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+            }
+
         }
-        loginOtpDialog.show();
+    }
+
+    private void startTimer() {
+        new CountDownTimer(30000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                txt_resend.setText("Resend OTP in " + millisUntilFinished / 1000);
+                txt_resend.setTextColor(getResources().getColor(R.color.black));
+            }
+
+            public void onFinish() {
+                txt_resend.setText("Resend");
+                txt_resend.setTextColor(getResources().getColor(R.color.sky_blue));
+            }
+
+        }.start();
+    }
+
+    private void showVerifyOtpBottomDialog(String number) {
+        if (loginOtpDialog == null) {
+            loginOtpDialog = new BottomSheetDialog(this);
+            loginOtpDialog.setContentView(R.layout.forgot_otp_bottomsheet);
+            loginOtpDialog.setCanceledOnTouchOutside(false);
+
+            CustomTextView label_otp_sent = loginOtpDialog.findViewById(R.id.label_otp_sent);
+            RelativeLayout btn_verify = loginOtpDialog.findViewById(R.id.btn_verify);
+            CustomInputEditText et_otp = loginOtpDialog.findViewById(R.id.et_otp);
+            txt_resend = loginOtpDialog.findViewById(R.id.txt_resend);
+
+            if (label_otp_sent != null)
+                label_otp_sent.setText(String.format("Enter OTP Sent on +91%sXXX", number.substring(0, 7)));
+
+            if (btn_verify != null) {
+                btn_verify.setOnClickListener(v -> {
+                    String otp = et_otp.getText().toString();
+                    if (otp.trim().length() == 0) {
+                        Toast.makeText(this, "Please Enter OTP", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    verifyOtp(number, otp);
+                });
+            }
+
+            if (txt_resend != null) {
+                txt_resend.setOnClickListener(v -> {
+                    if (txt_resend.getText().toString().equalsIgnoreCase("resend")) {
+                        sendOtp(number, true);
+                    }
+                });
+            }
+            loginOtpDialog.setOnDismissListener(dialog -> {
+                loginOtpDialog = null;
+            });
+            loginOtpDialog.show();
+        }
+    }
+
+    private void verifyOtp(String number, String otp) {
+        mViewModel.verifyOtp(this, number, otp);
+    }
+
+    @Override
+    public void onSuccessVerifyOtp(JsonObject jsonObject, String number) {
+        if (jsonObject != null) {
+            if (jsonObject.get("status").getAsBoolean()) {
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+                if (loginOtpDialog != null && loginOtpDialog.isShowing()) {
+                    loginOtpDialog.dismiss();
+                }
+                showChangePinBottomDialog(number);
+            } else {
+                int messageId = jsonObject.get("messageId").getAsInt();
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+    }
+
+    private void showChangePinBottomDialog(String number) {
+        if (changePinDialog == null) {
+            changePinDialog = new BottomSheetDialog(this);
+            changePinDialog.setContentView(R.layout.change_pin_bottomsheet);
+            changePinDialog.setCanceledOnTouchOutside(false);
+
+            CustomInputEditText et_new_pin = changePinDialog.findViewById(R.id.et_new_pin);
+            CustomInputEditText et_cnf_pin = changePinDialog.findViewById(R.id.et_cnf_pin);
+            RelativeLayout btn_change_pin = changePinDialog.findViewById(R.id.btn_change_pin);
+
+            if (btn_change_pin != null) {
+                btn_change_pin.setOnClickListener(v -> {
+                    String newPin = et_new_pin.getText().toString();
+                    String cnfPin = et_cnf_pin.getText().toString();
+
+                    if (newPin.trim().length() < 6) {
+                        Toast.makeText(this, "Invalid pin.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (cnfPin.trim().length() < 6) {
+                        Toast.makeText(this, "Please confirm pin.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (!newPin.equals(cnfPin)) {
+                        Toast.makeText(this, "Pin didn't match.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    updatePin(number, newPin);
+                });
+            }
+
+            changePinDialog.setOnDismissListener(dialog -> {
+                changePinDialog = null;
+            });
+            changePinDialog.show();
+        }
+    }
+
+    private void updatePin(String number, String newPin) {
+        mViewModel.updatePin(this, number, newPin);
+    }
+
+    @Override
+    public void onSuccessPinUpdated(JsonObject jsonObject, String number) {
+        if (jsonObject != null) {
+            if (jsonObject.get("status").getAsBoolean()) {
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+                if (changePinDialog != null && changePinDialog.isShowing()) {
+                    changePinDialog.dismiss();
+                }
+            } else {
+                int messageId = jsonObject.get("messageId").getAsInt();
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
     }
 }

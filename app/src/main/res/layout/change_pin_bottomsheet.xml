@@ -41,6 +41,7 @@
             app:fontName="Raleway-Light.ttf" />
 
         <com.mamits.apnaonlines.ui.customviews.CustomInputEditText
+            android:id="@+id/et_new_pin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.7"
@@ -77,6 +78,7 @@
             app:fontName="Raleway-Light.ttf" />
 
         <com.mamits.apnaonlines.ui.customviews.CustomInputEditText
+            android:id="@+id/et_cnf_pin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.7"
@@ -93,7 +95,7 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_change_pin"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_45sdp"
         android:layout_margin="@dimen/_10sdp"

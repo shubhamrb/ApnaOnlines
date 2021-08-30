@@ -5,16 +5,22 @@ import com.mamits.apnaonlines.di.module.activity.DashboardActivityModule;
 import com.mamits.apnaonlines.di.module.activity.MainActivityModule;
 import com.mamits.apnaonlines.di.module.activity.RegisterActivityModule;
 import com.mamits.apnaonlines.di.module.fragment.DashboardFragmentModule;
+import com.mamits.apnaonlines.di.module.fragment.HelpSupportModule;
 import com.mamits.apnaonlines.di.module.fragment.HomeModule;
+import com.mamits.apnaonlines.di.module.fragment.InboxModule;
 import com.mamits.apnaonlines.di.module.fragment.OrderDetailModule;
 import com.mamits.apnaonlines.di.module.fragment.OrdersModule;
 import com.mamits.apnaonlines.di.module.fragment.PaymentsModule;
+import com.mamits.apnaonlines.di.module.fragment.TransactionsModule;
 import com.mamits.apnaonlines.di.scope.ActivityScope;
 import com.mamits.apnaonlines.di.scope.FragmentScope;
 import com.mamits.apnaonlines.ui.activity.DashboardActivity;
 import com.mamits.apnaonlines.ui.activity.MainActivity;
 import com.mamits.apnaonlines.ui.activity.RegisterActivity;
 import com.mamits.apnaonlines.ui.fragment.DashboardFragment;
+import com.mamits.apnaonlines.ui.fragment.dashboard.InboxFragment;
+import com.mamits.apnaonlines.ui.fragment.dashboard.drawer.HelpSupportFragment;
+import com.mamits.apnaonlines.ui.fragment.dashboard.drawer.TransactionsFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.HomeFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.PaymentFragment;
 import com.mamits.apnaonlines.ui.fragment.orders.OrderDetailsFragment;
@@ -57,4 +63,16 @@ public abstract class ActivityBuilder {
     @ContributesAndroidInjector(modules = {PaymentsModule.class})
     @FragmentScope
     abstract PaymentFragment bindPaymentsFragment();
+
+    @ContributesAndroidInjector(modules = {TransactionsModule.class})
+    @FragmentScope
+    abstract TransactionsFragment bindTransactionsFragment();
+
+    @ContributesAndroidInjector(modules = {HelpSupportModule.class})
+    @FragmentScope
+    abstract HelpSupportFragment bindHelpSupportFragment();
+
+    @ContributesAndroidInjector(modules = {InboxModule.class})
+    @FragmentScope
+    abstract InboxFragment bindInboxFragment();
 }

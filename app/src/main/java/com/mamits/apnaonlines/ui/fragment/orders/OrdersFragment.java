@@ -79,6 +79,8 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
             binding.txtFilter.setOnClickListener(this);
 
             setUpOrders();
+        }else {
+            loadOrders(0, null);
         }
     }
 
@@ -218,7 +220,6 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
                 int messageId = jsonObject.get("messageId").getAsInt();
                 String message = jsonObject.get("message").getAsString();
                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-
             }
         }
     }

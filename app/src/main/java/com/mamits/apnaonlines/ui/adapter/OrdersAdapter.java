@@ -2,6 +2,7 @@ package com.mamits.apnaonlines.ui.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.data.model.orders.OrdersDataModel;
 import com.mamits.apnaonlines.ui.customviews.CustomCircularImageView;
@@ -21,7 +23,7 @@ import com.mamits.apnaonlines.viewmodel.fragment.OrdersViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.AddFriendsViewHolder> {
+public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrdersViewHolder> {
 
     private Context mContext;
     public List<OrdersDataModel> list;
@@ -38,18 +40,18 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.AddFriends
 
     @NonNull
     @Override
-    public AddFriendsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OrdersViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View root = LayoutInflater.from(mContext).inflate(R.layout.orders_list_item, parent, false);
-        return new AddFriendsViewHolder(root);
+        return new OrdersViewHolder(root);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AddFriendsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OrdersViewHolder holder, int position) {
         if (list.size() > 0) {
             OrdersDataModel model = list.get(position);
             holder.txt_date.setText(model.getOrderdatetime());
             holder.txt_order_id.setText(String.format("#%s", model.getOrder_id()));
-            holder.txt_username.setText("User name");
+            holder.txt_username.setText(model.getUsers().getName());
             holder.txt_service_category.setText(model.getProducts().getName());
             switch (model.getStatus()) {
                 case 1:
@@ -75,18 +77,21 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.AddFriends
             }
             holder.txt_price.setText("₹ " + model.getOrder_amount());
 
-            holder.itemView.setOnClickListener(this::gotoOrderDetail);
+            Glide.with(mContext).load(model.getProducts().getProduct_image()).into(holder.img);
+            holder.itemView.setOnClickListener(v -> gotoOrderDetail(v, position));
         }
 
     }
 
-    private void gotoOrderDetail(View v) {
+    private void gotoOrderDetail(View v, int position) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("order", list.get(position));
         NavOptions options = new NavOptions.Builder()
                 .setEnterAnim(R.anim.slide_out_right)
                 .setExitAnim(R.anim.slide_in).setPopEnterAnim(0).setPopExitAnim(R.anim.slide_out1)
                 .build();
         NavController navController = Navigation.findNavController(v);
-        navController.navigate(R.id.nav_order_details, null, options);
+        navController.navigate(R.id.nav_order_details, bundle, options);
     }
 
 
@@ -100,11 +105,11 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.AddFriends
         notifyDataSetChanged();
     }
 
-    public static class AddFriendsViewHolder extends RecyclerView.ViewHolder {
+    public static class OrdersViewHolder extends RecyclerView.ViewHolder {
         private CustomTextView txt_date, txt_order_id, txt_username, txt_service_category, txt_status, txt_price;
         private CustomCircularImageView img;
 
-        public AddFriendsViewHolder(@NonNull View itemView) {
+        public OrdersViewHolder(@NonNull View itemView) {
             super(itemView);
             txt_date = itemView.findViewById(R.id.txt_date);
             txt_order_id = itemView.findViewById(R.id.txt_order_id);

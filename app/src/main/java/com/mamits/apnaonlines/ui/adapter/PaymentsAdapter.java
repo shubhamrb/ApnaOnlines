@@ -7,13 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mamits.apnaonlines.R;
-import com.mamits.apnaonlines.data.model.payments.TransactionsDataModel;
+import com.mamits.apnaonlines.data.model.payments.PaymentsDataModel;
 import com.mamits.apnaonlines.ui.customviews.CustomCircularImageView;
 import com.mamits.apnaonlines.ui.customviews.CustomTextView;
 import com.mamits.apnaonlines.viewmodel.fragment.PaymentsViewModel;
@@ -24,7 +21,7 @@ import java.util.List;
 public class PaymentsAdapter extends RecyclerView.Adapter<PaymentsAdapter.PaymentsViewHolder> {
 
     private Context mContext;
-    public List<TransactionsDataModel> list;
+    public List<PaymentsDataModel> list;
     private PaymentsViewModel mViewModel;
     private Activity activity;
 
@@ -46,21 +43,12 @@ public class PaymentsAdapter extends RecyclerView.Adapter<PaymentsAdapter.Paymen
     @Override
     public void onBindViewHolder(@NonNull PaymentsViewHolder holder, int position) {
         if (list.size() > 0) {
-            TransactionsDataModel model = list.get(position);
+            PaymentsDataModel model = list.get(position);
             holder.txt_date.setText(model.getCreated_at().split(" ")[0]);
-            holder.txt_order_id.setText(String.format("#%s", model.getId()));
-            holder.txt_username.setText(model.getPayment_type());
-            holder.txt_service_category.setText(model.getDescription());
-            switch (model.getType()) {
-                case "Debit":
-                    holder.txt_status.setText("Debit");
-                    holder.txt_status.setTextColor(mContext.getResources().getColor(R.color.red_ff2502));
-                    break;
-                case "Credit":
-                    holder.txt_status.setText("Credit");
-                    holder.txt_status.setTextColor(mContext.getResources().getColor(R.color.green_39ae00));
-                    break;
-            }
+            holder.txt_order_id.setText(String.format("#%s", model.getTransaction_id()));
+            holder.txt_username.setText(model.getPayment_method());
+            holder.txt_service_category.setText(model.getPaymentMode());
+            holder.txt_status.setText(model.getStatus());
             holder.txt_price.setText("₹ " + model.getAmount());
 
         }
@@ -72,7 +60,7 @@ public class PaymentsAdapter extends RecyclerView.Adapter<PaymentsAdapter.Paymen
         return list.size();
     }
 
-    public void setList(List<TransactionsDataModel> orderList) {
+    public void setList(List<PaymentsDataModel> orderList) {
         list = orderList;
         notifyDataSetChanged();
     }
