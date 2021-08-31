@@ -6,6 +6,7 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -19,6 +20,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.core.content.ContextCompat;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
@@ -65,7 +69,22 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
             case R.id.btn_reject:
                 update("Reject", null, null, null);
                 break;
+            case R.id.btn_chat:
+                goToChat(v);
+                break;
         }
+    }
+
+    private void goToChat(View v) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("userid", model.getUsers().getId());
+        bundle.putSerializable("orderid", model.getId());
+        NavOptions options = new NavOptions.Builder()
+                .setEnterAnim(R.anim.slide_out_right)
+                .setExitAnim(R.anim.slide_in).setPopEnterAnim(0).setPopExitAnim(R.anim.slide_out1)
+                .build();
+        NavController navController = Navigation.findNavController(v);
+        navController.navigate(R.id.nav_message, bundle, options);
     }
 
     private void openAcceptBottomDialog() {
@@ -143,6 +162,7 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
 
             binding.btnAccept.setOnClickListener(this);
             binding.btnReject.setOnClickListener(this);
+            binding.btnChat.setOnClickListener(this);
         }
     }
 
@@ -163,6 +183,9 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
         binding.txtOrderId.setText(String.format("#%s", model.getOrder_id()));
         binding.txtUsername.setText(model.getUsers().getName());
         binding.txtServiceCategory.setText(model.getProducts().getName());
+
+        binding.bottom.setVisibility(View.GONE);
+        binding.chatBottom.setVisibility(View.GONE);
         switch (model.getStatus()) {
             case 1:
                 binding.txtStatus.setText("Pending");
@@ -174,26 +197,22 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
                 binding.txtStatus.setText("Accept");
                 binding.txtH1.setText("Accepted Order");
                 binding.txtStatus.setTextColor(mContext.getResources().getColor(R.color.green_39ae00));
-                binding.bottom.setVisibility(View.GONE);
                 binding.chatBottom.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 binding.txtStatus.setText("Reject");
                 binding.txtH1.setText("Rejected Order");
                 binding.txtStatus.setTextColor(mContext.getResources().getColor(R.color.red_ff2502));
-                binding.bottom.setVisibility(View.GONE);
                 break;
             case 4:
                 binding.txtStatus.setText("Cancel");
                 binding.txtH1.setText("Canceled Order");
                 binding.txtStatus.setTextColor(mContext.getResources().getColor(R.color.red_ff2502));
-                binding.bottom.setVisibility(View.GONE);
                 break;
             case 5:
                 binding.txtStatus.setText("Complete");
                 binding.txtH1.setText("Completed Order");
                 binding.txtStatus.setTextColor(mContext.getResources().getColor(R.color.green_39ae00));
-                binding.bottom.setVisibility(View.GONE);
                 binding.chatBottom.setVisibility(View.VISIBLE);
                 break;
         }

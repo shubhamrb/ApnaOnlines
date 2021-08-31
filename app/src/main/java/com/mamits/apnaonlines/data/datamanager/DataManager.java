@@ -81,7 +81,17 @@ public class DataManager implements IDataManager {
 
     @Override
     public void updateOrderStatus(Activity mActivity, String accessToken, String status, int order_id, String time, String type, String order_amount, ResponseListener responseListener) {
-        mApiHelper.updateOrderStatus(mActivity,accessToken ,status, order_id, time, type, order_amount, responseListener);
+        mApiHelper.updateOrderStatus(mActivity, accessToken, status, order_id, time, type, order_amount, responseListener);
+    }
+
+    @Override
+    public void fetchMessage(Activity mActivity, String accessToken, int user_id, int order_id, ResponseListener responseListener) {
+        mApiHelper.fetchMessage(mActivity, accessToken, user_id, order_id, responseListener);
+    }
+
+    @Override
+    public void sendMessage(Activity mActivity, String accessToken, int user_id, int order_id, String message, ResponseListener responseListener) {
+        mApiHelper.sendMessage(mActivity, accessToken, user_id, order_id, message, responseListener);
     }
 
     @Override

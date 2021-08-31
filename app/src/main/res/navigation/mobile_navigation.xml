@@ -25,4 +25,9 @@
         android:name="com.mamits.apnaonlines.ui.fragment.dashboard.drawer.HelpSupportFragment"
         tools:layout="@layout/fragment_help_support" />
 
+    <fragment
+        android:id="@+id/nav_message"
+        android:name="com.mamits.apnaonlines.ui.fragment.dashboard.MessageFragment"
+        tools:layout="@layout/fragment_message" />
+
 </navigation>

@@ -49,5 +49,13 @@ public interface RetrofitInterface {
 
     @Headers("Content-Type: application/json")
     @POST(ApiConstant.UPDATE_ORDER_STATUS_END_POINT)
-    Call<JsonObject> updateOrderStatus(@Header("Authorization") String accessToken,@Body String jsonObject);
+    Call<JsonObject> updateOrderStatus(@Header("Authorization") String accessToken, @Body String jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST(ApiConstant.FETCH_MESSAGES_END_POINT)
+    Call<JsonObject> fetchMessages(@Header("Authorization") String accessToken, @Body String jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST(ApiConstant.SEND_MESSAGE_END_POINT)
+    Call<JsonObject> sendMessages(@Header("Authorization") String accessToken, @Body String jsonObject);
 }

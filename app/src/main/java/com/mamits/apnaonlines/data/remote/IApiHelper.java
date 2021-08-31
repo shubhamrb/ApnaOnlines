@@ -25,4 +25,8 @@ public interface IApiHelper {
     void updatePin(Activity mActivity, String number, String newPin, ResponseListener responseListener);
 
     void updateOrderStatus(Activity mActivity, String accessToken, String status, int order_id, String time, String type, String order_amount, ResponseListener responseListener);
+
+    void fetchMessage(Activity mActivity, String accessToken, int user_id, int order_id, ResponseListener responseListener);
+
+    void sendMessage(Activity mActivity, String accessToken, int user_id, int order_id,String message, ResponseListener responseListener);
 }

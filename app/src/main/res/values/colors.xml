@@ -15,5 +15,5 @@
     <color name="red_ff2502">#ff2502</color>
     <color name="purple_8000ff">#8000ff</color>
     <color name="blue_006fff">#006fff</color>
-
+    <color name="placeholder">#BFC6D5</color>
 </resources>
