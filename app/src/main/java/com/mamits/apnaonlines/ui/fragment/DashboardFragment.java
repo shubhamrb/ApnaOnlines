@@ -3,6 +3,8 @@ package com.mamits.apnaonlines.ui.fragment;
 import android.content.Context;
 import android.view.View;
 
+import androidx.viewpager.widget.ViewPager;
+
 import com.mamits.apnaonlines.BR;
 import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.databinding.FragmentDashboardBinding;
@@ -54,6 +56,26 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
         binding.viewPager.setAdapter(viewPagerAdapter);
         binding.viewPager.setOffscreenPageLimit(1);
         binding.tabs.setupWithViewPager(binding.viewPager);
+        binding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position==0){
+                    binding.txtWish.setVisibility(View.VISIBLE);
+                }else {
+                    binding.txtWish.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void setWishText() {

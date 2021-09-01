@@ -58,4 +58,7 @@ public interface RetrofitInterface {
     @Headers("Content-Type: application/json")
     @POST(ApiConstant.SEND_MESSAGE_END_POINT)
     Call<JsonObject> sendMessages(@Header("Authorization") String accessToken, @Body String jsonObject);
+
+    @POST(ApiConstant.FETCH_COUPONS_END_POINT)
+    Call<JsonObject> fetchCoupons(@Header("Authorization") String accessToken);
 }

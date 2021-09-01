@@ -106,28 +106,28 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
 
         switch (status) {
             case 0:
-                binding.txtH1.setText("All Orders");
-                binding.txtFilter.setText("All");
-                break;
-            case 1:
                 binding.txtH1.setText("Pending Orders");
                 binding.txtFilter.setText("Pending");
                 break;
-            case 2:
+            case 1:
                 binding.txtH1.setText("Accepted Orders");
                 binding.txtFilter.setText("Accept");
                 break;
-            case 3:
-                binding.txtH1.setText("Rejected Orders");
-                binding.txtFilter.setText("Reject");
+            case 2:
+                binding.txtH1.setText("Completed Orders");
+                binding.txtFilter.setText("Complete");
                 break;
-            case 4:
+            case 3:
                 binding.txtH1.setText("Canceled Orders");
                 binding.txtFilter.setText("Cancel");
                 break;
+            case 4:
+                binding.txtH1.setText("Rejected Orders");
+                binding.txtFilter.setText("Reject");
+                break;
             case 5:
-                binding.txtH1.setText("Completed Orders");
-                binding.txtFilter.setText("Complete");
+                binding.txtH1.setText("All Orders");
+                binding.txtFilter.setText("All");
                 break;
         }
         mViewModel.fetchOrders((Activity) mContext, status);

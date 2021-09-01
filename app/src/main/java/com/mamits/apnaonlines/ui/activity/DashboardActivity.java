@@ -108,7 +108,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
     @Override
     public void onBackPressed() {
         try {
-            if (mNavController.getCurrentDestination() != null && mNavController.getCurrentDestination().getId() != 0) {
+            if (mNavController!=null &&mNavController.getCurrentDestination() != null && mNavController.getCurrentDestination().getId() != 0) {
                 mNavController.popBackStack();
             } else {
                 super.onBackPressed();

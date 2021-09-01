@@ -96,13 +96,6 @@ public class ApiHelper implements IApiHelper {
     public void fetchPayments(Activity mActivity, String accessToken, ResponseListener responseListener) {
         RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
 
-        /*JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("payment_type", pType);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
-
         call.fetchPayments("Bearer " + accessToken).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -317,6 +310,25 @@ public class ApiHelper implements IApiHelper {
             e.printStackTrace();
         }
         call.sendMessages("Bearer " + accessToken, jsonObject.toString()).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    responseListener.onSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                responseListener.onFailed(t);
+            }
+        });
+    }
+
+    @Override
+    public void fetchCoupons(Activity mActivity, String accessToken, ResponseListener responseListener) {
+        RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
+
+        call.fetchCoupons("Bearer " + accessToken).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null) {

@@ -44,7 +44,7 @@ public class PaymentsAdapter extends RecyclerView.Adapter<PaymentsAdapter.Paymen
     public void onBindViewHolder(@NonNull PaymentsViewHolder holder, int position) {
         if (list.size() > 0) {
             PaymentsDataModel model = list.get(position);
-            holder.txt_date.setText(model.getCreated_at().split(" ")[0]);
+            holder.txt_date.setText(model.getCreated_at());
             holder.txt_order_id.setText(String.format("#%s", model.getTransaction_id()));
             holder.txt_username.setText(model.getPayment_method());
             holder.txt_service_category.setText(model.getPaymentMode());

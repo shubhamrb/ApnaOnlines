@@ -179,7 +179,7 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
     }
 
     private void setData() {
-        binding.txtDate.setText(model.getOrderdatetime());
+        binding.txtDate.setText(model.getCreated_at());
         binding.txtOrderId.setText(String.format("#%s", model.getOrder_id()));
         binding.txtUsername.setText(model.getUsers().getName());
         binding.txtServiceCategory.setText(model.getProducts().getName());

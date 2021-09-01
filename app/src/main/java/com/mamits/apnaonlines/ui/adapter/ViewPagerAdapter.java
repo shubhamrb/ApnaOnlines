@@ -5,14 +5,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.mamits.apnaonlines.ui.fragment.dashboard.CouponFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.HomeFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.InboxFragment;
-import com.mamits.apnaonlines.ui.fragment.orders.OrdersFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.PaymentFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.ServicesFragment;
+import com.mamits.apnaonlines.ui.fragment.orders.OrdersFragment;
 
 
-public class ViewPagerAdapter extends FragmentPagerAdapter  {
+public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     public ViewPagerAdapter(FragmentManager fm, int page) {
         super(fm, page);
@@ -30,15 +31,17 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
             fragment = new InboxFragment();
         } else if (position == 3) {
             fragment = new ServicesFragment();
-        } else {
+        } else if (position == 4) {
             fragment = new PaymentFragment();
+        } else {
+            fragment = new CouponFragment();
         }
         return fragment;
     }
 
     @Override
     public int getCount() {
-        return 5;
+        return 6;
     }
 
     @Override
@@ -52,8 +55,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter  {
             title = "Inbox";
         } else if (position == 3) {
             title = "Services";
-        } else {
+        } else if (position == 4) {
             title = "Payments";
+        } else {
+            title = "Coupons";
         }
         return title;
     }

@@ -9,35 +9,13 @@
         android:layout_width="@dimen/_140sdp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
-        app:cardCornerRadius="@dimen/_8sdp"
-        android:elevation="@dimen/_10sdp">
+        android:elevation="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_8sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/divider" />
-            <RelativeLayout
-                android:id="@+id/rl_all"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="@dimen/_7sdp">
-
-                <com.mamits.apnaonlines.ui.customviews.CustomTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:text="All"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_12ssp"
-                    app:fontName="Raleway-Regular.ttf" />
-
-            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -89,13 +67,14 @@
 
             </RelativeLayout>
 
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:background="@color/divider" />
 
             <RelativeLayout
-                android:id="@+id/rl_reject"
+                android:id="@+id/rl_complete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -106,13 +85,14 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/_5sdp"
-                    android:text="Reject"
+                    android:text="Complete"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12ssp"
                     app:fontName="Raleway-Regular.ttf" />
 
 
             </RelativeLayout>
+
 
             <View
                 android:layout_width="match_parent"
@@ -145,7 +125,7 @@
                 android:background="@color/divider" />
 
             <RelativeLayout
-                android:id="@+id/rl_complete"
+                android:id="@+id/rl_reject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -156,13 +136,39 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/_5sdp"
-                    android:text="Complete"
+                    android:text="Reject"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12ssp"
                     app:fontName="Raleway-Regular.ttf" />
 
 
             </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/divider" />
+
+            <RelativeLayout
+                android:id="@+id/rl_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/_7sdp">
+
+                <com.mamits.apnaonlines.ui.customviews.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:text="All"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12ssp"
+                    app:fontName="Raleway-Regular.ttf" />
+
+            </RelativeLayout>
+
 
             <View
                 android:layout_width="match_parent"

@@ -48,6 +48,7 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
                 String message = binding.etMessage.getText().toString();
                 if (message.trim().length() == 0) {
                     Toast.makeText(mContext, "Can't send empty message.", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 binding.etMessage.setText("");
                 sendMessage(message);
@@ -174,11 +175,24 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
 
-                if (timer != null) {
-                    timer.cancel();
+                mGson = new Gson();
+                Type messages = new TypeToken<List<MessageDataModel>>() {
+                }.getType();
+                messagesList = mGson.fromJson(jsonObject.get("data").getAsJsonArray().toString(), messages);
+
+                if (messagesList != null && messagesList.size() > 0) {
+                    messageAdapter.setList(messagesList);
+                    binding.recyclerMessages.scrollToPosition(messagesList.size() - 1);
+
+                    if (timer != null) {
+                        timer.cancel();
+                    }
+                    /*start timer*/
+                    startTimer();
+                } else {
+                    binding.recyclerMessages.setVisibility(View.GONE);
                 }
-                isScrollToBottom = true;
-                loadMessages();
+
             } else {
                 int messageId = jsonObject.get("messageId").getAsInt();
                 String message = jsonObject.get("message").getAsString();

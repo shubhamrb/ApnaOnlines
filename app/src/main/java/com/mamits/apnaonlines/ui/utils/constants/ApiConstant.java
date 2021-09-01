@@ -15,4 +15,5 @@ public class ApiConstant {
     public static final String UPDATE_ORDER_STATUS_END_POINT = BuildConfig.BASE_URL + "api/auth/updateOrderStatus";
     public static final String FETCH_MESSAGES_END_POINT = BuildConfig.BASE_URL + "api/auth/getLatestMessage";
     public static final String SEND_MESSAGE_END_POINT = BuildConfig.BASE_URL + "api/auth/saveChatMessage";
+    public static final String FETCH_COUPONS_END_POINT = BuildConfig.BASE_URL + "api/auth/getCoupon";
 }

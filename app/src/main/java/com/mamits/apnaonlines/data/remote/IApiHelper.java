@@ -28,5 +28,7 @@ public interface IApiHelper {
 
     void fetchMessage(Activity mActivity, String accessToken, int user_id, int order_id, ResponseListener responseListener);
 
-    void sendMessage(Activity mActivity, String accessToken, int user_id, int order_id,String message, ResponseListener responseListener);
+    void sendMessage(Activity mActivity, String accessToken, int user_id, int order_id, String message, ResponseListener responseListener);
+
+    void fetchCoupons(Activity mActivity, String accessToken, ResponseListener responseListener);
 }

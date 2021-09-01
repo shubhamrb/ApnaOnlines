@@ -95,6 +95,11 @@ public class DataManager implements IDataManager {
     }
 
     @Override
+    public void fetchCoupons(Activity mActivity, String accessToken, ResponseListener responseListener) {
+        mApiHelper.fetchCoupons(mActivity, accessToken, responseListener);
+    }
+
+    @Override
     public String getAccessToken() {
         return mPreferenceHelper.getAccessToken();
     }

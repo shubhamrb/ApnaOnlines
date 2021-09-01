@@ -39,7 +39,7 @@
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:drawableEnd="@drawable/ic_bottom_arrow"
-                android:text="All"
+                android:text="Pending"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12ssp" />
 

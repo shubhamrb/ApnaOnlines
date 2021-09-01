@@ -49,7 +49,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrdersView
     public void onBindViewHolder(@NonNull OrdersViewHolder holder, int position) {
         if (list.size() > 0) {
             OrdersDataModel model = list.get(position);
-            holder.txt_date.setText(model.getOrderdatetime());
+            holder.txt_date.setText(model.getCreated_at());
             holder.txt_order_id.setText(String.format("#%s", model.getOrder_id()));
             holder.txt_username.setText(model.getUsers().getName());
             holder.txt_service_category.setText(model.getProducts().getName());

@@ -1,6 +1,8 @@
 package com.mamits.apnaonlines.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,6 +141,12 @@ public class MessengerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     }
 
                     chatFromViewHolder.txt_time.setText(msgTime);
+
+                    chatFromViewHolder.card_img_msg.setOnClickListener(v -> {
+                        if (message.getAttachment() != null && !message.getAttachment().equals("")) {
+                            openFile(message.getAttachment());
+                        }
+                    });
                     break;
                 case 2:
                     ChatToViewHolder chatToViewHolder = (ChatToViewHolder) holder;
@@ -190,9 +198,20 @@ public class MessengerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                     chatToViewHolder.txt_time.setText(msgTime);
 
+                    chatToViewHolder.card_img_msg.setOnClickListener(v -> {
+                        if (message.getAttachment() != null && !message.getAttachment().equals("")) {
+                            openFile(message.getAttachment());
+                        }
+                    });
                     break;
             }
+
         }
+    }
+
+    private void openFile(String attachment) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(attachment));
+        mContext.startActivity(browserIntent);
     }
 
     @Override

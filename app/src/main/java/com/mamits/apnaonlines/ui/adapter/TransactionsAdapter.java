@@ -46,7 +46,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     public void onBindViewHolder(@NonNull TransactionsViewHolder holder, int position) {
         if (list.size() > 0) {
             TransactionsDataModel model = list.get(position);
-            holder.txt_date.setText(model.getCreated_at().split(" ")[0]);
+            holder.txt_date.setText(model.getCreated_at());
             holder.txt_order_id.setText(String.format("#%s", model.getId()));
             holder.txt_username.setText(model.getPayment_type());
             holder.txt_service_category.setText(model.getDescription());
