@@ -62,4 +62,48 @@ public class CouponViewModel extends BaseViewModel<CouponNavigator> {
         }
     }
 
+    public void deleteCoupon(Activity mActivity, String couponid) {
+        if (NetworkUtils.isNetworkConnected(mActivity)) {
+            getmNavigator().get().showProgressBars();
+            getmDataManger().deleteCoupon(mActivity, getmDataManger().getAccessToken(), couponid, new ResponseListener() {
+                @Override
+                public void onSuccess(JsonObject jsonObject) {
+                    try {
+                        getmNavigator().get().hideProgressBars();
+                        getmNavigator().get().onSuccessDeleteCoupon(jsonObject);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailed(Throwable throwable) {
+                    try {
+                        getmNavigator().get().hideProgressBars();
+                        if (throwable instanceof ANError) {
+                            ANError anError = (ANError) throwable;
+                            if (anError.getErrorBody() != null) {
+                                JSONObject object = new JSONObject(anError.getErrorBody());
+                                try {
+                                    getmNavigator().get().checkValidation(anError.getErrorCode(), object.optString("message"));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                        } else {
+                            throwable.printStackTrace();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+        } else {
+            getmNavigator().get().checkInternetConnection(mActivity.getResources().getString(R.string.check_internet_connection));
+
+        }
+    }
+
 }

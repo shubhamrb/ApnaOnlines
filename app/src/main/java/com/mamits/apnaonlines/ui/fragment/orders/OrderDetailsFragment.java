@@ -99,7 +99,14 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
             CustomInputEditText et_amount = acceptOrderDialog.findViewById(R.id.et_amount);
             RelativeLayout btn_submit = acceptOrderDialog.findViewById(R.id.btn_submit);
             AppCompatSpinner spin = acceptOrderDialog.findViewById(R.id.spinner);
-            et_amount.setText(model.getOrder_amount());
+
+            if (model.getOrder_amount().equals("0.00")) {
+                et_amount.setEnabled(true);
+            } else {
+                et_amount.setText(model.getOrder_amount());
+                et_amount.setEnabled(false);
+            }
+
             ArrayList<String> list = new ArrayList<>();
             list.add("Minutes");
             list.add("Hour");
@@ -121,11 +128,22 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
 
             btn_submit.setOnClickListener(v -> {
                 String time = et_time.getText().toString();
+                String amount = et_amount.getText().toString();
                 if (time.trim().length() == 0) {
                     Toast.makeText(mContext, "Please enter the time.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                update("Accept", time, tType.toLowerCase(), model.getOrder_amount());
+                if (amount.trim().length() == 0) {
+                    Toast.makeText(mContext, "Please enter the amount.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (Double.parseDouble(amount) == 0) {
+                    Toast.makeText(mContext, "Amount should be greater than 0.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                update("Accept", time, tType.toLowerCase(), amount);
             });
             acceptOrderDialog.setOnDismissListener(dialog -> {
                 acceptOrderDialog = null;
@@ -199,21 +217,23 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
                 binding.txtStatus.setTextColor(mContext.getResources().getColor(R.color.green_39ae00));
                 binding.chatBottom.setVisibility(View.VISIBLE);
                 break;
-            case 3:
-                binding.txtStatus.setText("Reject");
-                binding.txtH1.setText("Rejected Order");
-                binding.txtStatus.setTextColor(mContext.getResources().getColor(R.color.red_ff2502));
+            case 5:
+
+                binding.txtStatus.setText("Complete");
+                binding.txtH1.setText("Completed Order");
+                binding.txtStatus.setTextColor(mContext.getResources().getColor(R.color.green_39ae00));
+                binding.chatBottom.setVisibility(View.VISIBLE);
                 break;
             case 4:
                 binding.txtStatus.setText("Cancel");
                 binding.txtH1.setText("Canceled Order");
                 binding.txtStatus.setTextColor(mContext.getResources().getColor(R.color.red_ff2502));
                 break;
-            case 5:
-                binding.txtStatus.setText("Complete");
-                binding.txtH1.setText("Completed Order");
-                binding.txtStatus.setTextColor(mContext.getResources().getColor(R.color.green_39ae00));
-                binding.chatBottom.setVisibility(View.VISIBLE);
+            case 3:
+                binding.txtStatus.setText("Reject");
+                binding.txtH1.setText("Rejected Order");
+                binding.txtStatus.setTextColor(mContext.getResources().getColor(R.color.red_ff2502));
+
                 break;
         }
         binding.txtPrice.setText("₹ " + model.getOrder_amount());

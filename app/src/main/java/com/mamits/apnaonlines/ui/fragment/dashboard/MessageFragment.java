@@ -1,12 +1,20 @@
 package com.mamits.apnaonlines.ui.fragment.dashboard;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.gson.Gson;
@@ -19,8 +27,10 @@ import com.mamits.apnaonlines.databinding.FragmentMessageBinding;
 import com.mamits.apnaonlines.ui.adapter.MessengerAdapter;
 import com.mamits.apnaonlines.ui.base.BaseFragment;
 import com.mamits.apnaonlines.ui.navigator.fragment.MessageNavigator;
+import com.mamits.apnaonlines.ui.utils.commonClasses.URIPathHelper;
 import com.mamits.apnaonlines.viewmodel.fragment.MessageViewModel;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,24 +50,81 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
     private MessengerAdapter messageAdapter;
     private boolean isScrollToBottom = true;
     private CountDownTimer timer;
+    private ActivityResultLauncher<Intent> someActivityResultLauncher;
+    private File uploadedFile = null;
+    private String message="";
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_send:
-                String message = binding.etMessage.getText().toString();
-                if (message.trim().length() == 0) {
+                message = binding.etMessage.getText().toString();
+                if (message.trim().length() == 0 && uploadedFile == null) {
                     Toast.makeText(mContext, "Can't send empty message.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 binding.etMessage.setText("");
-                sendMessage(message);
+                sendMessage(message, uploadedFile);
+                discardUpload();
+                break;
+            case R.id.btn_attach:
+                /*open file chooser*/
+                if (checkPermission()) {
+                    openFileChooser();
+                } else {
+                    requestPermission();
+                }
+                break;
+            case R.id.btn_discard:
+                discardUpload();
                 break;
         }
     }
 
-    private void sendMessage(String message) {
-        mViewModel.sendMessage((Activity) mContext, user_id, order_id, message);
+    private void discardUpload() {
+        uploadedFile = null;
+        binding.txtFileName.setText("");
+        binding.rlFile.setVisibility(View.GONE);
+    }
+
+    public boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission((Activity) mContext,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int result2 = ContextCompat.checkSelfPermission((Activity) mContext,
+                Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        return result == PackageManager.PERMISSION_GRANTED
+                && result2 == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission() {
+        requestPermissions(new
+                String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
+                , Manifest.permission.READ_EXTERNAL_STORAGE}, 101);
+
+    }
+
+    private void sendMessage(String message, File uploadedFile) {
+        mViewModel.sendMessage((Activity) mContext, user_id, order_id, uploadedFile, message);
+    }
+
+    /*open file chooser*/
+    private void openFileChooser() {
+
+        String[] mimeTypes = {"image/*", "audio/*", "video/*"};
+
+        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        //intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        intent.putExtra(Intent.EXTRA_TITLE, "Image");
+
+        chooserIntent.putExtra(Intent.EXTRA_INTENT, intent);
+        chooserIntent.putExtra(Intent.EXTRA_TITLE, "Choose an action");
+
+        someActivityResultLauncher.launch(chooserIntent);
     }
 
     @Override
@@ -85,7 +152,49 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
             }
             setUpMessages();
 
+            binding.btnAttach.setOnClickListener(this);
             binding.btnSend.setOnClickListener(this);
+            binding.btnDiscard.setOnClickListener(this);
+
+            someActivityResultLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            try {
+                                Intent data = result.getData();
+
+                                if (data != null) {
+
+                                    String finalFileName = URIPathHelper.getPath(mContext, data.getData());
+
+                                    /*create file*/
+                                    if (finalFileName != null) {
+                                        uploadedFile = new File(finalFileName);
+
+                                        long fileSizeInBytes = uploadedFile.length();
+                                        long fileSizeInKB = fileSizeInBytes / 1024;
+                                        long fileSizeInMB = fileSizeInKB / 1024;
+
+                                        if (fileSizeInMB > 20) {
+                                            Toast.makeText(mContext, "File size is too big. (Max : 20 MB)", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                        Uri file = Uri.fromFile(uploadedFile);
+
+                                        binding.txtFileName.setText(file.getLastPathSegment());
+                                        binding.rlFile.setVisibility(View.VISIBLE);
+                                    } else {
+                                        Log.e(TAG, "filename is null");
+                                    }
+
+                                } else {
+                                    Log.e(TAG, "Data is null");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
         }
     }
 

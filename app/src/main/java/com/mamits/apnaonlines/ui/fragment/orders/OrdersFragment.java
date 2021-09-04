@@ -80,7 +80,7 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
 
             setUpOrders();
         }else {
-            loadOrders(0, null);
+            loadOrders(1, null);
         }
     }
 
@@ -91,7 +91,7 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
         ordersAdapter = new OrdersAdapter(getActivity(), mViewModel);
         binding.recyclerOrders.setAdapter(ordersAdapter);
 
-        loadOrders(0, null);
+        loadOrders(1, null);
     }
 
     private void loadOrders(int status, PopupWindow popupWindow) {
@@ -103,29 +103,28 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         switch (status) {
-            case 0:
+            case 1:
                 binding.txtH1.setText("Pending Orders");
                 binding.txtFilter.setText("Pending");
                 break;
-            case 1:
+            case 2:
                 binding.txtH1.setText("Accepted Orders");
                 binding.txtFilter.setText("Accept");
                 break;
-            case 2:
+            case 5:
                 binding.txtH1.setText("Completed Orders");
                 binding.txtFilter.setText("Complete");
                 break;
-            case 3:
+            case 4:
                 binding.txtH1.setText("Canceled Orders");
                 binding.txtFilter.setText("Cancel");
                 break;
-            case 4:
+            case 3:
                 binding.txtH1.setText("Rejected Orders");
                 binding.txtFilter.setText("Reject");
                 break;
-            case 5:
+            case 0:
                 binding.txtH1.setText("All Orders");
                 binding.txtFilter.setText("All");
                 break;
@@ -153,12 +152,12 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
                 mContext.getResources().getDimensionPixelOffset(R.dimen._200sdp),
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        rl_all.setOnClickListener(v1 -> loadOrders(0, popupWindow));
         rl_pending.setOnClickListener(v1 -> loadOrders(1, popupWindow));
         rl_accept.setOnClickListener(v1 -> loadOrders(2, popupWindow));
-        rl_reject.setOnClickListener(v1 -> loadOrders(3, popupWindow));
-        rl_cancel.setOnClickListener(v1 -> loadOrders(4, popupWindow));
         rl_complete.setOnClickListener(v1 -> loadOrders(5, popupWindow));
+        rl_cancel.setOnClickListener(v1 -> loadOrders(4, popupWindow));
+        rl_reject.setOnClickListener(v1 -> loadOrders(3, popupWindow));
+        rl_all.setOnClickListener(v1 -> loadOrders(0, popupWindow));
 
         popupWindow.setOutsideTouchable(true);
         popupWindow.setFocusable(true);

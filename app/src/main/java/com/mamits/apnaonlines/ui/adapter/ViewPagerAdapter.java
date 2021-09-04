@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.mamits.apnaonlines.ui.fragment.dashboard.CouponFragment;
+import com.mamits.apnaonlines.ui.fragment.dashboard.coupons.CouponFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.HomeFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.InboxFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.PaymentFragment;

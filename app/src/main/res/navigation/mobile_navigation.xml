@@ -30,4 +30,9 @@
         android:name="com.mamits.apnaonlines.ui.fragment.dashboard.MessageFragment"
         tools:layout="@layout/fragment_message" />
 
+    <fragment
+        android:id="@+id/nav_create_coupon"
+        android:name="com.mamits.apnaonlines.ui.fragment.dashboard.coupons.CreateCouponFragment"
+        tools:layout="@layout/fragment_create_coupon" />
+
 </navigation>

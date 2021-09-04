@@ -1,14 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragment.dashboard.ServicesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="servicesView"
+            type="com.mamits.apnaonlines.viewmodel.fragment.ServicesViewModel" />
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:background="@color/white"
+        tools:context=".ui.fragment.dashboard.ServicesFragment">
 
-</FrameLayout>
+        <com.mamits.apnaonlines.ui.customviews.CustomTextView
+            android:id="@+id/txt_h1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="Services"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15ssp"
+            app:fontName="Raleway-Medium.ttf" />
+
+        <ImageView
+            android:id="@+id/btn_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:padding="@dimen/_10sdp"
+            android:src="@drawable/ic_filter" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_services"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/txt_h1"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            tools:listitem="@layout/orders_list_item" />
+
+    </RelativeLayout>
+</layout>

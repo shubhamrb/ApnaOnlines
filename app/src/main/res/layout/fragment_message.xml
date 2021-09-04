@@ -89,7 +89,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/bottom_card"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_50sdp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:backgroundTint="@color/white"
             android:elevation="@dimen/_15sdp">
@@ -98,40 +98,74 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageButton
-                    android:id="@+id/btn_attach"
-                    android:layout_width="@dimen/_35sdp"
-                    android:layout_height="@dimen/_35sdp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/attach" />
-
-                <com.mamits.apnaonlines.ui.customviews.CustomInputEditText
-                    android:id="@+id/et_message"
+                <RelativeLayout
+                    android:id="@+id/rl_file"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
-                    android:layout_toStartOf="@id/btn_send"
-                    android:layout_toEndOf="@id/btn_attach"
-                    android:hint="Type something"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:background="@null"
-                    android:textColorHint="@color/text_hint"
-                    android:textSize="@dimen/_14ssp"
-                    app:fontName="Raleway-SemiBold.ttf" />
+                    android:visibility="gone">
 
-                <ImageButton
-                    android:id="@+id/btn_send"
-                    android:layout_width="@dimen/_35sdp"
-                    android:layout_height="@dimen/_35sdp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/send" />
+                    <com.mamits.apnaonlines.ui.customviews.CustomTextView
+                        android:id="@+id/txt_file_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="Manish Kumar"
+                        android:textColor="@color/sky_blue"
+                        android:textSize="@dimen/_14ssp"
+                        app:fontName="Raleway-SemiBold.ttf" />
+
+                    <ImageView
+                        android:id="@+id/btn_discard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/ic_cancel" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_below="@id/rl_file">
+
+                    <ImageButton
+                        android:id="@+id/btn_attach"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/attach" />
+
+                    <com.mamits.apnaonlines.ui.customviews.CustomInputEditText
+                        android:id="@+id/et_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_toStartOf="@id/btn_send"
+                        android:layout_toEndOf="@id/btn_attach"
+                        android:background="@null"
+                        android:hint="Type something"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/text_hint"
+                        android:textSize="@dimen/_14ssp"
+                        app:fontName="Raleway-SemiBold.ttf" />
+
+                    <ImageButton
+                        android:id="@+id/btn_send"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/send" />
+                </RelativeLayout>
+
+
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
     </RelativeLayout>

@@ -4,6 +4,10 @@ import android.app.Activity;
 
 import com.mamits.apnaonlines.ui.utils.listeners.ResponseListener;
 
+import org.json.JSONObject;
+
+import java.io.File;
+
 public interface IApiHelper {
 
     void userLogin(Activity activity, String jsonObject, ResponseListener responseListener);
@@ -28,7 +32,17 @@ public interface IApiHelper {
 
     void fetchMessage(Activity mActivity, String accessToken, int user_id, int order_id, ResponseListener responseListener);
 
-    void sendMessage(Activity mActivity, String accessToken, int user_id, int order_id, String message, ResponseListener responseListener);
+    void sendMessage(Activity mActivity, String accessToken, int user_id, int order_id, String message, File uploadedFile, ResponseListener responseListener);
 
     void fetchCoupons(Activity mActivity, String accessToken, ResponseListener responseListener);
+
+    void createCoupon(Activity mActivity, String accessToken, JSONObject couponObject, ResponseListener responseListener);
+
+    void fetchServices(Activity mActivity, String accessToken, String category, String subCategory, ResponseListener responseListener);
+
+    void fetchCategorySubcategory(Activity mActivity, String accessToken, ResponseListener responseListener);
+
+    void deleteCoupon(Activity mActivity, String accessToken, String couponid, ResponseListener responseListener);
+
+    void deleteService(Activity mActivity, String accessToken, String inventoryId, ResponseListener responseListener);
 }

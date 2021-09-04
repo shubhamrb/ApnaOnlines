@@ -7,7 +7,8 @@ import com.androidnetworking.error.ANError;
 import com.google.gson.JsonObject;
 import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.data.datamanager.IDataManager;
-import com.mamits.apnaonlines.ui.navigator.fragment.TransactionsNavigator;
+import com.mamits.apnaonlines.ui.navigator.fragment.CreateCouponNavigator;
+import com.mamits.apnaonlines.ui.navigator.fragment.OrderDetailNavigator;
 import com.mamits.apnaonlines.ui.utils.commonClasses.NetworkUtils;
 import com.mamits.apnaonlines.ui.utils.listeners.ResponseListener;
 import com.mamits.apnaonlines.ui.utils.rx.ISchedulerProvider;
@@ -15,23 +16,23 @@ import com.mamits.apnaonlines.viewmodel.base.BaseViewModel;
 
 import org.json.JSONObject;
 
-public class TransactionsViewModel extends BaseViewModel<TransactionsNavigator> {
+public class CreateCouponViewModel extends BaseViewModel<CreateCouponNavigator> {
 
-    public TransactionsViewModel(IDataManager dataManager, ISchedulerProvider schedulerProvider) {
+    public CreateCouponViewModel(IDataManager dataManager, ISchedulerProvider schedulerProvider) {
         super(dataManager, schedulerProvider);
     }
 
-    public void fetchTransactions(Activity mActivity, String pType) {
+    public void createCoupon(Activity mActivity, JSONObject couponObject) {
 
         if (NetworkUtils.isNetworkConnected(mActivity)) {
             getmNavigator().get().showProgressBars();
-            getmDataManger().fetchTransactions(mActivity, getmDataManger().getAccessToken(),pType, new ResponseListener() {
+            getmDataManger().createCoupon(mActivity, getmDataManger().getAccessToken(),couponObject, new ResponseListener() {
                 @Override
                 public void onSuccess(JsonObject jsonObject) {
                     try {
                         getmNavigator().get().hideProgressBars();
 
-                        getmNavigator().get().onSuccessTransactions(jsonObject);
+                        getmNavigator().get().onSuccessCouponCreated(jsonObject);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

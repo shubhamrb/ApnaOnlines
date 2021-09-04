@@ -4,7 +4,7 @@ package com.mamits.apnaonlines.ui.navigator.fragment;
 import com.google.gson.JsonObject;
 import com.mamits.apnaonlines.ui.navigator.base.BaseNavigator;
 
-public interface CouponNavigator extends BaseNavigator {
+public interface CreateCouponNavigator extends BaseNavigator {
 
 
     void showProgressBars();
@@ -17,6 +17,5 @@ public interface CouponNavigator extends BaseNavigator {
 
     void throwable(Throwable throwable);
 
-    void onSuccessFetchCoupons(JsonObject jsonObject);
-    void onSuccessDeleteCoupon(JsonObject jsonObject);
+    void onSuccessCouponCreated(JsonObject jsonObject);
 }

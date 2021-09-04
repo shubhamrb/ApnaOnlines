@@ -16,4 +16,9 @@ public class ApiConstant {
     public static final String FETCH_MESSAGES_END_POINT = BuildConfig.BASE_URL + "api/auth/getLatestMessage";
     public static final String SEND_MESSAGE_END_POINT = BuildConfig.BASE_URL + "api/auth/saveChatMessage";
     public static final String FETCH_COUPONS_END_POINT = BuildConfig.BASE_URL + "api/auth/getCoupon";
+    public static final String CREATE_COUPON_END_POINT = BuildConfig.BASE_URL + "api/auth/addCoupon";
+    public static final String FETCH_SERVICES_END_POINT = BuildConfig.BASE_URL + "api/auth/getInventoryList";
+    public static final String DELETE_COUPON_END_POINT = BuildConfig.BASE_URL + "api/auth/deleteCoupon";
+    public static final String DELETE_SERVICE_END_POINT = BuildConfig.BASE_URL + "api/auth/deleteStock";
+    public static final String FETCH_CAT_SUB_CATEGORY_END_POINT = BuildConfig.BASE_URL + "api/auth/getVendorCategory";
 }

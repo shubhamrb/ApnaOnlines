@@ -10,6 +10,10 @@ import com.mamits.apnaonlines.data.remote.ApiHelper;
 import com.mamits.apnaonlines.data.remote.IApiHelper;
 import com.mamits.apnaonlines.ui.utils.listeners.ResponseListener;
 
+import org.json.JSONObject;
+
+import java.io.File;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -90,13 +94,38 @@ public class DataManager implements IDataManager {
     }
 
     @Override
-    public void sendMessage(Activity mActivity, String accessToken, int user_id, int order_id, String message, ResponseListener responseListener) {
-        mApiHelper.sendMessage(mActivity, accessToken, user_id, order_id, message, responseListener);
+    public void sendMessage(Activity mActivity, String accessToken, int user_id, int order_id, String message, File uploadedFile, ResponseListener responseListener) {
+        mApiHelper.sendMessage(mActivity, accessToken, user_id, order_id, message, uploadedFile, responseListener);
     }
 
     @Override
     public void fetchCoupons(Activity mActivity, String accessToken, ResponseListener responseListener) {
         mApiHelper.fetchCoupons(mActivity, accessToken, responseListener);
+    }
+
+    @Override
+    public void createCoupon(Activity mActivity, String accessToken, JSONObject couponObject, ResponseListener responseListener) {
+        mApiHelper.createCoupon(mActivity, accessToken, couponObject, responseListener);
+    }
+
+    @Override
+    public void fetchServices(Activity mActivity, String accessToken, String category, String subCategory, ResponseListener responseListener) {
+        mApiHelper.fetchServices(mActivity, accessToken, category, subCategory, responseListener);
+    }
+
+    @Override
+    public void fetchCategorySubcategory(Activity mActivity, String accessToken, ResponseListener responseListener) {
+        mApiHelper.fetchCategorySubcategory(mActivity, accessToken, responseListener);
+    }
+
+    @Override
+    public void deleteCoupon(Activity mActivity, String accessToken, String couponid, ResponseListener responseListener) {
+        mApiHelper.deleteCoupon(mActivity, accessToken, couponid, responseListener);
+    }
+
+    @Override
+    public void deleteService(Activity mActivity, String accessToken, String inventoryId, ResponseListener responseListener) {
+        mApiHelper.deleteService(mActivity, accessToken, inventoryId, responseListener);
     }
 
     @Override

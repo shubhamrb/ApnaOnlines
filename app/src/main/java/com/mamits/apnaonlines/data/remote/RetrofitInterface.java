@@ -3,11 +3,18 @@ package com.mamits.apnaonlines.data.remote;
 import com.google.gson.JsonObject;
 import com.mamits.apnaonlines.ui.utils.constants.ApiConstant;
 
+import java.util.Map;
+
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 
 public interface RetrofitInterface {
 
@@ -55,10 +62,30 @@ public interface RetrofitInterface {
     @POST(ApiConstant.FETCH_MESSAGES_END_POINT)
     Call<JsonObject> fetchMessages(@Header("Authorization") String accessToken, @Body String jsonObject);
 
-    @Headers("Content-Type: application/json")
+    @Multipart
     @POST(ApiConstant.SEND_MESSAGE_END_POINT)
-    Call<JsonObject> sendMessages(@Header("Authorization") String accessToken, @Body String jsonObject);
+    Call<JsonObject> sendMessages(@Header("Authorization") String accessToken, @Part("orderid")RequestBody orderid, @Part("userid")RequestBody userid, @Part("message")RequestBody message, @Part MultipartBody.Part chatfile);
 
     @POST(ApiConstant.FETCH_COUPONS_END_POINT)
     Call<JsonObject> fetchCoupons(@Header("Authorization") String accessToken);
+
+    @Headers("Content-Type: application/json")
+    @POST(ApiConstant.CREATE_COUPON_END_POINT)
+    Call<JsonObject> createCoupon(@Header("Authorization") String accessToken, @Body String jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST(ApiConstant.FETCH_SERVICES_END_POINT)
+    Call<JsonObject> fetchServices(@Header("Authorization") String accessToken, @Body String jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST(ApiConstant.DELETE_COUPON_END_POINT)
+    Call<JsonObject> deleteCoupon(@Header("Authorization") String accessToken, @Body String jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST(ApiConstant.FETCH_CAT_SUB_CATEGORY_END_POINT)
+    Call<JsonObject> fetchCatSubCategory(@Header("Authorization") String accessToken);
+
+    @Headers("Content-Type: application/json")
+    @POST(ApiConstant.DELETE_SERVICE_END_POINT)
+    Call<JsonObject> deleteService(@Header("Authorization") String accessToken, @Body String jsonObject);
 }

@@ -1,10 +1,14 @@
-package com.mamits.apnaonlines.ui.fragment.dashboard;
+package com.mamits.apnaonlines.ui.fragment.dashboard.coupons;
 
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.gson.Gson;
@@ -15,7 +19,6 @@ import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.data.model.coupons.CouponsDataModel;
 import com.mamits.apnaonlines.databinding.FragmentCouponBinding;
 import com.mamits.apnaonlines.ui.adapter.CouponsAdapter;
-import com.mamits.apnaonlines.ui.adapter.OrdersAdapter;
 import com.mamits.apnaonlines.ui.base.BaseFragment;
 import com.mamits.apnaonlines.ui.navigator.fragment.CouponNavigator;
 import com.mamits.apnaonlines.viewmodel.fragment.CouponViewModel;
@@ -27,7 +30,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 
-public class CouponFragment extends BaseFragment<FragmentCouponBinding, CouponViewModel> implements CouponNavigator, View.OnClickListener {
+public class CouponFragment extends BaseFragment<FragmentCouponBinding,
+        CouponViewModel> implements CouponNavigator, View.OnClickListener, CouponsAdapter.deleteListener {
     private String TAG = "CouponFragment";
     private FragmentCouponBinding binding;
 
@@ -40,7 +44,20 @@ public class CouponFragment extends BaseFragment<FragmentCouponBinding, CouponVi
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_add:
+                goToCreateCoupon(v);
+                break;
+        }
+    }
 
+    private void goToCreateCoupon(View v) {
+        NavOptions options = new NavOptions.Builder()
+                .setEnterAnim(R.anim.slide_out_right)
+                .setExitAnim(R.anim.slide_in).setPopEnterAnim(0).setPopExitAnim(R.anim.slide_out1)
+                .build();
+        NavController navController = Navigation.findNavController(v);
+        navController.navigate(R.id.nav_create_coupon, null, options);
     }
 
     @Override
@@ -62,6 +79,9 @@ public class CouponFragment extends BaseFragment<FragmentCouponBinding, CouponVi
         }
         if (isRefresh) {
             setUpCoupons();
+            binding.btnAdd.setOnClickListener(this);
+        } else {
+            loadCoupons();
         }
     }
 
@@ -69,7 +89,7 @@ public class CouponFragment extends BaseFragment<FragmentCouponBinding, CouponVi
         couponsList = new ArrayList<>();
         mGson = new Gson();
         binding.recyclerCoupons.setLayoutManager(new LinearLayoutManager(getActivity()));
-        couponsAdapter = new CouponsAdapter(getActivity(), mViewModel);
+        couponsAdapter = new CouponsAdapter(getActivity(), mViewModel, this);
         binding.recyclerCoupons.setAdapter(couponsAdapter);
 
         loadCoupons();
@@ -91,22 +111,22 @@ public class CouponFragment extends BaseFragment<FragmentCouponBinding, CouponVi
 
     @Override
     public void showProgressBars() {
-
+        showsLoading();
     }
 
     @Override
     public void checkInternetConnection(String message) {
-
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void hideProgressBars() {
-
+        hidesLoading();
     }
 
     @Override
     public void checkValidation(int errorCode, String message) {
-
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -135,5 +155,36 @@ public class CouponFragment extends BaseFragment<FragmentCouponBinding, CouponVi
                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void onSuccessDeleteCoupon(JsonObject jsonObject) {
+        if (jsonObject != null) {
+            if (jsonObject.get("status").getAsBoolean()) {
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                loadCoupons();
+            } else {
+                int messageId = jsonObject.get("messageId").getAsInt();
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onDeleteCoupon(String couponid) {
+        new AlertDialog.Builder(mContext)
+                .setTitle("Delete Coupon")
+                .setMessage("Are you sure you want to delete this coupon ?")
+
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    // Continue with delete operation
+                    mViewModel.deleteCoupon((Activity) mContext, couponid);
+                })
+
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

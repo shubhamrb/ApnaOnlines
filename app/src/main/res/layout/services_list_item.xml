@@ -16,7 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_5sdp"
-            android:backgroundTint="@color/tab_select">
+            android:backgroundTint="@color/tab_select"
+            android:visibility="invisible">
 
             <com.mamits.apnaonlines.ui.customviews.CustomTextView
                 android:id="@+id/txt_date"
@@ -37,8 +38,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_baseline_delete_24"
-            android:padding="@dimen/_4sdp"/>
+            android:padding="@dimen/_4sdp"
+            android:src="@drawable/ic_baseline_delete_24" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -48,28 +49,37 @@
             android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp">
 
+
+            <com.mamits.apnaonlines.ui.customviews.CustomCircularImageView
+                android:id="@+id/img"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:src="@drawable/rupee_circle" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_5sdp"
                 android:layout_toStartOf="@id/ll_status"
+                android:layout_toEndOf="@id/img"
                 android:orientation="vertical">
 
                 <com.mamits.apnaonlines.ui.customviews.CustomTextView
-                    android:id="@+id/txt_discount_amount"
+                    android:id="@+id/txt_service_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:alpha="0.7"
                     android:text="#6549845"
-                    android:textColor="@color/sky_blue"
-                    android:textSize="@dimen/_10ssp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_8ssp"
                     app:fontName="Montserrat-Regular.ttf" />
 
                 <com.mamits.apnaonlines.ui.customviews.CustomTextView
-                    android:id="@+id/txt_coupon"
+                    android:id="@+id/txt_service_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_2sdp"
                     android:alpha="0.7"
                     android:singleLine="true"
                     android:text="RRB Group B"
@@ -78,10 +88,9 @@
                     app:fontName="Montserrat-SemiBold.ttf" />
 
                 <com.mamits.apnaonlines.ui.customviews.CustomTextView
-                    android:id="@+id/txt_disc"
+                    android:id="@+id/txt_service_category_sub"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_2sdp"
                     android:alpha="0.7"
                     android:singleLine="true"
                     android:text="Simple Ticket - Simple Ticket"
@@ -103,18 +112,17 @@
                     android:id="@+id/txt_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Active"
-                    android:textColor="@color/green_39ae00"
+                    android:text="Price"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_10ssp"
                     app:fontName="Montserrat-SemiBold.ttf" />
 
                 <com.mamits.apnaonlines.ui.customviews.CustomTextView
-                    android:id="@+id/txt_min_max_price"
+                    android:id="@+id/txt_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:text="₹ 750-2500"
+                    android:text="₹ 467"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_9ssp"
                     app:fontName="Montserrat-SemiBold.ttf" />

@@ -11,9 +11,14 @@ import com.mamits.apnaonlines.ui.utils.listeners.ResponseListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -296,20 +301,46 @@ public class ApiHelper implements IApiHelper {
     }
 
     @Override
-    public void sendMessage(Activity mActivity, String accessToken, int user_id, int order_id, String message, ResponseListener responseListener) {
+    public void sendMessage(Activity mActivity, String accessToken, int user_id, int order_id, String message, File uploadedFile, ResponseListener responseListener) {
         RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
 
-        JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("orderid", order_id);
-            jsonObject.put("userid", user_id);
-            jsonObject.put("message", message);
-//            jsonObject.put("chatfile", "");
+            MultipartBody.Part requestImage = null;
+            if (uploadedFile != null) {
+                RequestBody requestFile = RequestBody.create(MediaType.parse("mutlipart/form-data"), uploadedFile);
+                requestImage = MultipartBody.Part.createFormData("chatfile", uploadedFile.getName(), requestFile);
+            }
 
-        } catch (JSONException e) {
+
+            RequestBody orderid = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(order_id));
+            RequestBody userid = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(user_id));
+            RequestBody msg = RequestBody.create(MediaType.parse("multipart/form-data"), message);
+
+            call.sendMessages("Bearer " + accessToken, orderid, userid, msg, requestImage).enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                    if (response.body() != null) {
+                        responseListener.onSuccess(response.body());
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                    responseListener.onFailed(t);
+                }
+            });
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        call.sendMessages("Bearer " + accessToken, jsonObject.toString()).enqueue(new Callback<JsonObject>() {
+
+
+    }
+
+    @Override
+    public void fetchCoupons(Activity mActivity, String accessToken, ResponseListener responseListener) {
+        RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
+
+        call.fetchCoupons("Bearer " + accessToken).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null) {
@@ -325,10 +356,108 @@ public class ApiHelper implements IApiHelper {
     }
 
     @Override
-    public void fetchCoupons(Activity mActivity, String accessToken, ResponseListener responseListener) {
+    public void createCoupon(Activity mActivity, String accessToken, JSONObject couponObject, ResponseListener responseListener) {
         RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
 
-        call.fetchCoupons("Bearer " + accessToken).enqueue(new Callback<JsonObject>() {
+        call.createCoupon("Bearer " + accessToken, couponObject.toString()).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    responseListener.onSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                responseListener.onFailed(t);
+            }
+        });
+    }
+
+    @Override
+    public void fetchServices(Activity mActivity, String accessToken, String category, String subCategory, ResponseListener responseListener) {
+        RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("category", category);
+            jsonObject.put("subcategory", subCategory);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        call.fetchServices("Bearer " + accessToken, jsonObject.toString()).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    responseListener.onSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                responseListener.onFailed(t);
+            }
+        });
+    }
+
+    @Override
+    public void fetchCategorySubcategory(Activity mActivity, String accessToken, ResponseListener responseListener) {
+        RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
+
+        call.fetchCatSubCategory("Bearer " + accessToken).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    responseListener.onSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                responseListener.onFailed(t);
+            }
+        });
+    }
+
+    @Override
+    public void deleteCoupon(Activity mActivity, String accessToken, String couponid, ResponseListener responseListener) {
+        RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("couponid", couponid);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        call.deleteCoupon("Bearer " + accessToken, jsonObject.toString()).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    responseListener.onSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                responseListener.onFailed(t);
+            }
+        });
+    }
+
+    @Override
+    public void deleteService(Activity mActivity, String accessToken, String inventoryId, ResponseListener responseListener) {
+        RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("inventoryid", inventoryId);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        call.deleteService("Bearer " + accessToken, jsonObject.toString()).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null) {

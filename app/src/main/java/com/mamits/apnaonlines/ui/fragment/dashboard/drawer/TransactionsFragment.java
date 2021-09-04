@@ -91,7 +91,6 @@ public class TransactionsFragment extends BaseFragment<FragmentTransactionsBindi
         try {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
-                mViewModel.getmNavigator().get().showProgressBars();
             }
         } catch (Exception e) {
             e.printStackTrace();
