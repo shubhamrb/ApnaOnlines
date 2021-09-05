@@ -3,7 +3,6 @@ package com.mamits.apnaonlines.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -77,6 +76,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
         binding.btnToggle.setOnClickListener(this);
         binding.navDrawer.btnClose.setOnClickListener(this);
         binding.navDrawer.btnLogout.setOnClickListener(this);
+        binding.navDrawer.btnChangePass.setOnClickListener(this);
         binding.navDrawer.btnTransactions.setOnClickListener(this);
         binding.navDrawer.btnHelp.setOnClickListener(this);
 
@@ -108,7 +108,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
     @Override
     public void onBackPressed() {
         try {
-            if (mNavController!=null &&mNavController.getCurrentDestination() != null && mNavController.getCurrentDestination().getId() != 0) {
+            if (mNavController != null && mNavController.getCurrentDestination() != null && mNavController.getCurrentDestination().getId() != 0) {
                 mNavController.popBackStack();
             } else {
                 super.onBackPressed();
@@ -120,7 +120,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
 
     @Override
     public void onClick(View v) {
-        NavDestination navDestination= mNavController.getCurrentDestination();
+        NavDestination navDestination = mNavController.getCurrentDestination();
 
         NavOptions options = new NavOptions.Builder()
                 .setEnterAnim(R.anim.slide_out_right)
@@ -133,15 +133,21 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
             case R.id.btn_close:
                 binding.drawerLayout.closeDrawers();
                 break;
+            case R.id.btn_change_pass:
+                binding.drawerLayout.closeDrawers();
+                if (navDestination != null && navDestination.getId() != R.id.nav_transactions) {
+                    mNavController.navigate(R.id.nav_change_pass, null, options);
+                }
+                break;
             case R.id.btn_transactions:
                 binding.drawerLayout.closeDrawers();
-                if (navDestination!=null && navDestination.getId()!=R.id.nav_transactions){
+                if (navDestination != null && navDestination.getId() != R.id.nav_transactions) {
                     mNavController.navigate(R.id.nav_transactions, null, options);
                 }
                 break;
             case R.id.btn_help:
                 binding.drawerLayout.closeDrawers();
-                if (navDestination!=null && navDestination.getId()!=R.id.nav_help) {
+                if (navDestination != null && navDestination.getId() != R.id.nav_help) {
                     mNavController.navigate(R.id.nav_help, null, options);
                 }
                 break;

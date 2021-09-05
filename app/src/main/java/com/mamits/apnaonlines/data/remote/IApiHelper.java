@@ -52,4 +52,6 @@ public interface IApiHelper {
 
     void updateService(Activity mActivity, String accessToken, JSONObject productDataModel, ResponseListener responseListener);
 
+    void changePassword(Activity mActivity, String accessToken, JSONObject object, ResponseListener responseListener);
+
 }

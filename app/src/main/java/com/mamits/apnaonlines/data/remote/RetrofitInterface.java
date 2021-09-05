@@ -100,4 +100,8 @@ public interface RetrofitInterface {
     @Headers("Content-Type: application/json")
     @POST(ApiConstant.UPDATE_SERVICE_END_POINT)
     Call<JsonObject> updateService(@Header("Authorization") String accessToken, @Body String jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST(ApiConstant.CHANGE_PASSWORD_END_POINT)
+    Call<JsonObject> changePassword(@Header("Authorization") String accessToken, @Body String jsonObject);
 }

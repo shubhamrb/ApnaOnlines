@@ -24,4 +24,5 @@ public class ApiConstant {
     public static final String FETCH_PRODUCTS_END_POINT = BuildConfig.BASE_URL + "api/auth/getProduct";
     public static final String ADD_SERVICE_END_POINT = BuildConfig.BASE_URL + "api/auth/addStock";
     public static final String UPDATE_SERVICE_END_POINT = BuildConfig.BASE_URL + "api/auth/updateStock";
+    public static final String CHANGE_PASSWORD_END_POINT = BuildConfig.BASE_URL + "api/auth/changePassword";
 }

@@ -113,7 +113,7 @@
                 android:background="@color/divider" />
 
             <com.mamits.apnaonlines.ui.customviews.CustomTextView
-                android:id="@+id/change_password"
+                android:id="@+id/btn_change_pass"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:gravity="center_vertical"

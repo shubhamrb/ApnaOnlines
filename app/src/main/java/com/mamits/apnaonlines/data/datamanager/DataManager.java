@@ -144,6 +144,11 @@ public class DataManager implements IDataManager {
     }
 
     @Override
+    public void changePassword(Activity mActivity, String accessToken, JSONObject object, ResponseListener responseListener) {
+        mApiHelper.changePassword(mActivity, accessToken, object, responseListener);
+    }
+
+    @Override
     public String getAccessToken() {
         return mPreferenceHelper.getAccessToken();
     }
