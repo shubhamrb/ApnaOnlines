@@ -45,7 +45,8 @@
             android:text="@string/edit"
             android:textColor="@color/sky_blue"
             android:textSize="@dimen/_12ssp"
-            app:fontName="Raleway-Regular.ttf" />
+            app:fontName="Raleway-Regular.ttf"
+            android:visibility="gone"/>
     </RelativeLayout>
 
 
