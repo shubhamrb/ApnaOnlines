@@ -136,6 +136,7 @@ public class ChangePasswordFragment extends BaseFragment<FragmentChangePasswordB
     @Override
     public void onSuccessPasswordChanged(JsonObject jsonObject) {
         if (jsonObject != null) {
+
             if (jsonObject.get("status").getAsBoolean()) {
                 String message = jsonObject.get("message").getAsString();
                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
