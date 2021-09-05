@@ -45,4 +45,11 @@ public interface IApiHelper {
     void deleteCoupon(Activity mActivity, String accessToken, String couponid, ResponseListener responseListener);
 
     void deleteService(Activity mActivity, String accessToken, String inventoryId, ResponseListener responseListener);
+
+    void fetchProducts(Activity mActivity, String accessToken, String cat, String sub_cat, ResponseListener responseListener);
+
+    void addService(Activity mActivity, String accessToken, JSONObject productDataModel, ResponseListener responseListener);
+
+    void updateService(Activity mActivity, String accessToken, JSONObject productDataModel, ResponseListener responseListener);
+
 }

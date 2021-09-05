@@ -4,6 +4,7 @@ package com.mamits.apnaonlines.di.builder;
 import com.mamits.apnaonlines.di.module.activity.DashboardActivityModule;
 import com.mamits.apnaonlines.di.module.activity.MainActivityModule;
 import com.mamits.apnaonlines.di.module.activity.RegisterActivityModule;
+import com.mamits.apnaonlines.di.module.fragment.AddServiceModule;
 import com.mamits.apnaonlines.di.module.fragment.CouponModule;
 import com.mamits.apnaonlines.di.module.fragment.CreateCouponModule;
 import com.mamits.apnaonlines.di.module.fragment.DashboardFragmentModule;
@@ -22,7 +23,8 @@ import com.mamits.apnaonlines.ui.activity.DashboardActivity;
 import com.mamits.apnaonlines.ui.activity.MainActivity;
 import com.mamits.apnaonlines.ui.activity.RegisterActivity;
 import com.mamits.apnaonlines.ui.fragment.DashboardFragment;
-import com.mamits.apnaonlines.ui.fragment.dashboard.ServicesFragment;
+import com.mamits.apnaonlines.ui.fragment.dashboard.services.AddServiceFragment;
+import com.mamits.apnaonlines.ui.fragment.dashboard.services.ServicesFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.coupons.CouponFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.InboxFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.MessageFragment;
@@ -99,4 +101,8 @@ public abstract class ActivityBuilder {
     @ContributesAndroidInjector(modules = {ServicesModule.class})
     @FragmentScope
     abstract ServicesFragment bindServicesFragment();
+
+    @ContributesAndroidInjector(modules = {AddServiceModule.class})
+    @FragmentScope
+    abstract AddServiceFragment bindAddServicesFragment();
 }

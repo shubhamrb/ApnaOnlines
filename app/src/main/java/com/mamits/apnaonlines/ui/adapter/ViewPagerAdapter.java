@@ -9,7 +9,7 @@ import com.mamits.apnaonlines.ui.fragment.dashboard.coupons.CouponFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.HomeFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.InboxFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.PaymentFragment;
-import com.mamits.apnaonlines.ui.fragment.dashboard.ServicesFragment;
+import com.mamits.apnaonlines.ui.fragment.dashboard.services.ServicesFragment;
 import com.mamits.apnaonlines.ui.fragment.orders.OrdersFragment;
 
 

@@ -106,7 +106,21 @@
                 android:textSize="@dimen/_12ssp"
                 app:fontName="Raleway-Regular.ttf" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@color/divider" />
 
+            <com.mamits.apnaonlines.ui.customviews.CustomTextView
+                android:id="@+id/change_password"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:gravity="center_vertical"
+                android:text="Change Password"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12ssp"
+                app:fontName="Raleway-Regular.ttf" />
 
             <View
                 android:layout_width="match_parent"

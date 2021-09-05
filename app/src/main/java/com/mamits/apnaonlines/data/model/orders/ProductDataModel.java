@@ -1,8 +1,10 @@
 package com.mamits.apnaonlines.data.model.orders;
 
 import com.google.gson.annotations.SerializedName;
+import com.mamits.apnaonlines.data.model.services.VariationDataModel;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ProductDataModel implements Serializable {
 
@@ -71,6 +73,7 @@ public class ProductDataModel implements Serializable {
 
     @SerializedName("product_image")
     String product_image;
+
 
     public String getProduct_image() {
         return product_image;

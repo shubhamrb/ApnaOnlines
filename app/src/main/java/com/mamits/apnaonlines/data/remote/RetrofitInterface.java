@@ -88,4 +88,16 @@ public interface RetrofitInterface {
     @Headers("Content-Type: application/json")
     @POST(ApiConstant.DELETE_SERVICE_END_POINT)
     Call<JsonObject> deleteService(@Header("Authorization") String accessToken, @Body String jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST(ApiConstant.FETCH_PRODUCTS_END_POINT)
+    Call<JsonObject> fetchProducts(@Header("Authorization") String accessToken, @Body String jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST(ApiConstant.ADD_SERVICE_END_POINT)
+    Call<JsonObject> addService(@Header("Authorization") String accessToken, @Body String jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST(ApiConstant.UPDATE_SERVICE_END_POINT)
+    Call<JsonObject> updateService(@Header("Authorization") String accessToken, @Body String jsonObject);
 }

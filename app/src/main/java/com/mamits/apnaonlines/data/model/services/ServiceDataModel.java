@@ -28,11 +28,22 @@ public class ServiceDataModel implements Serializable {
     @SerializedName("price")
     String price;
 
+    @SerializedName("admin_commission")
+    String admin_commission;
+
     @SerializedName("variation")
     List<VariationDataModel> variation;
 
     @SerializedName("image")
     String image;
+
+    public String getAdmin_commission() {
+        return admin_commission;
+    }
+
+    public void setAdmin_commission(String admin_commission) {
+        this.admin_commission = admin_commission;
+    }
 
     public int getId() {
         return id;
@@ -116,6 +127,7 @@ public class ServiceDataModel implements Serializable {
                 ", category=" + category +
                 ", subcategory=" + subcategory +
                 ", price='" + price + '\'' +
+                ", admin_commission='" + admin_commission + '\'' +
                 ", variation=" + variation +
                 ", image='" + image + '\'' +
                 '}';

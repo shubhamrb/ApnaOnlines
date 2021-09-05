@@ -129,6 +129,21 @@ public class DataManager implements IDataManager {
     }
 
     @Override
+    public void fetchProducts(Activity mActivity, String accessToken, String cat, String sub_cat, ResponseListener responseListener) {
+        mApiHelper.fetchProducts(mActivity, accessToken, cat, sub_cat, responseListener);
+    }
+
+    @Override
+    public void addService(Activity mActivity, String accessToken, JSONObject productDataModel, ResponseListener responseListener) {
+        mApiHelper.addService(mActivity, accessToken, productDataModel, responseListener);
+    }
+
+    @Override
+    public void updateService(Activity mActivity, String accessToken, JSONObject productDataModel, ResponseListener responseListener) {
+        mApiHelper.updateService(mActivity, accessToken, productDataModel, responseListener);
+    }
+
+    @Override
     public String getAccessToken() {
         return mPreferenceHelper.getAccessToken();
     }

@@ -1,4 +1,4 @@
-package com.mamits.apnaonlines.ui.fragment.dashboard;
+package com.mamits.apnaonlines.ui.fragment.dashboard.services;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -58,7 +61,19 @@ public class ServicesFragment extends BaseFragment<FragmentServicesBinding, Serv
             case R.id.btn_filter:
                 openFilterBottomDialog();
                 break;
+            case R.id.btn_add:
+                goToCreateCoupon(v);
+                break;
         }
+    }
+
+    private void goToCreateCoupon(View v) {
+        NavOptions options = new NavOptions.Builder()
+                .setEnterAnim(R.anim.slide_out_right)
+                .setExitAnim(R.anim.slide_in).setPopEnterAnim(0).setPopExitAnim(R.anim.slide_out1)
+                .build();
+        NavController navController = Navigation.findNavController(v);
+        navController.navigate(R.id.nav_add_service, null, options);
     }
 
     @Override
@@ -80,8 +95,11 @@ public class ServicesFragment extends BaseFragment<FragmentServicesBinding, Serv
         }
         if (isRefresh) {
             binding.btnFilter.setOnClickListener(this);
+            binding.btnAdd.setOnClickListener(this);
             loadCategorySubCategory();
             setUpServices();
+        } else {
+            loadServices(selected_cat, selected_sub_cat);
         }
     }
 

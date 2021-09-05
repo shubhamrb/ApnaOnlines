@@ -21,4 +21,7 @@ public class ApiConstant {
     public static final String DELETE_COUPON_END_POINT = BuildConfig.BASE_URL + "api/auth/deleteCoupon";
     public static final String DELETE_SERVICE_END_POINT = BuildConfig.BASE_URL + "api/auth/deleteStock";
     public static final String FETCH_CAT_SUB_CATEGORY_END_POINT = BuildConfig.BASE_URL + "api/auth/getVendorCategory";
+    public static final String FETCH_PRODUCTS_END_POINT = BuildConfig.BASE_URL + "api/auth/getProduct";
+    public static final String ADD_SERVICE_END_POINT = BuildConfig.BASE_URL + "api/auth/addStock";
+    public static final String UPDATE_SERVICE_END_POINT = BuildConfig.BASE_URL + "api/auth/updateStock";
 }

@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".ui.fragment.dashboard.ServicesFragment">
+        tools:context=".ui.fragment.dashboard.services.ServicesFragment">
 
         <com.mamits.apnaonlines.ui.customviews.CustomTextView
             android:id="@+id/txt_h1"
@@ -36,11 +36,19 @@
             android:padding="@dimen/_10sdp"
             android:src="@drawable/ic_filter" />
 
+        <RelativeLayout
+            android:id="@+id/btn_add"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_below="@id/txt_h1"
+            android:layout_margin="@dimen/_10sdp"
+            android:background="@drawable/add" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_services"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/txt_h1"
+            android:layout_below="@id/btn_add"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
