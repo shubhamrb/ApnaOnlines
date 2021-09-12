@@ -3,6 +3,7 @@ package com.mamits.apnaonlines.di.builder;
 
 import com.mamits.apnaonlines.di.module.activity.DashboardActivityModule;
 import com.mamits.apnaonlines.di.module.activity.MainActivityModule;
+import com.mamits.apnaonlines.di.module.activity.PaymentActivityModule;
 import com.mamits.apnaonlines.di.module.activity.RegisterActivityModule;
 import com.mamits.apnaonlines.di.module.fragment.AddServiceModule;
 import com.mamits.apnaonlines.di.module.fragment.ChangePasswordModule;
@@ -16,15 +17,18 @@ import com.mamits.apnaonlines.di.module.fragment.MessageModule;
 import com.mamits.apnaonlines.di.module.fragment.OrderDetailModule;
 import com.mamits.apnaonlines.di.module.fragment.OrdersModule;
 import com.mamits.apnaonlines.di.module.fragment.PaymentsModule;
+import com.mamits.apnaonlines.di.module.fragment.ProfileModule;
 import com.mamits.apnaonlines.di.module.fragment.ServicesModule;
 import com.mamits.apnaonlines.di.module.fragment.TransactionsModule;
 import com.mamits.apnaonlines.di.scope.ActivityScope;
 import com.mamits.apnaonlines.di.scope.FragmentScope;
 import com.mamits.apnaonlines.ui.activity.DashboardActivity;
 import com.mamits.apnaonlines.ui.activity.MainActivity;
+import com.mamits.apnaonlines.ui.activity.PaymentActivity;
 import com.mamits.apnaonlines.ui.activity.RegisterActivity;
 import com.mamits.apnaonlines.ui.fragment.DashboardFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.drawer.ChangePasswordFragment;
+import com.mamits.apnaonlines.ui.fragment.dashboard.drawer.ProfileFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.services.AddServiceFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.services.ServicesFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.coupons.CouponFragment;
@@ -47,6 +51,10 @@ public abstract class ActivityBuilder {
     @ContributesAndroidInjector(modules = {MainActivityModule.class})
     @ActivityScope
     abstract MainActivity bindMainActivity();
+
+    @ContributesAndroidInjector(modules = {PaymentActivityModule.class})
+    @ActivityScope
+    abstract PaymentActivity bindPaymentActivity();
 
     @ContributesAndroidInjector(modules = {RegisterActivityModule.class})
     @ActivityScope
@@ -111,4 +119,8 @@ public abstract class ActivityBuilder {
     @ContributesAndroidInjector(modules = {ChangePasswordModule.class})
     @FragmentScope
     abstract ChangePasswordFragment bindChangePassFragment();
+
+    @ContributesAndroidInjector(modules = {ProfileModule.class})
+    @FragmentScope
+    abstract ProfileFragment bindProfileFragment();
 }

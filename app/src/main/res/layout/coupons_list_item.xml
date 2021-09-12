@@ -74,7 +74,7 @@
                     android:singleLine="true"
                     android:text="RRB Group B"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_11ssp"
+                    android:textSize="@dimen/_10ssp"
                     app:fontName="Montserrat-SemiBold.ttf" />
 
                 <com.mamits.apnaonlines.ui.customviews.CustomTextView

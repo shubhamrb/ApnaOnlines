@@ -13,9 +13,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.gson.Gson;
@@ -25,7 +22,6 @@ import com.mamits.apnaonlines.BR;
 import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.data.model.orders.OrdersDataModel;
 import com.mamits.apnaonlines.databinding.FragmentOrdersBinding;
-import com.mamits.apnaonlines.ui.activity.DashboardActivity;
 import com.mamits.apnaonlines.ui.adapter.OrdersAdapter;
 import com.mamits.apnaonlines.ui.base.BaseFragment;
 import com.mamits.apnaonlines.ui.navigator.fragment.OrdersNavigator;
@@ -77,9 +73,9 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
         }
         if (isRefresh) {
             binding.txtFilter.setOnClickListener(this);
-
+            binding.progressBar.setVisibility(View.VISIBLE);
             setUpOrders();
-        }else {
+        } else {
             loadOrders(1, null);
         }
     }
@@ -130,7 +126,6 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
                 break;
         }
         mViewModel.fetchOrders((Activity) mContext, status);
-        binding.recyclerOrders.setVisibility(View.VISIBLE);
     }
 
     private void openFilterDialog(View v) {
@@ -182,7 +177,7 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
 
     @Override
     public void checkInternetConnection(String message) {
-
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -192,16 +187,18 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
 
     @Override
     public void checkValidation(int errorCode, String message) {
-
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void throwable(Throwable throwable) {
+        binding.progressBar.setVisibility(View.GONE);
         throwable.printStackTrace();
     }
 
     @Override
     public void onSuccessOrders(JsonObject jsonObject) {
+        binding.progressBar.setVisibility(View.GONE);
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
                 mGson = new Gson();
@@ -211,6 +208,7 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
 
                 if (ordersList != null && ordersList.size() > 0) {
                     ordersAdapter.setList(ordersList);
+                    binding.recyclerOrders.setVisibility(View.VISIBLE);
                 } else {
                     binding.recyclerOrders.setVisibility(View.GONE);
                 }

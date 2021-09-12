@@ -24,7 +24,6 @@ public class TransactionsViewModel extends BaseViewModel<TransactionsNavigator> 
     public void fetchTransactions(Activity mActivity, String pType) {
 
         if (NetworkUtils.isNetworkConnected(mActivity)) {
-            getmNavigator().get().showProgressBars();
             getmDataManger().fetchTransactions(mActivity, getmDataManger().getAccessToken(),pType, new ResponseListener() {
                 @Override
                 public void onSuccess(JsonObject jsonObject) {

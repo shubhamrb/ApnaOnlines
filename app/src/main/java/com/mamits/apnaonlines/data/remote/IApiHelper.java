@@ -14,6 +14,10 @@ public interface IApiHelper {
 
     void fetchHomeData(Activity mActivity, String accessToken, ResponseListener responseListener);
 
+    void fetchPaymentKeys(Activity mActivity, String accessToken, ResponseListener responseListener);
+
+    void fetchCfsToken(Activity mActivity, String accessToken, String orderId, String amount, ResponseListener responseListener);
+
     void fetchOrders(Activity mActivity, String accessToken, int status, ResponseListener responseListener);
 
     void fetchPayments(Activity mActivity, String accessToken, ResponseListener responseListener);
@@ -29,6 +33,8 @@ public interface IApiHelper {
     void updatePin(Activity mActivity, String number, String newPin, ResponseListener responseListener);
 
     void updateOrderStatus(Activity mActivity, String accessToken, String status, int order_id, String time, String type, String order_amount, ResponseListener responseListener);
+
+    void completeOrder(Activity mActivity, String accessToken, String des, int order_id, String pType, File uploadedFile, ResponseListener responseListener);
 
     void fetchMessage(Activity mActivity, String accessToken, int user_id, int order_id, ResponseListener responseListener);
 

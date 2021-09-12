@@ -4,15 +4,18 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.URLUtil;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -38,8 +41,10 @@ import com.mamits.apnaonlines.ui.base.BaseFragment;
 import com.mamits.apnaonlines.ui.customviews.CustomInputEditText;
 import com.mamits.apnaonlines.ui.customviews.CustomTextView;
 import com.mamits.apnaonlines.ui.navigator.fragment.OrderDetailNavigator;
+import com.mamits.apnaonlines.ui.utils.commonClasses.URIPathHelper;
 import com.mamits.apnaonlines.viewmodel.fragment.OrderDetailViewModel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,8 +62,11 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
     private Context mContext;
     private OrdersDataModel model;
     private ActivityResultLauncher<String> requestPermissionLauncher;
-    private BottomSheetDialog acceptOrderDialog;
-    private String tType = "";
+    private BottomSheetDialog acceptOrderDialog, completeOrderDialog;
+    private String tType = "", pType = "";
+    private ActivityResultLauncher<Intent> someActivityResultLauncher;
+    private File uploadedFile = null;
+    private CustomTextView et_upload;
 
     @Override
     public void onClick(View v) {
@@ -72,13 +80,107 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
             case R.id.btn_chat:
                 goToChat(v);
                 break;
+            case R.id.btn_complete:
+                openCompleteBottomDialog();
+                break;
         }
+    }
+
+    private void openCompleteBottomDialog() {
+        if (completeOrderDialog == null) {
+            uploadedFile = null;
+            completeOrderDialog = new BottomSheetDialog(mContext);
+            completeOrderDialog.setContentView(R.layout.complete_order_bottomsheet);
+            completeOrderDialog.setCanceledOnTouchOutside(false);
+
+            CustomInputEditText et_des = completeOrderDialog.findViewById(R.id.et_des);
+            et_upload = completeOrderDialog.findViewById(R.id.et_upload);
+            LinearLayout btn_upload = completeOrderDialog.findViewById(R.id.ll_upload);
+            RelativeLayout btn_submit = completeOrderDialog.findViewById(R.id.btn_submit);
+            AppCompatSpinner spin = completeOrderDialog.findViewById(R.id.spinner);
+
+            ArrayList<String> payMethod = new ArrayList<>();
+            payMethod.add("Pay on shop");
+            payMethod.add("Upi");
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_layout, payMethod);
+            spin.setAdapter(adapter);
+            spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    pType = adapterView.getItemAtPosition(i).toString();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                    pType = "";
+                }
+            });
+
+            btn_upload.setOnClickListener(v -> {
+                if (checkPermission()) {
+                    openFileChooser();
+                } else {
+                    requestPermission();
+                }
+            });
+            btn_submit.setOnClickListener(v -> {
+                String des = et_des.getText().toString();
+                if (des.trim().length() == 0) {
+                    Toast.makeText(mContext, "Please enter the description.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                completeOrder(des, pType);
+            });
+            
+            completeOrderDialog.setOnDismissListener(dialog -> {
+                completeOrderDialog = null;
+            });
+            completeOrderDialog.show();
+        }
+    }
+
+    /*open file chooser*/
+    private void openFileChooser() {
+
+        String[] mimeTypes = {"image/*", "audio/*", "video/*"};
+
+        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        //intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        intent.putExtra(Intent.EXTRA_TITLE, "Image");
+
+        chooserIntent.putExtra(Intent.EXTRA_INTENT, intent);
+        chooserIntent.putExtra(Intent.EXTRA_TITLE, "Choose an action");
+
+        someActivityResultLauncher.launch(chooserIntent);
+    }
+
+    private void requestPermission() {
+        requestPermissions(new
+                String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
+                , Manifest.permission.READ_EXTERNAL_STORAGE}, 101);
+    }
+
+    public boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(mContext,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int result2 = ContextCompat.checkSelfPermission(mContext,
+                Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        return result == PackageManager.PERMISSION_GRANTED
+                && result2 == PackageManager.PERMISSION_GRANTED;
     }
 
     private void goToChat(View v) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("userid", model.getUsers().getId());
         bundle.putSerializable("orderid", model.getId());
+        bundle.putInt("status", model.getStatus());
+        bundle.putString("name", model.getUsers().getName());
         NavOptions options = new NavOptions.Builder()
                 .setEnterAnim(R.anim.slide_out_right)
                 .setExitAnim(R.anim.slide_in).setPopEnterAnim(0).setPopExitAnim(R.anim.slide_out1)
@@ -152,6 +254,10 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
         }
     }
 
+    private void completeOrder(String des, String pType) {
+        mViewModel.completeOrder((Activity) mContext, des, model.getId(), pType, uploadedFile);
+    }
+
     private void update(String status, String time, String type, String order_amount) {
         mViewModel.updateOrderStatus((Activity) mContext, status, model.getId(), time, type, order_amount);
     }
@@ -177,10 +283,48 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
             model = (OrdersDataModel) getArguments().getSerializable("order");
             setData();
             permission();
+            someActivityResultLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            try {
+                                Intent data = result.getData();
 
+                                if (data != null) {
+
+                                    String finalFileName = URIPathHelper.getPath(mContext, data.getData());
+
+                                    /*create file*/
+                                    if (finalFileName != null) {
+                                        uploadedFile = new File(finalFileName);
+
+                                        long fileSizeInBytes = uploadedFile.length();
+                                        long fileSizeInKB = fileSizeInBytes / 1024;
+                                        long fileSizeInMB = fileSizeInKB / 1024;
+
+                                        if (fileSizeInMB > 20) {
+                                            Toast.makeText(mContext, "File size is too big. (Max : 20 MB)", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                        Uri file = Uri.fromFile(uploadedFile);
+
+                                        et_upload.setText(file.getLastPathSegment());
+                                    } else {
+                                        Log.e(TAG, "filename is null");
+                                    }
+
+                                } else {
+                                    Log.e(TAG, "Data is null");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
             binding.btnAccept.setOnClickListener(this);
             binding.btnReject.setOnClickListener(this);
             binding.btnChat.setOnClickListener(this);
+            binding.btnComplete.setOnClickListener(this);
         }
     }
 
@@ -218,11 +362,12 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
                 binding.chatBottom.setVisibility(View.VISIBLE);
                 break;
             case 5:
-
                 binding.txtStatus.setText("Complete");
                 binding.txtH1.setText("Completed Order");
                 binding.txtStatus.setTextColor(mContext.getResources().getColor(R.color.green_39ae00));
                 binding.chatBottom.setVisibility(View.VISIBLE);
+                binding.btnComplete.setVisibility(View.GONE);
+                binding.chatBottom.setWeightSum(1);
                 break;
             case 4:
                 binding.txtStatus.setText("Cancel");
@@ -304,6 +449,25 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
                     binding.chatBottom.setVisibility(View.VISIBLE);
                 }
                 binding.bottom.setVisibility(View.GONE);
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            } else {
+                int messageId = jsonObject.get("messageId").getAsInt();
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onSuccessOrderCompleted(JsonObject jsonObject) {
+        if (jsonObject != null) {
+            if (jsonObject.get("status").getAsBoolean()) {
+                String message = jsonObject.get("message").getAsString();
+                if (completeOrderDialog != null && completeOrderDialog.isShowing()) {
+                    completeOrderDialog.dismiss();
+                }
+                binding.btnComplete.setVisibility(View.GONE);
+                binding.chatBottom.setWeightSum(1);
                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
             } else {
                 int messageId = jsonObject.get("messageId").getAsInt();

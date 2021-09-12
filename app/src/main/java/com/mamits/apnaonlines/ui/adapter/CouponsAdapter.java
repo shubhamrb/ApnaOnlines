@@ -13,9 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.data.model.coupons.CouponsDataModel;
 import com.mamits.apnaonlines.ui.customviews.CustomTextView;
+import com.mamits.apnaonlines.ui.utils.DateConvertor;
 import com.mamits.apnaonlines.viewmodel.fragment.CouponViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -46,7 +49,19 @@ public class CouponsAdapter extends RecyclerView.Adapter<CouponsAdapter.CouponsV
     public void onBindViewHolder(@NonNull CouponsViewHolder holder, int position) {
         if (list.size() > 0) {
             CouponsDataModel model = list.get(position);
-            holder.txt_date.setText(String.format("%s - %s", model.getFrom_date(), model.getTo_date()));
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            try {
+                Date d1 = formatter.parse(model.getFrom_date());
+                Date d2 = formatter.parse(model.getTo_date());
+                String f_date = new DateConvertor().getDate(d1.getTime(), DateConvertor.FORMAT_dd_MM_yyyy);
+                String t_date = new DateConvertor().getDate(d2.getTime(), DateConvertor.FORMAT_dd_MM_yyyy);
+                holder.txt_date.setText(String.format("%s - %s", f_date, t_date));
+
+            } catch (Exception e) {
+                holder.txt_date.setText(String.format("%s - %s", model.getFrom_date(), model.getTo_date()));
+                e.printStackTrace();
+            }
+
             holder.txt_discount_amount.setText(String.format("%s %s", model.getDiscount_amount(), model.getDiscount_type() == 1 ? "Flat" : "%"));
             holder.txt_coupon.setText(model.getCoupon());
             holder.txt_disc.setText(String.format(Locale.getDefault(), "Per user - %d   |   Per coupon - %d", model.getUsage_limit_per_user(), model.getUsage_limit_per_coupon()));

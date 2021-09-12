@@ -5,6 +5,8 @@ import com.mamits.apnaonlines.BuildConfig;
 public class ApiConstant {
     public static final String LOGIN_END_POINT = BuildConfig.BASE_URL + "api/vendorsignin";
     public static final String HOME_DATA_END_POINT = BuildConfig.BASE_URL + "api/auth/vendordashboard";
+    public static final String PAYMENT_KEYS_END_POINT = BuildConfig.BASE_URL + "api/getSetting";
+    public static final String FETCH_CFSTOKEN_END_POINT = BuildConfig.BASE_URL + "api/auth/cashfreetoken";
     public static final String ORDERS_END_POINT = BuildConfig.BASE_URL + "api/auth/vendorOrder";
     public static final String PAYMENTS_END_POINT = BuildConfig.BASE_URL + "api/auth/paymenthistory";
     public static final String TRANSACTIONS_END_POINT = BuildConfig.BASE_URL + "api/auth/transactionHistory";
@@ -25,4 +27,5 @@ public class ApiConstant {
     public static final String ADD_SERVICE_END_POINT = BuildConfig.BASE_URL + "api/auth/addStock";
     public static final String UPDATE_SERVICE_END_POINT = BuildConfig.BASE_URL + "api/auth/updateStock";
     public static final String CHANGE_PASSWORD_END_POINT = BuildConfig.BASE_URL + "api/auth/changePassword";
+    public static final String COMPLETE_ORDER_END_POINT = BuildConfig.BASE_URL + "api/auth/orderComplete";
 }

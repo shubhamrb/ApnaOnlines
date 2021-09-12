@@ -7,6 +7,7 @@ import java.util.Locale;
 public class DateConvertor {
 
     public final static String FORMAT_dd_MM_yyyy = "dd-MM-yyyy";
+    public final static String FORMAT_dd_MM_yyyy_HH_mm_ss = "dd-MM-yyyy HH:mm:ss";
     public final static String FORMAT_yyyy_MM_dd = "yyyy-MM-dd";
 
     public String getDate(long milliSeconds, String dateFormat) {

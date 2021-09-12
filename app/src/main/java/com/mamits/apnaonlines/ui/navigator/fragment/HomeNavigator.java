@@ -17,4 +17,6 @@ public interface HomeNavigator extends BaseNavigator {
     void throwable(Throwable throwable);
 
     void onSuccessHomeData(JsonObject jsonObject);
+
+    void onSuccessPaymentKeys(JsonObject jsonObject);
 }

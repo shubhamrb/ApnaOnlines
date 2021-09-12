@@ -173,7 +173,7 @@ public class MessengerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             chatToViewHolder.card_img_msg.setVisibility(View.VISIBLE);
 
                         } else {
-                            Glide.with(mContext).load(message.getMessage())
+                            Glide.with(mContext).load(message.getAttachment())
                                     .dontAnimate()
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .listener(new RequestListener<String, GlideDrawable>() {

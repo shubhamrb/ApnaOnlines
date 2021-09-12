@@ -238,7 +238,8 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp">
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:visibility="gone">
 
                         <com.mamits.apnaonlines.ui.customviews.CustomTextView
                             android:layout_width="wrap_content"
@@ -265,9 +266,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_1sdp"
                         android:layout_marginTop="@dimen/_5sdp"
+                        android:visibility="gone"
                         android:background="@color/divider" />
 
                     <RelativeLayout
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp">
@@ -294,6 +297,7 @@
                     </RelativeLayout>
 
                     <View
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_1sdp"
                         android:layout_marginTop="@dimen/_5sdp"

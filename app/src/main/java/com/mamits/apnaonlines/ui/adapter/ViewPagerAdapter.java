@@ -15,8 +15,8 @@ import com.mamits.apnaonlines.ui.fragment.orders.OrdersFragment;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    public ViewPagerAdapter(FragmentManager fm, int page) {
-        super(fm, page);
+    public ViewPagerAdapter(FragmentManager fm) {
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
     }
 
     @NonNull
@@ -52,7 +52,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         } else if (position == 1) {
             title = "Orders";
         } else if (position == 2) {
-            title = "Inbox";
+            title = "Chat";
         } else if (position == 3) {
             title = "Services";
         } else if (position == 4) {

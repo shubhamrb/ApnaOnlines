@@ -16,10 +16,12 @@ allprojects {
         // Check that you have the following line (if not, add it):
         google()  // Google's Maven repository
         mavenCentral()
-        maven {
-            url "https://jcenter.bintray.com/"
-        }
+        maven { url "https://jcenter.bintray.com/" }
         maven { url "https://jitpack.io" }
+        maven { url 'https://maven.cashfree.com/release' }
+        maven {
+            url "https://artifactory.paytm.in/libs-release-local"
+        }
     }
 }
 

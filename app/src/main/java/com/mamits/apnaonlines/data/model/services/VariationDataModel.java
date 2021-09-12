@@ -3,7 +3,6 @@ package com.mamits.apnaonlines.data.model.services;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class VariationDataModel implements Serializable {
 
@@ -11,7 +10,7 @@ public class VariationDataModel implements Serializable {
     String name;
 
     @SerializedName("value")
-    double value;
+    String value;
 
     public String getName() {
         return name;
@@ -21,19 +20,20 @@ public class VariationDataModel implements Serializable {
         this.name = name;
     }
 
-    public double getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(double value) {
+    public void setValue(String value) {
         this.value = value;
     }
+
 
     @Override
     public String toString() {
         return "VariationDataModel{" +
                 "name='" + name + '\'' +
-                ", value=" + value +
+                ", value='" + value + '\'' +
                 '}';
     }
 }

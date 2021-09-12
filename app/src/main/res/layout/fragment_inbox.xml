@@ -6,7 +6,7 @@
 
         <variable
             name="inboxView"
-            type="com.mamits.apnaonlines.viewmodel.fragment.InboxViewModel" />
+            type="com.mamits.apnaonlines.viewmodel.fragment.OrdersViewModel" />
     </data>
 
     <FrameLayout
@@ -15,5 +15,21 @@
         android:background="@color/white"
         tools:context=".ui.fragment.dashboard.InboxFragment">
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/_15sdp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_chats"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:visibility="gone"
+            tools:listitem="@layout/orders_list_item" />
     </FrameLayout>
 </layout>

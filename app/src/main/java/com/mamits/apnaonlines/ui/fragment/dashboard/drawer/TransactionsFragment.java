@@ -73,6 +73,7 @@ public class TransactionsFragment extends BaseFragment<FragmentTransactionsBindi
         }
         if (isRefresh) {
             binding.txtFilter.setOnClickListener(this);
+            binding.progressBar.setVisibility(View.VISIBLE);
             setUpPayments();
         }
     }
@@ -117,7 +118,6 @@ public class TransactionsFragment extends BaseFragment<FragmentTransactionsBindi
         }
 
         mViewModel.fetchTransactions((Activity) mContext, pType);
-        binding.recyclerPayments.setVisibility(View.VISIBLE);
     }
 
     private void openFilterDialog(View v) {
@@ -165,7 +165,7 @@ public class TransactionsFragment extends BaseFragment<FragmentTransactionsBindi
 
     @Override
     public void checkInternetConnection(String message) {
-
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -175,16 +175,18 @@ public class TransactionsFragment extends BaseFragment<FragmentTransactionsBindi
 
     @Override
     public void checkValidation(int errorCode, String message) {
-
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void throwable(Throwable throwable) {
-
+        binding.progressBar.setVisibility(View.GONE);
+        throwable.printStackTrace();
     }
 
     @Override
     public void onSuccessTransactions(JsonObject jsonObject) {
+        binding.progressBar.setVisibility(View.GONE);
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
                 mGson = new Gson();
@@ -194,6 +196,7 @@ public class TransactionsFragment extends BaseFragment<FragmentTransactionsBindi
 
                 if (paymentsList != null && paymentsList.size() > 0) {
                     transactionsAdapter.setList(paymentsList);
+                    binding.recyclerPayments.setVisibility(View.VISIBLE);
                 } else {
                     binding.recyclerPayments.setVisibility(View.GONE);
                 }

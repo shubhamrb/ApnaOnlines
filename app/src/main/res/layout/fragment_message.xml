@@ -92,7 +92,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:backgroundTint="@color/white"
-            android:elevation="@dimen/_15sdp">
+            android:elevation="@dimen/_15sdp"
+            >
 
             <RelativeLayout
                 android:layout_width="match_parent"

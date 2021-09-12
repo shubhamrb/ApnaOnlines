@@ -16,4 +16,6 @@ public class AppConstant {
     public static final String PREF_KEY_USER_ID = "PREF_KEY_USER_ID";
     public static final String PREF_KEY_USER_NAME = "PREF_KEY_USER_NAME";
     public static final String PREF_KEY_USER_NUMBER = "PREF_KEY_USER_NUMBER";
+    public static final String PREF_KEY_USER_EMAIL = "PREF_KEY_USER_EMAIL";
+    public static final String PREF_KEY_USER_DATA = "PREF_KEY_USER_DATA";
 }

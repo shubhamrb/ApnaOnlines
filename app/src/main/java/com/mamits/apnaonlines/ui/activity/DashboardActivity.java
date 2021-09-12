@@ -79,6 +79,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
         binding.navDrawer.btnChangePass.setOnClickListener(this);
         binding.navDrawer.btnTransactions.setOnClickListener(this);
         binding.navDrawer.btnHelp.setOnClickListener(this);
+        binding.navDrawer.btnProfile.setOnClickListener(this);
 
         /*set user data*/
         String[] nameSplit = mViewModel.getmDataManger().getUsername().split(" ");
@@ -149,6 +150,13 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
                 binding.drawerLayout.closeDrawers();
                 if (navDestination != null && navDestination.getId() != R.id.nav_help) {
                     mNavController.navigate(R.id.nav_help, null, options);
+                }
+                break;
+            case R.id.btn_profile:
+                binding.drawerLayout.closeDrawers();
+                if (navDestination != null && navDestination.getId() != R.id.nav_profile) {
+
+                    mNavController.navigate(R.id.nav_profile, null, options);
                 }
                 break;
             case R.id.btn_logout:

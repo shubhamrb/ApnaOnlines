@@ -15,6 +15,8 @@ import com.mamits.apnaonlines.viewmodel.base.BaseViewModel;
 
 import org.json.JSONObject;
 
+import java.io.File;
+
 public class OrderDetailViewModel extends BaseViewModel<OrderDetailNavigator> {
 
     public OrderDetailViewModel(IDataManager dataManager, ISchedulerProvider schedulerProvider) {
@@ -25,13 +27,60 @@ public class OrderDetailViewModel extends BaseViewModel<OrderDetailNavigator> {
 
         if (NetworkUtils.isNetworkConnected(mActivity)) {
             getmNavigator().get().showProgressBars();
-            getmDataManger().updateOrderStatus(mActivity, getmDataManger().getAccessToken(), status,order_id,time,type,order_amount, new ResponseListener() {
+            getmDataManger().updateOrderStatus(mActivity, getmDataManger().getAccessToken(), status, order_id, time, type, order_amount, new ResponseListener() {
                 @Override
                 public void onSuccess(JsonObject jsonObject) {
                     try {
                         getmNavigator().get().hideProgressBars();
 
-                        getmNavigator().get().onSuccessOrderStatusUpdated(jsonObject,status);
+                        getmNavigator().get().onSuccessOrderStatusUpdated(jsonObject, status);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailed(Throwable throwable) {
+                    try {
+                        getmNavigator().get().hideProgressBars();
+
+                        if (throwable instanceof ANError) {
+                            ANError anError = (ANError) throwable;
+                            if (anError.getErrorBody() != null) {
+                                JSONObject object = new JSONObject(anError.getErrorBody());
+                                try {
+                                    getmNavigator().get().checkValidation(anError.getErrorCode(), object.optString("message"));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                        } else {
+                            throwable.printStackTrace();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+        } else {
+            getmNavigator().get().checkInternetConnection(mActivity.getResources().getString(R.string.check_internet_connection));
+
+        }
+    }
+
+    public void completeOrder(Activity mActivity, String des, int order_id, String pType, File uploadedFile) {
+
+        if (NetworkUtils.isNetworkConnected(mActivity)) {
+            getmNavigator().get().showProgressBars();
+            getmDataManger().completeOrder(mActivity, getmDataManger().getAccessToken(), des, order_id, pType,uploadedFile, new ResponseListener() {
+                @Override
+                public void onSuccess(JsonObject jsonObject) {
+                    try {
+                        getmNavigator().get().hideProgressBars();
+
+                        getmNavigator().get().onSuccessOrderCompleted(jsonObject);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

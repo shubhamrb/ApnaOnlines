@@ -45,14 +45,15 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
     MessageViewModel mViewModel;
     private Context mContext;
     private Gson mGson;
-    private int user_id, order_id;
+    private int user_id, order_id, status;
     private List<MessageDataModel> messagesList;
     private MessengerAdapter messageAdapter;
     private boolean isScrollToBottom = true;
     private CountDownTimer timer;
     private ActivityResultLauncher<Intent> someActivityResultLauncher;
     private File uploadedFile = null;
-    private String message="";
+    private String message = "";
+    private String name;
 
     @Override
     public void onClick(View v) {
@@ -101,7 +102,6 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
         requestPermissions(new
                 String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
                 , Manifest.permission.READ_EXTERNAL_STORAGE}, 101);
-
     }
 
     private void sendMessage(String message, File uploadedFile) {
@@ -149,6 +149,14 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
             if (bundle != null) {
                 user_id = bundle.getInt("userid", -1);
                 order_id = bundle.getInt("orderid", -1);
+                status = bundle.getInt("status", -1);
+                name = bundle.getString("name");
+                binding.userName.setText(name);
+            }
+            if (status == 2) {
+                binding.bottomCard.setVisibility(View.VISIBLE);
+            } else if (status == 5) {
+                binding.bottomCard.setVisibility(View.GONE);
             }
             setUpMessages();
 

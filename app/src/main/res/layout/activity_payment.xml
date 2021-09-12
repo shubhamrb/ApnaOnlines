@@ -1,0 +1,34 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="paymentView"
+            type="com.mamits.apnaonlines.viewmodel.activity.PaymentActivityViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            />
+
+        <com.mamits.apnaonlines.ui.customviews.CustomTextView
+            android:id="@+id/txt_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/progress_bar"
+            android:layout_centerInParent="true"
+            android:text="Please wait..."
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15ssp"
+            app:fontName="Raleway-Medium.ttf" />
+    </RelativeLayout>
+</layout>

@@ -1,7 +1,6 @@
 package com.mamits.apnaonlines.data.model.services;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -30,14 +29,6 @@ public class ProductDataModel implements Serializable {
 
     @SerializedName("variation")
     List<VariationDataModel> variation;
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
 
     public int getId() {
         return id;
@@ -87,6 +78,14 @@ public class ProductDataModel implements Serializable {
         this.product_type = product_type;
     }
 
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
     public List<VariationDataModel> getVariation() {
         return variation;
     }
@@ -107,38 +106,5 @@ public class ProductDataModel implements Serializable {
                 ", price='" + price + '\'' +
                 ", variation=" + variation +
                 '}';
-    }
-
-    public static class VariationDataModel implements Serializable {
-
-        @SerializedName("name")
-        String name;
-
-        @SerializedName("value")
-        String value;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return "VariationDataModel{" +
-                    "name='" + name + '\'' +
-                    ", value='" + value + '\'' +
-                    '}';
-        }
     }
 }

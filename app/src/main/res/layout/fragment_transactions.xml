@@ -43,6 +43,14 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12ssp" />
 
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_h1"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/_15sdp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_payments"
@@ -52,6 +60,8 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
+
+                android:visibility="gone"
                 tools:listitem="@layout/orders_list_item" />
         </RelativeLayout>
     </FrameLayout>

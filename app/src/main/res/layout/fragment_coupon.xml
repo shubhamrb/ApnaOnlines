@@ -38,6 +38,13 @@
             android:layout_margin="@dimen/_10sdp"
             android:background="@drawable/add" />
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_add"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/_15sdp" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_coupons"
             android:layout_width="match_parent"
@@ -46,6 +53,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
+            android:visibility="gone"
             tools:listitem="@layout/coupons_list_item" />
 
     </RelativeLayout>

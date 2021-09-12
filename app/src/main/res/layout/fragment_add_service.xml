@@ -147,6 +147,74 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/rl_var1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:visibility="gone">
+
+                    <com.mamits.apnaonlines.ui.customviews.CustomTextView
+                        android:id="@+id/label_var1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.7"
+                        android:text="var1*"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        app:fontName="Raleway-Regular.ttf" />
+
+                    <com.mamits.apnaonlines.ui.customviews.CustomInputEditText
+                        android:id="@+id/et_var1"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_below="@+id/label_var1"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/rectangle_border"
+                        android:hint="0.00"
+                        android:inputType="number"
+                        android:padding="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/text_hint"
+                        android:textSize="@dimen/_12ssp"
+                        app:fontName="Raleway-SemiBold.ttf" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_var2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:visibility="gone">
+
+                    <com.mamits.apnaonlines.ui.customviews.CustomTextView
+                        android:id="@+id/label_var2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.7"
+                        android:text="var2*"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp"
+                        app:fontName="Raleway-Regular.ttf" />
+
+                    <com.mamits.apnaonlines.ui.customviews.CustomInputEditText
+                        android:id="@+id/et_var2"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_below="@+id/label_var2"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/rectangle_border"
+                        android:hint="0.00"
+                        android:inputType="number"
+                        android:padding="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/text_hint"
+                        android:textSize="@dimen/_12ssp"
+                        app:fontName="Raleway-SemiBold.ttf" />
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:id="@+id/rl_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -190,7 +258,8 @@
                     android:text="Submit"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_15ssp"
-                    app:fontName="Raleway-Medium.ttf" />
+                    app:fontName="Raleway-Medium.ttf"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

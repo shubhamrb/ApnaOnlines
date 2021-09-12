@@ -2,6 +2,8 @@ package com.mamits.apnaonlines.data.local.pref;
 
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+import com.mamits.apnaonlines.data.model.login.LoginDataModel;
 import com.mamits.apnaonlines.ui.utils.constants.AppConstant;
 
 import javax.inject.Inject;
@@ -22,6 +24,18 @@ public class PreferenceHelper implements IPreferenceHelper {
     }
 
     @Override
+    public String getUserData() {
+        return mSharedPreferences.getString(AppConstant.PREF_KEY_USER_DATA, null);
+    }
+
+    @Override
+    public void setUserData(LoginDataModel loginDataModel) {
+        Gson gson = new Gson();
+        String json = gson.toJson(loginDataModel);
+        mSharedPreferences.edit().putString(AppConstant.PREF_KEY_USER_DATA, json).apply();
+    }
+
+    @Override
     public String getAccessToken() {
         return mSharedPreferences.getString(AppConstant.PREF_KEY_ACCESS_TOKEN, null);
     }
@@ -33,7 +47,7 @@ public class PreferenceHelper implements IPreferenceHelper {
 
     @Override
     public int getCurrentUserId() {
-        return mSharedPreferences.getInt(AppConstant.PREF_KEY_USER_ID,-1);
+        return mSharedPreferences.getInt(AppConstant.PREF_KEY_USER_ID, -1);
     }
 
     @Override
@@ -54,6 +68,16 @@ public class PreferenceHelper implements IPreferenceHelper {
     @Override
     public void settUserNumber(String number) {
         mSharedPreferences.edit().putString(AppConstant.PREF_KEY_USER_NUMBER, number).apply();
+    }
+
+    @Override
+    public String getUserEmail() {
+        return mSharedPreferences.getString(AppConstant.PREF_KEY_USER_EMAIL, null);
+    }
+
+    @Override
+    public void settUserEmail(String email) {
+        mSharedPreferences.edit().putString(AppConstant.PREF_KEY_USER_EMAIL, email).apply();
     }
 
     @Override

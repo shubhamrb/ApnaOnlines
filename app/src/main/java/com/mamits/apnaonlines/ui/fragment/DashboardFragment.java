@@ -52,7 +52,7 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
     }
 
     private void setUpViewPager() {
-        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), 5);
+        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         binding.viewPager.setAdapter(viewPagerAdapter);
         binding.viewPager.setOffscreenPageLimit(1);
         binding.tabs.setupWithViewPager(binding.viewPager);

@@ -62,6 +62,7 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding, Paymen
             mContext = view.getContext();
         }
         if (isRefresh) {
+            binding.progressBar.setVisibility(View.VISIBLE);
             setUpPayments();
         }
     }
@@ -77,9 +78,7 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding, Paymen
     }
 
     private void loadPayments() {
-
         mViewModel.fetchPayments((Activity) mContext);
-        binding.recyclerPayments.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -99,7 +98,7 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding, Paymen
 
     @Override
     public void checkInternetConnection(String message) {
-
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -109,16 +108,17 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding, Paymen
 
     @Override
     public void checkValidation(int errorCode, String message) {
-
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void throwable(Throwable throwable) {
-
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onSuccessPayments(JsonObject jsonObject) {
+        binding.progressBar.setVisibility(View.GONE);
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
                 mGson = new Gson();
@@ -128,6 +128,7 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding, Paymen
 
                 if (paymentsList != null && paymentsList.size() > 0) {
                     paymentsAdapter.setList(paymentsList);
+                    binding.recyclerPayments.setVisibility(View.VISIBLE);
                 } else {
                     binding.recyclerPayments.setVisibility(View.GONE);
                 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.mamits.apnaonlines.data.local.pref.IPreferenceHelper;
 import com.mamits.apnaonlines.data.local.pref.PreferenceHelper;
+import com.mamits.apnaonlines.data.model.login.LoginDataModel;
 import com.mamits.apnaonlines.data.remote.ApiHelper;
 import com.mamits.apnaonlines.data.remote.IApiHelper;
 import com.mamits.apnaonlines.ui.utils.listeners.ResponseListener;
@@ -49,6 +50,16 @@ public class DataManager implements IDataManager {
     }
 
     @Override
+    public void fetchPaymentKeys(Activity mActivity, String accessToken, ResponseListener responseListener) {
+        mApiHelper.fetchPaymentKeys(mActivity, accessToken, responseListener);
+    }
+
+    @Override
+    public void fetchCfsToken(Activity mActivity, String accessToken, String orderId, String amount, ResponseListener responseListener) {
+        mApiHelper.fetchCfsToken(mActivity, accessToken,orderId,amount, responseListener);
+    }
+
+    @Override
     public void fetchOrders(Activity mActivity, String accessToken, int status, ResponseListener responseListener) {
         mApiHelper.fetchOrders(mActivity, accessToken, status, responseListener);
     }
@@ -86,6 +97,11 @@ public class DataManager implements IDataManager {
     @Override
     public void updateOrderStatus(Activity mActivity, String accessToken, String status, int order_id, String time, String type, String order_amount, ResponseListener responseListener) {
         mApiHelper.updateOrderStatus(mActivity, accessToken, status, order_id, time, type, order_amount, responseListener);
+    }
+
+    @Override
+    public void completeOrder(Activity mActivity, String accessToken, String des, int order_id, String pType, File uploadedFile, ResponseListener responseListener) {
+        mApiHelper.completeOrder(mActivity, accessToken, des, order_id, pType, uploadedFile, responseListener);
     }
 
     @Override
@@ -159,6 +175,16 @@ public class DataManager implements IDataManager {
     }
 
     @Override
+    public String getUserData() {
+        return mPreferenceHelper.getUserData();
+    }
+
+    @Override
+    public void setUserData(LoginDataModel loginDataModel) {
+        mPreferenceHelper.setUserData(loginDataModel);
+    }
+
+    @Override
     public void setCurrentUserId(int userId) {
         mPreferenceHelper.setCurrentUserId(userId);
     }
@@ -186,6 +212,16 @@ public class DataManager implements IDataManager {
     @Override
     public void settUserNumber(String number) {
         mPreferenceHelper.settUserNumber(number);
+    }
+
+    @Override
+    public String getUserEmail() {
+        return mPreferenceHelper.getUserEmail();
+    }
+
+    @Override
+    public void settUserEmail(String email) {
+        mPreferenceHelper.settUserEmail(email);
     }
 
     @Override

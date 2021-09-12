@@ -70,7 +70,7 @@ public class ServicesViewModel extends BaseViewModel<ServicesNavigator> {
     public void fetchServices(Activity mActivity, String category, String subCategory) {
 
         if (NetworkUtils.isNetworkConnected(mActivity)) {
-            getmNavigator().get().showProgressBars();
+            //getmNavigator().get().showProgressBars();
             getmDataManger().fetchServices(mActivity, getmDataManger().getAccessToken(), category, subCategory, new ResponseListener() {
                 @Override
                 public void onSuccess(JsonObject jsonObject) {

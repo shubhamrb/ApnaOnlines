@@ -105,10 +105,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
             if (jsonObject.get("status").getAsBoolean()) {
                 mGson = new Gson();
                 LoginDataModel model = mGson.fromJson(jsonObject.get("data").getAsJsonObject().toString(), LoginDataModel.class);
+                mViewModel.getmDataManger().setUserData(model);
                 mViewModel.getmDataManger().setAccessToken(model.getToken());
                 mViewModel.getmDataManger().setCurrentUserId(model.getUser().getId());
                 mViewModel.getmDataManger().setUsername(model.getUser().getName());
                 mViewModel.getmDataManger().settUserNumber(model.getUser().getPhone());
+                mViewModel.getmDataManger().settUserEmail(model.getUser().getEmail());
 
                 Intent intent = new Intent(this, DashboardActivity.class);
                 startActivity(intent);

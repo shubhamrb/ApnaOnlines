@@ -78,6 +78,7 @@ public class CouponFragment extends BaseFragment<FragmentCouponBinding,
             mContext = view.getContext();
         }
         if (isRefresh) {
+            binding.progressBar.setVisibility(View.VISIBLE);
             setUpCoupons();
             binding.btnAdd.setOnClickListener(this);
         } else {
@@ -116,6 +117,7 @@ public class CouponFragment extends BaseFragment<FragmentCouponBinding,
 
     @Override
     public void checkInternetConnection(String message) {
+        binding.progressBar.setVisibility(View.GONE);
         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
 
@@ -126,16 +128,19 @@ public class CouponFragment extends BaseFragment<FragmentCouponBinding,
 
     @Override
     public void checkValidation(int errorCode, String message) {
+        binding.progressBar.setVisibility(View.GONE);
         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void throwable(Throwable throwable) {
+        binding.progressBar.setVisibility(View.GONE);
         throwable.printStackTrace();
     }
 
     @Override
     public void onSuccessFetchCoupons(JsonObject jsonObject) {
+        binding.progressBar.setVisibility(View.GONE);
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
                 mGson = new Gson();
@@ -145,6 +150,7 @@ public class CouponFragment extends BaseFragment<FragmentCouponBinding,
 
                 if (couponsList != null && couponsList.size() > 0) {
                     couponsAdapter.setList(couponsList);
+                    binding.recyclerCoupons.setVisibility(View.VISIBLE);
                 } else {
                     binding.recyclerCoupons.setVisibility(View.GONE);
                 }

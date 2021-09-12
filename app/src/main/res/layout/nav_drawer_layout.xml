@@ -97,11 +97,11 @@
             android:orientation="vertical">
 
             <com.mamits.apnaonlines.ui.customviews.CustomTextView
-                android:id="@+id/my_account"
+                android:id="@+id/btn_profile"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:gravity="center_vertical"
-                android:text="My account"
+                android:text="My Profile"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12ssp"
                 app:fontName="Raleway-Regular.ttf" />

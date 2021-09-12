@@ -2,19 +2,31 @@ package com.mamits.apnaonlines.ui.fragment.dashboard;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatSpinner;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.mamits.apnaonlines.BR;
 import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.data.model.home.HomeDataModel;
+import com.mamits.apnaonlines.data.model.home.KeysDataModel;
 import com.mamits.apnaonlines.databinding.FragmentHomeBinding;
+import com.mamits.apnaonlines.ui.activity.PaymentActivity;
 import com.mamits.apnaonlines.ui.base.BaseFragment;
-import com.mamits.apnaonlines.ui.fragment.DashboardFragment;
+import com.mamits.apnaonlines.ui.customviews.CustomInputEditText;
 import com.mamits.apnaonlines.ui.navigator.fragment.HomeNavigator;
 import com.mamits.apnaonlines.viewmodel.fragment.HomeViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -27,10 +39,22 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
     HomeViewModel mViewModel;
     private Context mContext;
     private Gson mGson;
+    private BottomSheetDialog paymentDialog;
+    private ArrayAdapter payMethodAdapter;
+    private HomeDataModel model;
+    private KeysDataModel keyModel;
+    private String orderId;
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.rl_pay:
+                if (model.getPaytoadmin()==0){
+                    return;
+                }
+                openPaymentBottomDialog();
+                break;
+        }
     }
 
     @Override
@@ -52,6 +76,58 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
         }
         if (isRefresh) {
             mViewModel.fetchData((Activity) mContext);
+            mViewModel.fetchPaymentKeys((Activity) mContext);
+            binding.rlPay.setOnClickListener(this);
+        }
+    }
+
+    private void openPaymentBottomDialog() {
+        if (paymentDialog == null) {
+            paymentDialog = new BottomSheetDialog(mContext);
+            paymentDialog.setContentView(R.layout.payment_bottomsheet);
+            paymentDialog.setCanceledOnTouchOutside(false);
+
+            RelativeLayout btn_pay = paymentDialog.findViewById(R.id.btn_pay);
+            AppCompatSpinner spinner_method = paymentDialog.findViewById(R.id.spinner_method);
+            CustomInputEditText et_amount = paymentDialog.findViewById(R.id.et_amount);
+            et_amount.setText("₹ " + model.getPaytoadmin());
+
+            List<String> methodList = new ArrayList<>();
+            methodList.add("Cashfree");
+            methodList.add("Paytm");
+
+            payMethodAdapter = new ArrayAdapter(mContext, R.layout.spinner_layout, methodList);
+            spinner_method.setAdapter(payMethodAdapter);
+
+            btn_pay.setOnClickListener(v -> {
+                try {
+                    int amount = model.getPaytoadmin();
+                    if (amount == 0) {
+                        Log.e(TAG, "Amount is 0.");
+                        return;
+                    }
+                    int position = spinner_method.getSelectedItemPosition();
+                    Intent payIntent = new Intent(mContext, PaymentActivity.class);
+                    payIntent.putExtra("amount", String.valueOf(model.getPaytoadmin()));
+                    if (position == 0) {
+                        paymentDialog.dismiss();
+                        /*cashfree*/
+
+                        payIntent.putExtra("appid", "936476e4b0e75a0300a64fc14639");
+                    } else {
+                        /*paytm*/
+                        payIntent.putExtra("m_id", keyModel.getPaytm_merchant_mid());
+                    }
+
+                    startActivity(payIntent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            paymentDialog.setOnDismissListener(dialog -> {
+                paymentDialog = null;
+            });
+            paymentDialog.show();
         }
     }
 
@@ -95,14 +171,13 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
                 mGson = new Gson();
-                HomeDataModel model = mGson.fromJson(jsonObject.get("data").getAsJsonObject().toString(), HomeDataModel.class);
+                model = mGson.fromJson(jsonObject.get("data").getAsJsonObject().toString(), HomeDataModel.class);
                 binding.txtTotalOrder.setText(model.getTotalorder() + "");
                 binding.txtOrderAccept.setText(model.getTotalaccept() + "");
                 binding.txtOrderReject.setText(model.getTotalreject() + "");
                 binding.txtPendingOrder.setText(model.getTotalpending() + "");
                 binding.txtOrderComplete.setText(model.getTotalcomplete() + "");
                 binding.txtPayNow.setText("₹ " + model.getPaytoadmin() + "");
-
             } else {
                 int messageId = jsonObject.get("messageId").getAsInt();
                 String message = jsonObject.get("message").getAsString();
@@ -111,4 +186,19 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
             }
         }
     }
+
+    @Override
+    public void onSuccessPaymentKeys(JsonObject jsonObject) {
+        if (jsonObject != null) {
+            if (jsonObject.get("status").getAsBoolean()) {
+                mGson = new Gson();
+                keyModel = mGson.fromJson(jsonObject.get("data").getAsJsonArray().get(0).getAsJsonObject().toString(), KeysDataModel.class);
+            } else {
+                int messageId = jsonObject.get("messageId").getAsInt();
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }

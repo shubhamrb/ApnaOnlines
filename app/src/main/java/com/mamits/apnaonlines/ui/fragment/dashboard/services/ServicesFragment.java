@@ -97,6 +97,7 @@ public class ServicesFragment extends BaseFragment<FragmentServicesBinding, Serv
             binding.btnFilter.setOnClickListener(this);
             binding.btnAdd.setOnClickListener(this);
             loadCategorySubCategory();
+            binding.progressBar.setVisibility(View.VISIBLE);
             setUpServices();
         } else {
             loadServices(selected_cat, selected_sub_cat);
@@ -206,7 +207,6 @@ public class ServicesFragment extends BaseFragment<FragmentServicesBinding, Serv
 
     private void loadServices(String cat_id, String subcat_id) {
         mViewModel.fetchServices((Activity) mContext, cat_id, subcat_id);
-        binding.recyclerServices.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -226,7 +226,7 @@ public class ServicesFragment extends BaseFragment<FragmentServicesBinding, Serv
 
     @Override
     public void checkInternetConnection(String message) {
-
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -236,11 +236,12 @@ public class ServicesFragment extends BaseFragment<FragmentServicesBinding, Serv
 
     @Override
     public void checkValidation(int errorCode, String message) {
-
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void throwable(Throwable throwable) {
+        binding.progressBar.setVisibility(View.GONE);
         throwable.printStackTrace();
     }
 
@@ -263,6 +264,7 @@ public class ServicesFragment extends BaseFragment<FragmentServicesBinding, Serv
 
     @Override
     public void onSuccessServices(JsonObject jsonObject) {
+        binding.progressBar.setVisibility(View.GONE);
         if (jsonObject != null) {
             if (jsonObject.get("success").getAsBoolean()) {
                 mGson = new Gson();
@@ -274,6 +276,8 @@ public class ServicesFragment extends BaseFragment<FragmentServicesBinding, Serv
 
                     if (servicesList != null && servicesList.size() > 0) {
                         servicesAdapter.setList(servicesList);
+                        binding.recyclerServices.setVisibility(View.VISIBLE);
+
                     } else {
                         binding.recyclerServices.setVisibility(View.GONE);
                     }

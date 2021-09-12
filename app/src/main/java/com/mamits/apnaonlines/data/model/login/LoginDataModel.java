@@ -38,6 +38,7 @@ public class LoginDataModel implements Serializable {
         this.store = store;
     }
 
+
     @Override
     public String toString() {
         return "LoginDataModel{" +

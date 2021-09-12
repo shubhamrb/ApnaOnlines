@@ -3,6 +3,7 @@ package com.mamits.apnaonlines.ui.fragment.dashboard.services;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,6 +21,7 @@ import com.mamits.apnaonlines.data.model.services.CategoryDataModel;
 import com.mamits.apnaonlines.data.model.services.ProductDataModel;
 import com.mamits.apnaonlines.data.model.services.ServiceDataModel;
 import com.mamits.apnaonlines.data.model.services.SubCategoryDataModel;
+import com.mamits.apnaonlines.data.model.services.VariationDataModel;
 import com.mamits.apnaonlines.databinding.FragmentAddServiceBinding;
 import com.mamits.apnaonlines.ui.activity.DashboardActivity;
 import com.mamits.apnaonlines.ui.base.BaseFragment;
@@ -55,6 +57,7 @@ public class AddServiceFragment extends BaseFragment<FragmentAddServiceBinding, 
     private ServiceDataModel model;
     private boolean isUpdate = false;
     private String inventoryId = "";
+    private List<VariationDataModel> variationList;
 
     @Override
     public void onClick(View v) {
@@ -70,10 +73,39 @@ public class AddServiceFragment extends BaseFragment<FragmentAddServiceBinding, 
                 }
 
                 if (price.trim().length() == 0) {
-                    price = "";
+                    price = "0.00";
                 }
                 try {
                     finalObject.put("price", price);
+
+                    JSONArray jsonArray;
+                    if (variationList.size() == 0) {
+                        jsonArray = new JSONArray();
+                    } else {
+                        String var1 = binding.etVar1.getText().toString();
+                        if (var1.trim().length() == 0) {
+                            var1 = null;
+                        }
+                        variationList.get(0).setValue(var1);
+
+                        if (variationList.size() == 2) {
+                            String var2 = binding.etVar2.getText().toString();
+                            if (var2.trim().length() == 0) {
+                                var2 = null;
+                            }
+                            variationList.get(1).setValue(var2);
+                        }
+
+                        Gson gson = new GsonBuilder().serializeNulls().create();
+                        String listString = gson.toJson(
+                                variationList,
+                                new TypeToken<List<VariationDataModel>>() {
+                                }.getType());
+
+                        jsonArray = new JSONArray(listString);
+                    }
+
+                    finalObject.put("variation", jsonArray);
 
                     if (isUpdate) {
                         finalObject.put("inventoryid", inventoryId);
@@ -81,6 +113,7 @@ public class AddServiceFragment extends BaseFragment<FragmentAddServiceBinding, 
                     } else {
                         addService(finalObject);
                     }
+                    Log.e(TAG, "JSON : " + finalObject);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -209,6 +242,15 @@ public class AddServiceFragment extends BaseFragment<FragmentAddServiceBinding, 
                 }.getType();
                 productsList = mGson.fromJson(jsonObject.get("data").getAsJsonArray().toString(), products);
 
+                if (productsList.size() == 0) {
+                    variationList = new ArrayList<>();
+                    binding.rlVar1.setVisibility(View.GONE);
+                    binding.rlVar2.setVisibility(View.GONE);
+                    binding.rlPrice.setVisibility(View.GONE);
+                    binding.btnSubmit.setVisibility(View.GONE);
+                } else {
+                    binding.btnSubmit.setVisibility(View.VISIBLE);
+                }
                 fillServicesSpinner();
             } else {
                 int messageId = jsonObject.get("messageId").getAsInt();
@@ -245,10 +287,7 @@ public class AddServiceFragment extends BaseFragment<FragmentAddServiceBinding, 
                 subCategoryList.add(model.getName());
             }
 
-            binding.etPrice.setText(model.getPrice());
-            binding.rlPrice.setVisibility(View.VISIBLE);
         }
-
 
         binding.spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -274,14 +313,12 @@ public class AddServiceFragment extends BaseFragment<FragmentAddServiceBinding, 
 
                     if (!selected_cat.equals("Select Category") && !selected_sub_cat.equals("Select Subcategory")) {
                         fetchProducts();
-                        binding.rlPrice.setVisibility(View.VISIBLE);
                     } else {
                         if (servicesAdapter != null) {
                             servicesAdapter.clear();
                             servicesAdapter.notifyDataSetChanged();
                             finalObject = null;
                         }
-                        binding.rlPrice.setVisibility(View.GONE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -304,14 +341,12 @@ public class AddServiceFragment extends BaseFragment<FragmentAddServiceBinding, 
 
                     if (!selected_cat.equals("Select Category") && !selected_sub_cat.equals("Select Subcategory")) {
                         fetchProducts();
-                        binding.rlPrice.setVisibility(View.VISIBLE);
                     } else {
                         if (servicesAdapter != null) {
                             servicesAdapter.clear();
                             servicesAdapter.notifyDataSetChanged();
                             finalObject = null;
                         }
-                        binding.rlPrice.setVisibility(View.GONE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -352,17 +387,26 @@ public class AddServiceFragment extends BaseFragment<FragmentAddServiceBinding, 
                     finalObject.put("product", String.valueOf(productsList.get(i).getId()));
                     finalObject.put("product_type", String.valueOf(productsList.get(i).getProduct_type()));
 
-                    List<ProductDataModel.VariationDataModel> list = productsList.get(i).getVariation();
 
-                    Gson gson = new GsonBuilder().serializeNulls().create();
-                    String listString = gson.toJson(
-                            list,
-                            new TypeToken<List<ProductDataModel>>() {
-                            }.getType());
+                    if (productsList.get(i).getProduct_type() == 0) {
+                        variationList = new ArrayList<>();
+                        binding.rlVar1.setVisibility(View.GONE);
+                        binding.rlVar2.setVisibility(View.GONE);
 
-                    JSONArray jsonArray = new JSONArray(listString);
-                    finalObject.put("variation", jsonArray);
-                    model = null;
+                        if (model != null && model.getPrice() != null) {
+                            binding.etPrice.setText(model.getPrice());
+                        }
+                        binding.rlPrice.setVisibility(View.VISIBLE);
+                    } else {
+                        if (model != null) {
+                            variationList = model.getVariation();
+                        } else {
+                            variationList = productsList.get(i).getVariation();
+                        }
+                        binding.rlPrice.setVisibility(View.GONE);
+                        setUpVariations(variationList);
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -372,6 +416,57 @@ public class AddServiceFragment extends BaseFragment<FragmentAddServiceBinding, 
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+
+        if (productsList.size() == 0) {
+            setUpVariations(variationList);
+        }
     }
 
+    private void setUpVariations(List<VariationDataModel> list) {
+        if (list.size() != 0) {
+            binding.rlVar1.setVisibility(View.GONE);
+            binding.rlVar2.setVisibility(View.GONE);
+
+            VariationDataModel var = list.get(0);
+            String name = var.getName();
+            if (name != null) {
+                binding.labelVar1.setText(name);
+            } else {
+                binding.labelVar1.setText("null");
+            }
+            String value = var.getValue();
+            if (value != null) {
+                binding.etVar1.setText(value);
+            } else {
+                binding.etVar1.setHint(binding.labelVar1.getText().toString());
+            }
+
+            binding.rlVar1.setVisibility(View.VISIBLE);
+
+            if (list.size() == 2) {
+                VariationDataModel var2 = list.get(1);
+                String name2 = var2.getName();
+                if (name2 != null) {
+                    binding.labelVar2.setText(name2);
+                } else {
+                    binding.labelVar2.setText("null");
+                }
+
+                String value2 = var2.getValue();
+                if (value2 != null) {
+                    binding.etVar2.setText(value2);
+                } else {
+                    binding.etVar2.setHint(binding.labelVar2.getText().toString());
+                }
+                binding.rlVar2.setVisibility(View.VISIBLE);
+            }
+
+
+        } else {
+            binding.rlVar1.setVisibility(View.GONE);
+            binding.rlVar2.setVisibility(View.GONE);
+        }
+
+        model = null;
+    }
 }

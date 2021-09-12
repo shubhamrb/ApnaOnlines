@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mamits.apnaonlines" >
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.mamits.apnaonlines">
 
-    <!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the "MyLocation" functionality.
-    -->
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -19,17 +16,26 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ApnaOnlinesVendor" >
+        android:theme="@style/Theme.ApnaOnlinesVendor"
+        tools:node="merge">
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".ui.activity.DashboardActivity"
-            android:exported="true" />
+            android:exported="true"
+            />
         <activity
             android:name=".ui.activity.RegisterActivity"
             android:exported="true" />
         <activity
+            android:name=".ui.activity.PaymentActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.activity.MainActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

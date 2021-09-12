@@ -14,11 +14,15 @@ import com.mamits.apnaonlines.data.model.payments.PaymentsDataModel;
 import com.mamits.apnaonlines.data.model.payments.TransactionsDataModel;
 import com.mamits.apnaonlines.ui.customviews.CustomCircularImageView;
 import com.mamits.apnaonlines.ui.customviews.CustomTextView;
+import com.mamits.apnaonlines.ui.utils.DateConvertor;
 import com.mamits.apnaonlines.viewmodel.fragment.PaymentsViewModel;
 import com.mamits.apnaonlines.viewmodel.fragment.TransactionsViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapter.TransactionsViewHolder> {
 
@@ -46,7 +50,16 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     public void onBindViewHolder(@NonNull TransactionsViewHolder holder, int position) {
         if (list.size() > 0) {
             TransactionsDataModel model = list.get(position);
-            holder.txt_date.setText(model.getCreated_at());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            try {
+                Date d1 = formatter.parse(model.getCreated_at());
+                String date = new DateConvertor().getDate(d1.getTime(), DateConvertor.FORMAT_dd_MM_yyyy_HH_mm_ss);
+                holder.txt_date.setText(date);
+
+            } catch (Exception e) {
+                holder.txt_date.setText(model.getCreated_at());
+                e.printStackTrace();
+            }
             holder.txt_order_id.setText(String.format("#%s", model.getId()));
             holder.txt_username.setText(model.getPayment_type());
             holder.txt_service_category.setText(model.getDescription());

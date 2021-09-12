@@ -45,4 +45,9 @@
         android:name="com.mamits.apnaonlines.ui.fragment.dashboard.drawer.ChangePasswordFragment"
         tools:layout="@layout/fragment_change_password" />
 
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.mamits.apnaonlines.ui.fragment.dashboard.drawer.ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
+
 </navigation>
