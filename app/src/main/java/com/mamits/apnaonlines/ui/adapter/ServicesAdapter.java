@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -54,13 +55,16 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Orders
             ServiceDataModel model = list.get(position);
             if (model.getVariation().size() != 0) {
                 holder.txt_service_type.setText("VARIATION");
+                holder.ll_status.setVisibility(View.INVISIBLE);
             } else {
                 holder.txt_service_type.setText("SIMPLE");
+                holder.txt_price.setText("₹ " + model.getPrice());
+                holder.ll_status.setVisibility(View.VISIBLE);
             }
-            holder.txt_commission.setText("Commission - ₹ " + model.getAdmin_commission());
+            holder.txt_commission.setText("Platform charge - ₹ " + model.getAdmin_commission());
             holder.txt_service_name.setText(model.getName());
             holder.txt_service_category_sub.setText(model.getCategory().getName() + " | " + model.getSubcategory().getName());
-            holder.txt_price.setText("₹ " + model.getPrice());
+
 
             Glide.with(mContext).load(model.getImage()).into(holder.img);
 
@@ -99,6 +103,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Orders
         private CustomTextView txt_commission, txt_service_type, txt_service_name, txt_service_category_sub, txt_price;
         private CustomCircularImageView img;
         private ImageView btn_delete;
+        private LinearLayout ll_status;
 
         public OrdersViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -109,6 +114,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Orders
             txt_price = itemView.findViewById(R.id.txt_price);
             img = itemView.findViewById(R.id.img);
             btn_delete = itemView.findViewById(R.id.btn_delete);
+            ll_status = itemView.findViewById(R.id.ll_status);
 
         }
     }

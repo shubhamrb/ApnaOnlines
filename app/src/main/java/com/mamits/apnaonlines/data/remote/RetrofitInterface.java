@@ -35,6 +35,10 @@ public interface RetrofitInterface {
     Call<JsonObject> fetchCfsToken(@Header("Authorization") String accessToken, @Body String jsonObject);
 
     @Headers("Content-Type: application/json")
+    @POST(ApiConstant.FETCH_PAYTM_TOKEN_END_POINT)
+    Call<JsonObject> fetchPaytmToken(@Header("Authorization") String accessToken, @Body String jsonObject);
+
+    @Headers("Content-Type: application/json")
     @POST(ApiConstant.ORDERS_END_POINT)
     Call<JsonObject> fetchOrders(@Header("Authorization") String accessToken, @Body String jsonObject);
 

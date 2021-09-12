@@ -22,11 +22,14 @@
 
         <com.mamits.apnaonlines.ui.customviews.CustomTextView
             android:id="@+id/txt_message"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/progress_bar"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
             android:layout_centerInParent="true"
             android:text="Please wait..."
+            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/_15ssp"
             app:fontName="Raleway-Medium.ttf" />

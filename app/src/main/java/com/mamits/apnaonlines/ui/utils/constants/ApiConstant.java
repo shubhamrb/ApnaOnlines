@@ -7,6 +7,7 @@ public class ApiConstant {
     public static final String HOME_DATA_END_POINT = BuildConfig.BASE_URL + "api/auth/vendordashboard";
     public static final String PAYMENT_KEYS_END_POINT = BuildConfig.BASE_URL + "api/getSetting";
     public static final String FETCH_CFSTOKEN_END_POINT = BuildConfig.BASE_URL + "api/auth/cashfreetoken";
+    public static final String FETCH_PAYTM_TOKEN_END_POINT = BuildConfig.BASE_URL + "api/auth/paytmtoken";
     public static final String ORDERS_END_POINT = BuildConfig.BASE_URL + "api/auth/vendorOrder";
     public static final String PAYMENTS_END_POINT = BuildConfig.BASE_URL + "api/auth/paymenthistory";
     public static final String TRANSACTIONS_END_POINT = BuildConfig.BASE_URL + "api/auth/transactionHistory";

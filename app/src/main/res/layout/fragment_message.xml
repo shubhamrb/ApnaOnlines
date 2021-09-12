@@ -92,8 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:backgroundTint="@color/white"
-            android:elevation="@dimen/_15sdp"
-            >
+            android:elevation="@dimen/_15sdp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -130,14 +129,13 @@
                     android:layout_height="@dimen/_50sdp"
                     android:layout_below="@id/rl_file">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/btn_attach"
                         android:layout_width="@dimen/_35sdp"
                         android:layout_height="@dimen/_35sdp"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="@dimen/_5sdp"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/attach" />
+                        android:src="@drawable/upload_file" />
 
                     <com.mamits.apnaonlines.ui.customviews.CustomInputEditText
                         android:id="@+id/et_message"

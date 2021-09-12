@@ -42,9 +42,9 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
     @Inject
     PaymentActivityViewModel mViewModel;
     ActivityPaymentBinding binding;
-    private String orderId;
-    private String amount, appid, m_id;
+    private String orderId, customerName, customerPhone, customerEmail, amount, appid, m_id;
     private static final String STAGE_CALLBACK_URL_PAYTM = "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=";
+    private static final String PROD_CALLBACK_URL_PAYTM = "https://securegw.paytm.in/theia/paytmCallback?ORDER_ID=";
 
     @Override
     public int getBindingVariable() {
@@ -63,7 +63,9 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
         mViewModel.setNavigator(this);
 
         amount = getIntent().getStringExtra("amount");
-
+        customerName = mViewModel.getmDataManger().getUsername();
+        customerPhone = mViewModel.getmDataManger().getUserNumber();
+        customerEmail = mViewModel.getmDataManger().getUserEmail();
         if (getIntent().hasExtra("appid")) {
             appid = getIntent().getStringExtra("appid");
         } else if (getIntent().hasExtra("m_id")) {
@@ -76,7 +78,16 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
         int n = 10000 + new Random().nextInt(90000);
         int m = (int) Math.pow(10, n - 1);
         orderId = String.valueOf(m + new Random().nextInt(9 * m)).replace("-", "");
-        getCfsToken();
+        if (appid != null) {
+            getCfsToken();
+        } else if (m_id != null) {
+            getPaytmToken();
+        }
+
+    }
+
+    private void getPaytmToken() {
+        mViewModel.fetchPaytmToken(this, orderId, amount,customerPhone,customerEmail);
     }
 
     private void getCfsToken() {
@@ -138,14 +149,15 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
             Map<String, String> params = getInputParams();
             if (params != null) {
                 Log.e(TAG, "params : " + params);
-                CFPaymentService.getCFPaymentServiceInstance().doPayment(this, params, token, "TEST");
+                CFPaymentService.getCFPaymentServiceInstance().doPayment(this, params, token, "PROD");
             } else {
                 Log.e(TAG, "PAYMENT : " + "keys not found");
                 finish();
             }
         } else {
             /*paytm*/
-            PaytmOrder paytmOrder = new PaytmOrder(orderId, m_id, token, amount, STAGE_CALLBACK_URL_PAYTM + orderId);
+
+            PaytmOrder paytmOrder = new PaytmOrder(orderId, m_id, token, amount, PROD_CALLBACK_URL_PAYTM + orderId);
             TransactionManager transactionManager = new TransactionManager(paytmOrder, this);
             transactionManager.setAppInvokeEnabled(false);
             transactionManager.startTransaction(this, 101);
@@ -176,10 +188,6 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
     private Map<String, String> getInputParams() {
 
         if (amount != null && appid != null) {
-            String customerName = mViewModel.getmDataManger().getUsername();
-            String customerPhone = mViewModel.getmDataManger().getUserNumber();
-            String customerEmail = mViewModel.getmDataManger().getUserEmail();
-
             Map<String, String> params = new HashMap<>();
 
             params.put(PARAM_APP_ID, appid);
@@ -206,7 +214,7 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
 
     @Override
     public void onTransactionResponse(@Nullable Bundle bundle) {
-        if (bundle!=null){
+        if (bundle != null) {
             binding.txtMessage.setText(bundle.toString());
         }
     }
@@ -220,25 +228,25 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
     @Override
     public void onErrorProceed(String s) {
         binding.progressBar.setVisibility(View.GONE);
-        binding.txtMessage.setText("PAYMENT ERROR : " +s);
+        binding.txtMessage.setText("PAYMENT ERROR : " + s);
     }
 
     @Override
     public void clientAuthenticationFailed(String s) {
         binding.progressBar.setVisibility(View.GONE);
-        binding.txtMessage.setText("PAYMENT ERROR : " +s);
+        binding.txtMessage.setText("PAYMENT ERROR : " + s);
     }
 
     @Override
     public void someUIErrorOccurred(String s) {
         binding.progressBar.setVisibility(View.GONE);
-        binding.txtMessage.setText("PAYMENT ERROR : " +s);
+        binding.txtMessage.setText("PAYMENT ERROR : " + s);
     }
 
     @Override
     public void onErrorLoadingWebPage(int i, String s, String s1) {
         binding.progressBar.setVisibility(View.GONE);
-        binding.txtMessage.setText("PAYMENT ERROR : " +s +" "+s1);
+        binding.txtMessage.setText("PAYMENT ERROR : " + s + " " + s1);
     }
 
     @Override
@@ -250,6 +258,6 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
     @Override
     public void onTransactionCancel(String s, Bundle bundle) {
         binding.progressBar.setVisibility(View.GONE);
-        binding.txtMessage.setText("PAYMENT ERROR : "+ s+" "+bundle.toString());
+        binding.txtMessage.setText("PAYMENT ERROR : " + s + " " + bundle.toString());
     }
 }

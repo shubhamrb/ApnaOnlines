@@ -123,6 +123,34 @@ public class ApiHelper implements IApiHelper {
     }
 
     @Override
+    public void fetchPaytmToken(Activity mActivity, String accessToken, String orderId, String amount, String customerPhone, String customerEmail, ResponseListener responseListener) {
+        RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("orderId", orderId);
+            jsonObject.put("orderAmount", amount);
+            jsonObject.put("mobile", customerPhone);
+            jsonObject.put("email", customerEmail);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        call.fetchPaytmToken("Bearer " + accessToken, jsonObject.toString()).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    responseListener.onSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                responseListener.onFailed(t);
+            }
+        });
+    }
+
+    @Override
     public void fetchOrders(Activity mActivity, String accessToken, int status, ResponseListener responseListener) {
         RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
 

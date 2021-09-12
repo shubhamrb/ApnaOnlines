@@ -113,7 +113,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
                         paymentDialog.dismiss();
                         /*cashfree*/
 
-                        payIntent.putExtra("appid", "936476e4b0e75a0300a64fc14639");
+                        payIntent.putExtra("appid", keyModel.getAppid());//"936476e4b0e75a0300a64fc14639"
                     } else {
                         /*paytm*/
                         payIntent.putExtra("m_id", keyModel.getPaytm_merchant_mid());

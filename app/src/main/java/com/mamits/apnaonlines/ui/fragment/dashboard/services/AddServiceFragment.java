@@ -152,8 +152,10 @@ public class AddServiceFragment extends BaseFragment<FragmentAddServiceBinding, 
                 model = (ServiceDataModel) bundle.getSerializable("model");
                 inventoryId = String.valueOf(model.getId());
                 isUpdate = true;
+                binding.txtH1.setText("Edit Service");
                 binding.btnSubmit.setText("Update");
             } else {
+                binding.txtH1.setText("Add Service");
                 binding.btnSubmit.setText("Submit");
             }
             loadCategorySubCategory();
@@ -394,7 +396,8 @@ public class AddServiceFragment extends BaseFragment<FragmentAddServiceBinding, 
                         binding.rlVar2.setVisibility(View.GONE);
 
                         if (model != null && model.getPrice() != null) {
-                            binding.etPrice.setText(model.getPrice());
+                            double finalPrice = Double.parseDouble(model.getPrice()) - Double.parseDouble(model.getAdmin_commission());
+                            binding.etPrice.setText(""+finalPrice);
                         }
                         binding.rlPrice.setVisibility(View.VISIBLE);
                     } else {

@@ -60,6 +60,11 @@ public class DataManager implements IDataManager {
     }
 
     @Override
+    public void fetchPaytmToken(Activity mActivity, String accessToken, String orderId, String amount, String customerPhone, String customerEmail, ResponseListener responseListener) {
+        mApiHelper.fetchPaytmToken(mActivity, accessToken,orderId,amount,customerPhone,customerEmail, responseListener);
+    }
+
+    @Override
     public void fetchOrders(Activity mActivity, String accessToken, int status, ResponseListener responseListener) {
         mApiHelper.fetchOrders(mActivity, accessToken, status, responseListener);
     }

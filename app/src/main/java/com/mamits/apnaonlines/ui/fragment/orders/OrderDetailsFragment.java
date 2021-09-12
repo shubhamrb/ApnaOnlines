@@ -100,8 +100,13 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
             AppCompatSpinner spin = completeOrderDialog.findViewById(R.id.spinner);
 
             ArrayList<String> payMethod = new ArrayList<>();
-            payMethod.add("Pay on shop");
-            payMethod.add("Upi");
+            if (model.getPayment_type()==null || model.getPayment_type().equals("")){
+                payMethod.add("Pay on shop");
+                payMethod.add("Upi");
+            }else {
+                payMethod.add(model.getPayment_type());
+            }
+
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_layout, payMethod);
             spin.setAdapter(adapter);

@@ -18,6 +18,8 @@ public interface IApiHelper {
 
     void fetchCfsToken(Activity mActivity, String accessToken, String orderId, String amount, ResponseListener responseListener);
 
+    void fetchPaytmToken(Activity mActivity, String accessToken, String orderId, String amount, String customerPhone, String customerEmail, ResponseListener responseListener);
+
     void fetchOrders(Activity mActivity, String accessToken, int status, ResponseListener responseListener);
 
     void fetchPayments(Activity mActivity, String accessToken, ResponseListener responseListener);
