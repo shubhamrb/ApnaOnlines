@@ -30,6 +30,10 @@ public interface IApiHelper {
 
     void sendOtp(Activity mActivity, String number, ResponseListener responseListener);
 
+    void signUp(Activity mActivity, String number, ResponseListener responseListener);
+
+    void doRegistration(Activity mActivity, JSONObject jsonObject, ResponseListener responseListener);
+
     void verifyOtp(Activity mActivity, String number, String otp, ResponseListener responseListener);
 
     void updatePin(Activity mActivity, String number, String newPin, ResponseListener responseListener);
@@ -49,6 +53,8 @@ public interface IApiHelper {
     void fetchServices(Activity mActivity, String accessToken, String category, String subCategory, ResponseListener responseListener);
 
     void fetchCategorySubcategory(Activity mActivity, String accessToken, ResponseListener responseListener);
+
+    void updateCategory(Activity mActivity, String accessToken, JSONObject jsonObject, ResponseListener responseListener);
 
     void deleteCoupon(Activity mActivity, String accessToken, String couponid, ResponseListener responseListener);
 

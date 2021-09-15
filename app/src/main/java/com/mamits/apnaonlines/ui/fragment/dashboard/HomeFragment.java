@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
@@ -49,7 +50,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rl_pay:
-                if (model.getPaytoadmin()==0){
+                if (model.getPaytoadmin() == 0) {
                     return;
                 }
                 openPaymentBottomDialog();
@@ -75,10 +76,16 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
             mContext = view.getContext();
         }
         if (isRefresh) {
-            mViewModel.fetchData((Activity) mContext);
-            mViewModel.fetchPaymentKeys((Activity) mContext);
+            fetchData();
             binding.rlPay.setOnClickListener(this);
+
+            binding.swipe.setOnRefreshListener(this::fetchData);
         }
+    }
+
+    private void fetchData() {
+        mViewModel.fetchData((Activity) mContext);
+        mViewModel.fetchPaymentKeys((Activity) mContext);
     }
 
     private void openPaymentBottomDialog() {
@@ -148,7 +155,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
 
     @Override
     public void checkInternetConnection(String message) {
-
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
     }
 
     @Override
@@ -158,16 +166,21 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
 
     @Override
     public void checkValidation(int errorCode, String message) {
-
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
     }
 
     @Override
     public void throwable(Throwable throwable) {
         throwable.printStackTrace();
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
     }
 
     @Override
     public void onSuccessHomeData(JsonObject jsonObject) {
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
                 mGson = new Gson();
@@ -178,6 +191,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
                 binding.txtPendingOrder.setText(model.getTotalpending() + "");
                 binding.txtOrderComplete.setText(model.getTotalcomplete() + "");
                 binding.txtPayNow.setText("₹ " + model.getPaytoadmin() + "");
+
+
             } else {
                 int messageId = jsonObject.get("messageId").getAsInt();
                 String message = jsonObject.get("message").getAsString();

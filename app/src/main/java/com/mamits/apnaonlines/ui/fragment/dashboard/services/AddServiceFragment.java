@@ -9,6 +9,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import com.google.gson.Gson;
@@ -208,13 +211,50 @@ public class AddServiceFragment extends BaseFragment<FragmentAddServiceBinding, 
         if (jsonObject != null) {
             if (jsonObject.get("success").getAsBoolean()) {
                 String message = jsonObject.get("message").getAsString();
-                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                Navigation.findNavController(((DashboardActivity) mContext).findViewById(R.id.nav_host_fragment)).navigateUp();
+                int messageId = jsonObject.get("messageId").getAsInt();
+                if (messageId == 204) {
+                    new AlertDialog.Builder(mContext)
+                            .setTitle("Already Added")
+                            .setMessage(message)
+                            .setPositiveButton("View", (dialog, which) -> {
+                                try {
+                                    ServiceDataModel model = mGson.fromJson(jsonObject.get("data").getAsJsonObject().toString(), ServiceDataModel.class);
+                                    goToEditService(model);
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            })
+
+                            .setNegativeButton(android.R.string.no, null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                } else {
+                    Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                    Navigation.findNavController(((DashboardActivity) mContext).findViewById(R.id.nav_host_fragment)).navigateUp();
+
+                }
             } else {
                 int messageId = jsonObject.get("messageId").getAsInt();
                 String message = jsonObject.get("message").getAsString();
                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private void goToEditService(ServiceDataModel model) {
+        try {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("model", model);
+            NavOptions options = new NavOptions.Builder()
+                    .setEnterAnim(R.anim.slide_out_right)
+                    .setExitAnim(R.anim.slide_in).setPopEnterAnim(0).setPopExitAnim(R.anim.slide_out1)
+                    .build();
+            NavController navController = Navigation.findNavController(((DashboardActivity) mContext).findViewById(R.id.nav_host_fragment));
+            navController.popBackStack(R.id.nav_add_service, true);
+            navController.navigate(R.id.nav_add_service, bundle, options);
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -397,7 +437,7 @@ public class AddServiceFragment extends BaseFragment<FragmentAddServiceBinding, 
 
                         if (model != null && model.getPrice() != null) {
                             double finalPrice = Double.parseDouble(model.getPrice()) - Double.parseDouble(model.getAdmin_commission());
-                            binding.etPrice.setText(""+finalPrice);
+                            binding.etPrice.setText("" + finalPrice);
                         }
                         binding.rlPrice.setVisibility(View.VISIBLE);
                     } else {

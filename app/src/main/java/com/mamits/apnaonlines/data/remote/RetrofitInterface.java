@@ -59,6 +59,14 @@ public interface RetrofitInterface {
     Call<JsonObject> sendOtp(@Body String jsonObject);
 
     @Headers("Content-Type: application/json")
+    @POST(ApiConstant.SIGNUP_END_POINT)
+    Call<JsonObject> signUp(@Body String jsonObject);
+
+    @Headers("Content-Type: application/json")
+    @POST(ApiConstant.REGISTRATION_END_POINT)
+    Call<JsonObject> doRegistration(@Body String jsonObject);
+
+    @Headers("Content-Type: application/json")
     @POST(ApiConstant.VERIFY_OTP_END_POINT)
     Call<JsonObject> verifyOtp(@Body String jsonObject);
 
@@ -96,6 +104,10 @@ public interface RetrofitInterface {
     @Headers("Content-Type: application/json")
     @POST(ApiConstant.FETCH_CAT_SUB_CATEGORY_END_POINT)
     Call<JsonObject> fetchCatSubCategory(@Header("Authorization") String accessToken);
+
+    @Headers("Content-Type: application/json")
+    @POST(ApiConstant.UPDATE_CATEGORY_END_POINT)
+    Call<JsonObject> updateCategory(@Header("Authorization") String accessToken, @Body String jsonObject);
 
     @Headers("Content-Type: application/json")
     @POST(ApiConstant.DELETE_SERVICE_END_POINT)

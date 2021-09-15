@@ -5,10 +5,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.mamits.apnaonlines.ui.fragment.dashboard.coupons.CouponFragment;
+import com.mamits.apnaonlines.ui.fragment.dashboard.CategoryFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.HomeFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.InboxFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.PaymentFragment;
+import com.mamits.apnaonlines.ui.fragment.dashboard.coupons.CouponFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.services.ServicesFragment;
 import com.mamits.apnaonlines.ui.fragment.orders.OrdersFragment;
 
@@ -24,14 +25,16 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment;
         if (position == 0) {
-            fragment = new HomeFragment();
+            fragment = new CategoryFragment();
         } else if (position == 1) {
-            fragment = new OrdersFragment();
+            fragment = new HomeFragment();
         } else if (position == 2) {
-            fragment = new InboxFragment();
+            fragment = new OrdersFragment();
         } else if (position == 3) {
-            fragment = new ServicesFragment();
+            fragment = new InboxFragment();
         } else if (position == 4) {
+            fragment = new ServicesFragment();
+        } else if (position == 5) {
             fragment = new PaymentFragment();
         } else {
             fragment = new CouponFragment();
@@ -41,21 +44,23 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 6;
+        return 7;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         String title;
         if (position == 0) {
-            title = "Home";
+            title = "Category";
         } else if (position == 1) {
-            title = "Orders";
+            title = "Home";
         } else if (position == 2) {
-            title = "Chat";
+            title = "Orders";
         } else if (position == 3) {
-            title = "Services";
+            title = "Chat";
         } else if (position == 4) {
+            title = "Services";
+        } else if (position == 5) {
             title = "Payments";
         } else {
             title = "Coupons";

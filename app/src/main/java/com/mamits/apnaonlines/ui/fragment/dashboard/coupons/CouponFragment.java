@@ -81,6 +81,7 @@ public class CouponFragment extends BaseFragment<FragmentCouponBinding,
             binding.progressBar.setVisibility(View.VISIBLE);
             setUpCoupons();
             binding.btnAdd.setOnClickListener(this);
+            binding.swipe.setOnRefreshListener(this::loadCoupons);
         } else {
             loadCoupons();
         }
@@ -118,6 +119,8 @@ public class CouponFragment extends BaseFragment<FragmentCouponBinding,
     @Override
     public void checkInternetConnection(String message) {
         binding.progressBar.setVisibility(View.GONE);
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
 
@@ -129,18 +132,24 @@ public class CouponFragment extends BaseFragment<FragmentCouponBinding,
     @Override
     public void checkValidation(int errorCode, String message) {
         binding.progressBar.setVisibility(View.GONE);
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void throwable(Throwable throwable) {
         binding.progressBar.setVisibility(View.GONE);
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
         throwable.printStackTrace();
     }
 
     @Override
     public void onSuccessFetchCoupons(JsonObject jsonObject) {
         binding.progressBar.setVisibility(View.GONE);
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
                 mGson = new Gson();

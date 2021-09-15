@@ -1,4 +1,5 @@
-package com.mamits.apnaonlines.viewmodel.activity;
+package com.mamits.apnaonlines.viewmodel.fragment;
+
 
 import android.app.Activity;
 
@@ -6,7 +7,7 @@ import com.androidnetworking.error.ANError;
 import com.google.gson.JsonObject;
 import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.data.datamanager.IDataManager;
-import com.mamits.apnaonlines.ui.navigator.activity.RegisterActivityNavigator;
+import com.mamits.apnaonlines.ui.navigator.fragment.CategoryNavigator;
 import com.mamits.apnaonlines.ui.utils.commonClasses.NetworkUtils;
 import com.mamits.apnaonlines.ui.utils.listeners.ResponseListener;
 import com.mamits.apnaonlines.ui.utils.rx.ISchedulerProvider;
@@ -14,23 +15,21 @@ import com.mamits.apnaonlines.viewmodel.base.BaseViewModel;
 
 import org.json.JSONObject;
 
+public class CategoryViewModel extends BaseViewModel<CategoryNavigator> {
 
-public class RegisterActivityViewModel extends BaseViewModel<RegisterActivityNavigator> {
-
-
-    public RegisterActivityViewModel(IDataManager mDataManager, ISchedulerProvider mSchedulerProvider) {
-        super(mDataManager, mSchedulerProvider);
+    public CategoryViewModel(IDataManager dataManager, ISchedulerProvider schedulerProvider) {
+        super(dataManager, schedulerProvider);
     }
 
-    public void sendOtp(Activity mActivity, String number, boolean isResend) {
+    public void fetchCategory(Activity mActivity) {
         if (NetworkUtils.isNetworkConnected(mActivity)) {
-            getmNavigator().get().showLoader();
-            getmDataManger().signUp(mActivity, number, new ResponseListener() {
+            getmDataManger().fetchCategorySubcategory(mActivity, getmDataManger().getAccessToken(), new ResponseListener() {
                 @Override
                 public void onSuccess(JsonObject jsonObject) {
                     try {
-                        getmNavigator().get().hideLoader();
-                        getmNavigator().get().onSuccessSendOtp(jsonObject, isResend);
+                        getmNavigator().get().hideProgressBars();
+
+                        getmNavigator().get().onSuccessCategory(jsonObject);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -39,7 +38,8 @@ public class RegisterActivityViewModel extends BaseViewModel<RegisterActivityNav
                 @Override
                 public void onFailed(Throwable throwable) {
                     try {
-                        getmNavigator().get().hideLoader();
+                        getmNavigator().get().hideProgressBars();
+
                         if (throwable instanceof ANError) {
                             ANError anError = (ANError) throwable;
                             if (anError.getErrorBody() != null) {
@@ -66,15 +66,16 @@ public class RegisterActivityViewModel extends BaseViewModel<RegisterActivityNav
         }
     }
 
-    public void doRegistration(Activity mActivity, JSONObject jsonObject) {
+    public void updateCategory(Activity mActivity, JSONObject jsonObject) {
         if (NetworkUtils.isNetworkConnected(mActivity)) {
-            getmNavigator().get().showLoader();
-            getmDataManger().doRegistration(mActivity, jsonObject, new ResponseListener() {
+            getmNavigator().get().showProgressBars();
+            getmDataManger().updateCategory(mActivity, getmDataManger().getAccessToken(),jsonObject, new ResponseListener() {
                 @Override
                 public void onSuccess(JsonObject jsonObject) {
                     try {
-                        getmNavigator().get().hideLoader();
-                        getmNavigator().get().onSuccessRegistration(jsonObject);
+                        getmNavigator().get().hideProgressBars();
+
+                        getmNavigator().get().onSuccessUpdateCategory(jsonObject);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -83,7 +84,8 @@ public class RegisterActivityViewModel extends BaseViewModel<RegisterActivityNav
                 @Override
                 public void onFailed(Throwable throwable) {
                     try {
-                        getmNavigator().get().hideLoader();
+                        getmNavigator().get().hideProgressBars();
+
                         if (throwable instanceof ANError) {
                             ANError anError = (ANError) throwable;
                             if (anError.getErrorBody() != null) {

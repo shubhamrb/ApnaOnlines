@@ -69,12 +69,12 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Orders
             Glide.with(mContext).load(model.getImage()).into(holder.img);
 
             holder.btn_delete.setOnClickListener(v -> listener.onDeleteService(String.valueOf(model.getId())));
-            holder.itemView.setOnClickListener(v -> goToCreateCoupon(v, model));
+            holder.itemView.setOnClickListener(v -> goToEditService(v, model));
         }
 
     }
 
-    private void goToCreateCoupon(View v, ServiceDataModel model) {
+    private void goToEditService(View v, ServiceDataModel model) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("model", model);
         NavOptions options = new NavOptions.Builder()

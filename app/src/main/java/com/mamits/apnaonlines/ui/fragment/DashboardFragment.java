@@ -64,9 +64,9 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
 
             @Override
             public void onPageSelected(int position) {
-                if (position==0){
+                if (position == 0) {
                     binding.txtWish.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     binding.txtWish.setVisibility(View.GONE);
                 }
             }
@@ -77,6 +77,7 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
             }
         });
     }
+
 
     private void setWishText() {
         Calendar c = Calendar.getInstance();
@@ -122,6 +123,15 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
     @Override
     public void hideProgressBars() {
 
+    }
+
+    public boolean setViewPagerToHome() {
+        if (binding.viewPager.getCurrentItem() == 0) {
+            return true;
+        } else {
+            binding.viewPager.setCurrentItem(0);
+            return false;
+        }
     }
 
     @Override

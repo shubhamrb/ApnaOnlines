@@ -87,6 +87,11 @@ dependencies {
     implementation "com.amitshekhar.android:rx2-android-networking:$rootProject.rx2FastAndroidNetworking"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
+    /*okhttp3*/
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.1"))
+    implementation("com.squareup.okhttp3:okhttp")              // No version!
+    implementation("com.squareup.okhttp3:okhttp-urlconnection") // No version!
+    implementation("com.squareup.okhttp3:logging-interceptor")
     // reactive
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjava2Version"
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"

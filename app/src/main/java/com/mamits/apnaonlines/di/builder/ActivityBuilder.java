@@ -6,6 +6,7 @@ import com.mamits.apnaonlines.di.module.activity.MainActivityModule;
 import com.mamits.apnaonlines.di.module.activity.PaymentActivityModule;
 import com.mamits.apnaonlines.di.module.activity.RegisterActivityModule;
 import com.mamits.apnaonlines.di.module.fragment.AddServiceModule;
+import com.mamits.apnaonlines.di.module.fragment.CategoryModule;
 import com.mamits.apnaonlines.di.module.fragment.ChangePasswordModule;
 import com.mamits.apnaonlines.di.module.fragment.CouponModule;
 import com.mamits.apnaonlines.di.module.fragment.CreateCouponModule;
@@ -27,6 +28,7 @@ import com.mamits.apnaonlines.ui.activity.MainActivity;
 import com.mamits.apnaonlines.ui.activity.PaymentActivity;
 import com.mamits.apnaonlines.ui.activity.RegisterActivity;
 import com.mamits.apnaonlines.ui.fragment.DashboardFragment;
+import com.mamits.apnaonlines.ui.fragment.dashboard.CategoryFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.drawer.ChangePasswordFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.drawer.ProfileFragment;
 import com.mamits.apnaonlines.ui.fragment.dashboard.services.AddServiceFragment;
@@ -123,4 +125,8 @@ public abstract class ActivityBuilder {
     @ContributesAndroidInjector(modules = {ProfileModule.class})
     @FragmentScope
     abstract ProfileFragment bindProfileFragment();
+
+    @ContributesAndroidInjector(modules = {CategoryModule.class})
+    @FragmentScope
+    abstract CategoryFragment bindCategoryFragment();
 }

@@ -151,6 +151,9 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
                 order_id = bundle.getInt("orderid", -1);
                 status = bundle.getInt("status", -1);
                 name = bundle.getString("name");
+                String[] nameSplit = name.split(" ");
+                String nameCode = (nameSplit[0].charAt(0) + nameSplit[nameSplit.length - 1].substring(0, 1)).toUpperCase();
+                binding.nameCode.setText(nameCode);
                 binding.userName.setText(name);
             }
             if (status == 2) {

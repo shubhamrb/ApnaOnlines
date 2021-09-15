@@ -2,24 +2,39 @@ package com.mamits.apnaonlines.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.gson.JsonObject;
 import com.mamits.apnaonlines.BR;
 import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.databinding.ActivityRegisterBinding;
 import com.mamits.apnaonlines.ui.base.BaseActivity;
+import com.mamits.apnaonlines.ui.customviews.CustomInputEditText;
+import com.mamits.apnaonlines.ui.customviews.CustomTextView;
 import com.mamits.apnaonlines.ui.navigator.activity.RegisterActivityNavigator;
+import com.mamits.apnaonlines.ui.utils.constants.AppConstant;
 import com.mamits.apnaonlines.viewmodel.activity.RegisterActivityViewModel;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
 
 public class RegisterActivity extends BaseActivity<ActivityRegisterBinding, RegisterActivityViewModel>
-        implements RegisterActivityNavigator , View.OnClickListener {
+        implements RegisterActivityNavigator, View.OnClickListener {
 
     String TAG = "RegisterActivity";
     @Inject
     RegisterActivityViewModel mViewModel;
     ActivityRegisterBinding binding;
+    private String name, email, mobile, pass;
+    private CustomTextView txt_resend;
+    private BottomSheetDialog signOtpDialog;
+    private int sent_otp;
 
     @Override
     public int getBindingVariable() {
@@ -38,6 +53,7 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding, Regi
         mViewModel.setNavigator(this);
 
         binding.btnLogin.setOnClickListener(this);
+        binding.btnRegister.setOnClickListener(this);
     }
 
     @Override
@@ -48,12 +64,12 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding, Regi
 
     @Override
     public void showLoader() {
-
+        showLoading();
     }
 
     @Override
     public void hideLoader() {
-
+        hideLoading();
     }
 
 
@@ -76,10 +92,158 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding, Regi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_login:
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                onBackPressed();
                 break;
+            case R.id.btn_register:
+                name = binding.etName.getText().toString();
+                email = binding.etEmail.getText().toString();
+                mobile = binding.etNumber.getText().toString();
+                pass = binding.etPass.getText().toString();
+                String cnf_pass = binding.etCnfPass.getText().toString();
+
+                if (name.trim().length() == 0) {
+                    Toast.makeText(this, "Please enter your name.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (email.trim().length() == 0) {
+                    Toast.makeText(this, "Please enter your email.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (mobile.trim().length() == 0) {
+                    Toast.makeText(this, "Please enter your mobile no.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (pass.trim().length() == 0) {
+                    Toast.makeText(this, "Please enter your password.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (cnf_pass.trim().length() == 0) {
+                    Toast.makeText(this, "Please confirm password.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!pass.equals(cnf_pass)) {
+                    Toast.makeText(this, "Password did not match.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                sendOtp(mobile, false);
+                break;
+        }
+    }
+
+    private void sendOtp(String mobile, boolean isResend) {
+        mViewModel.sendOtp(this, mobile, false);
+    }
+
+    @Override
+    public void onSuccessSendOtp(JsonObject jsonObject, boolean isResend) {
+        if (jsonObject != null) {
+            if (jsonObject.get("status").getAsBoolean()) {
+                String number = jsonObject.get("data").getAsJsonObject().get("phone_number").getAsString();
+                sent_otp = jsonObject.get("data").getAsJsonObject().get("otp").getAsInt();
+                Toast.makeText(this, "OTP sent to your registered number.", Toast.LENGTH_SHORT).show();
+                showVerifyOtpBottomDialog(number);
+            } else {
+                int messageId = jsonObject.get("messageId").getAsInt();
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+    }
+
+    private void startTimer() {
+        new CountDownTimer(30000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                txt_resend.setText("Resend OTP in " + millisUntilFinished / 1000);
+                txt_resend.setTextColor(getResources().getColor(R.color.black));
+            }
+
+            public void onFinish() {
+                txt_resend.setText("Resend");
+                txt_resend.setTextColor(getResources().getColor(R.color.sky_blue));
+            }
+
+        }.start();
+    }
+
+    private void showVerifyOtpBottomDialog(String number) {
+        if (signOtpDialog == null) {
+            signOtpDialog = new BottomSheetDialog(this);
+            signOtpDialog.setContentView(R.layout.forgot_otp_bottomsheet);
+            signOtpDialog.setCanceledOnTouchOutside(false);
+
+            CustomTextView label_otp_sent = signOtpDialog.findViewById(R.id.label_otp_sent);
+            RelativeLayout btn_verify = signOtpDialog.findViewById(R.id.btn_verify);
+            CustomInputEditText et_otp = signOtpDialog.findViewById(R.id.et_otp);
+            txt_resend = signOtpDialog.findViewById(R.id.txt_resend);
+            /*start timer*/
+            startTimer();
+
+            if (label_otp_sent != null)
+                label_otp_sent.setText(String.format("Enter OTP Sent on +91%sXXX", number.substring(0, 7)));
+
+            if (btn_verify != null) {
+                btn_verify.setOnClickListener(v -> {
+                    String otp = et_otp.getText().toString();
+                    if (otp.trim().length() == 0) {
+                        Toast.makeText(this, "Please Enter OTP", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (!otp.equals(String.valueOf(sent_otp))) {
+                        Toast.makeText(this, "OTP is incorrect.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    verifyAndDoRegistration();
+                });
+            }
+
+            if (txt_resend != null) {
+                txt_resend.setOnClickListener(v -> {
+                    if (txt_resend.getText().toString().equalsIgnoreCase("resend")) {
+                        sendOtp(number, true);
+                    }
+                });
+            }
+            signOtpDialog.setOnDismissListener(dialog -> {
+                signOtpDialog = null;
+            });
+            signOtpDialog.show();
+        }
+    }
+
+    private void verifyAndDoRegistration() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("name", name);
+            jsonObject.put("email", email);
+            jsonObject.put("mobile", mobile);
+            jsonObject.put("password", pass);
+            jsonObject.put("api_key", AppConstant.API_KEY);
+
+            mViewModel.doRegistration(this, jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onSuccessRegistration(JsonObject jsonObject) {
+        if (jsonObject != null) {
+            if (jsonObject.get("status").getAsBoolean()) {
+                if (signOtpDialog != null && signOtpDialog.isShowing()) {
+                    signOtpDialog.dismiss();
+                }
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            } else {
+                int messageId = jsonObject.get("messageId").getAsInt();
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+            }
         }
     }
 }

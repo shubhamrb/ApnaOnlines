@@ -61,6 +61,7 @@ public class InboxFragment extends BaseFragment<FragmentInboxBinding, OrdersView
         if (isRefresh) {
             binding.progressBar.setVisibility(View.VISIBLE);
             setUpInbox();
+            binding.swipe.setOnRefreshListener(this::loadInbox);
         }
     }
 
@@ -96,6 +97,7 @@ public class InboxFragment extends BaseFragment<FragmentInboxBinding, OrdersView
     @Override
     public void checkInternetConnection(String message) {
         binding.progressBar.setVisibility(View.GONE);
+        binding.swipe.setRefreshing(false);
     }
 
     @Override
@@ -106,16 +108,19 @@ public class InboxFragment extends BaseFragment<FragmentInboxBinding, OrdersView
     @Override
     public void checkValidation(int errorCode, String message) {
         binding.progressBar.setVisibility(View.GONE);
+        binding.swipe.setRefreshing(false);
     }
 
     @Override
     public void throwable(Throwable throwable) {
         binding.progressBar.setVisibility(View.GONE);
+        binding.swipe.setRefreshing(false);
         throwable.printStackTrace();
     }
 
     @Override
     public void onSuccessOrders(JsonObject jsonObject) {
+        binding.swipe.setRefreshing(false);
         binding.progressBar.setVisibility(View.GONE);
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {

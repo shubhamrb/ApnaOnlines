@@ -22,7 +22,6 @@ import com.mamits.apnaonlines.BR;
 import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.data.model.payments.TransactionsDataModel;
 import com.mamits.apnaonlines.databinding.FragmentTransactionsBinding;
-import com.mamits.apnaonlines.ui.adapter.PaymentsAdapter;
 import com.mamits.apnaonlines.ui.adapter.TransactionsAdapter;
 import com.mamits.apnaonlines.ui.base.BaseFragment;
 import com.mamits.apnaonlines.ui.navigator.fragment.TransactionsNavigator;
@@ -75,6 +74,7 @@ public class TransactionsFragment extends BaseFragment<FragmentTransactionsBindi
             binding.txtFilter.setOnClickListener(this);
             binding.progressBar.setVisibility(View.VISIBLE);
             setUpPayments();
+            binding.swipe.setOnRefreshListener(() -> loadPayments("all", null));
         }
     }
 
@@ -166,6 +166,8 @@ public class TransactionsFragment extends BaseFragment<FragmentTransactionsBindi
     @Override
     public void checkInternetConnection(String message) {
         binding.progressBar.setVisibility(View.GONE);
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
     }
 
     @Override
@@ -176,17 +178,23 @@ public class TransactionsFragment extends BaseFragment<FragmentTransactionsBindi
     @Override
     public void checkValidation(int errorCode, String message) {
         binding.progressBar.setVisibility(View.GONE);
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
     }
 
     @Override
     public void throwable(Throwable throwable) {
         binding.progressBar.setVisibility(View.GONE);
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
         throwable.printStackTrace();
     }
 
     @Override
     public void onSuccessTransactions(JsonObject jsonObject) {
         binding.progressBar.setVisibility(View.GONE);
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
                 mGson = new Gson();

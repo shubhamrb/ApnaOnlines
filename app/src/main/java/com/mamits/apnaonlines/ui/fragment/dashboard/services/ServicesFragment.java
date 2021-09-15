@@ -99,6 +99,7 @@ public class ServicesFragment extends BaseFragment<FragmentServicesBinding, Serv
             loadCategorySubCategory();
             binding.progressBar.setVisibility(View.VISIBLE);
             setUpServices();
+            binding.swipe.setOnRefreshListener(() -> loadServices("all", "all"));
         } else {
             loadServices(selected_cat, selected_sub_cat);
         }
@@ -227,6 +228,8 @@ public class ServicesFragment extends BaseFragment<FragmentServicesBinding, Serv
     @Override
     public void checkInternetConnection(String message) {
         binding.progressBar.setVisibility(View.GONE);
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
     }
 
     @Override
@@ -237,11 +240,15 @@ public class ServicesFragment extends BaseFragment<FragmentServicesBinding, Serv
     @Override
     public void checkValidation(int errorCode, String message) {
         binding.progressBar.setVisibility(View.GONE);
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
     }
 
     @Override
     public void throwable(Throwable throwable) {
         binding.progressBar.setVisibility(View.GONE);
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
         throwable.printStackTrace();
     }
 
@@ -265,6 +272,8 @@ public class ServicesFragment extends BaseFragment<FragmentServicesBinding, Serv
     @Override
     public void onSuccessServices(JsonObject jsonObject) {
         binding.progressBar.setVisibility(View.GONE);
+        /*swipe off*/
+        binding.swipe.setRefreshing(false);
         if (jsonObject != null) {
             if (jsonObject.get("success").getAsBoolean()) {
                 mGson = new Gson();

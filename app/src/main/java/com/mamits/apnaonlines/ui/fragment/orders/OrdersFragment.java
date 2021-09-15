@@ -75,6 +75,7 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
             binding.txtFilter.setOnClickListener(this);
             binding.progressBar.setVisibility(View.VISIBLE);
             setUpOrders();
+            binding.swipe.setOnRefreshListener(() -> loadOrders(1, null));
         } else {
             loadOrders(1, null);
         }
@@ -178,6 +179,7 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
     @Override
     public void checkInternetConnection(String message) {
         binding.progressBar.setVisibility(View.GONE);
+        binding.swipe.setRefreshing(false);
     }
 
     @Override
@@ -188,16 +190,19 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
     @Override
     public void checkValidation(int errorCode, String message) {
         binding.progressBar.setVisibility(View.GONE);
+        binding.swipe.setRefreshing(false);
     }
 
     @Override
     public void throwable(Throwable throwable) {
         binding.progressBar.setVisibility(View.GONE);
+        binding.swipe.setRefreshing(false);
         throwable.printStackTrace();
     }
 
     @Override
     public void onSuccessOrders(JsonObject jsonObject) {
+        binding.swipe.setRefreshing(false);
         binding.progressBar.setVisibility(View.GONE);
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {

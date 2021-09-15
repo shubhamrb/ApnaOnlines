@@ -50,4 +50,9 @@
         android:name="com.mamits.apnaonlines.ui.fragment.dashboard.drawer.ProfileFragment"
         tools:layout="@layout/fragment_profile" />
 
+    <fragment
+        android:id="@+id/nav_category"
+        android:name="com.mamits.apnaonlines.ui.fragment.dashboard.CategoryFragment"
+        tools:layout="@layout/fragment_category" />
+
 </navigation>

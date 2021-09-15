@@ -13,6 +13,8 @@ public class ApiConstant {
     public static final String TRANSACTIONS_END_POINT = BuildConfig.BASE_URL + "api/auth/transactionHistory";
     public static final String HELP_END_POINT = BuildConfig.BASE_URL + "api/auth/helpandsupport";
     public static final String SEND_OTP_END_POINT = BuildConfig.BASE_URL + "api/sendOtp";
+    public static final String SIGNUP_END_POINT = BuildConfig.BASE_URL + "api/signup";
+    public static final String REGISTRATION_END_POINT = BuildConfig.BASE_URL + "api/vendorsignup";
     public static final String VERIFY_OTP_END_POINT = BuildConfig.BASE_URL + "api/forgotpassword";
     public static final String UPDATE_PIN_END_POINT = BuildConfig.BASE_URL + "api/updatepassword";
     public static final String UPDATE_ORDER_STATUS_END_POINT = BuildConfig.BASE_URL + "api/auth/updateOrderStatus";
@@ -29,4 +31,5 @@ public class ApiConstant {
     public static final String UPDATE_SERVICE_END_POINT = BuildConfig.BASE_URL + "api/auth/updateStock";
     public static final String CHANGE_PASSWORD_END_POINT = BuildConfig.BASE_URL + "api/auth/changePassword";
     public static final String COMPLETE_ORDER_END_POINT = BuildConfig.BASE_URL + "api/auth/orderComplete";
+    public static final String UPDATE_CATEGORY_END_POINT = BuildConfig.BASE_URL + "api/auth/updateCategory";
 }

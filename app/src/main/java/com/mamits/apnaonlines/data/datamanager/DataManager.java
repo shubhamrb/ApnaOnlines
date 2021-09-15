@@ -56,12 +56,12 @@ public class DataManager implements IDataManager {
 
     @Override
     public void fetchCfsToken(Activity mActivity, String accessToken, String orderId, String amount, ResponseListener responseListener) {
-        mApiHelper.fetchCfsToken(mActivity, accessToken,orderId,amount, responseListener);
+        mApiHelper.fetchCfsToken(mActivity, accessToken, orderId, amount, responseListener);
     }
 
     @Override
     public void fetchPaytmToken(Activity mActivity, String accessToken, String orderId, String amount, String customerPhone, String customerEmail, ResponseListener responseListener) {
-        mApiHelper.fetchPaytmToken(mActivity, accessToken,orderId,amount,customerPhone,customerEmail, responseListener);
+        mApiHelper.fetchPaytmToken(mActivity, accessToken, orderId, amount, customerPhone, customerEmail, responseListener);
     }
 
     @Override
@@ -87,6 +87,16 @@ public class DataManager implements IDataManager {
     @Override
     public void sendOtp(Activity mActivity, String number, ResponseListener responseListener) {
         mApiHelper.sendOtp(mActivity, number, responseListener);
+    }
+
+    @Override
+    public void signUp(Activity mActivity, String number, ResponseListener responseListener) {
+        mApiHelper.signUp(mActivity, number, responseListener);
+    }
+
+    @Override
+    public void doRegistration(Activity mActivity, JSONObject jsonObject, ResponseListener responseListener) {
+        mApiHelper.doRegistration(mActivity, jsonObject, responseListener);
     }
 
     @Override
@@ -137,6 +147,11 @@ public class DataManager implements IDataManager {
     @Override
     public void fetchCategorySubcategory(Activity mActivity, String accessToken, ResponseListener responseListener) {
         mApiHelper.fetchCategorySubcategory(mActivity, accessToken, responseListener);
+    }
+
+    @Override
+    public void updateCategory(Activity mActivity, String accessToken, JSONObject jsonObject, ResponseListener responseListener) {
+        mApiHelper.updateCategory(mActivity, accessToken, jsonObject, responseListener);
     }
 
     @Override

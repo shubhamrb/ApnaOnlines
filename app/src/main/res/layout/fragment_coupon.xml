@@ -45,16 +45,23 @@
             android:layout_below="@id/btn_add"
             android:layout_centerHorizontal="true"
             android:layout_margin="@dimen/_15sdp" />
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_coupons"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/btn_add"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:visibility="gone"
-            tools:listitem="@layout/coupons_list_item" />
 
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_add">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_coupons"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:visibility="gone"
+                tools:listitem="@layout/coupons_list_item" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </RelativeLayout>
 </layout>

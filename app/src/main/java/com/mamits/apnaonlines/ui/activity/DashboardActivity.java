@@ -10,16 +10,21 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.mamits.apnaonlines.BR;
 import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.databinding.ActivityDashboardBinding;
 import com.mamits.apnaonlines.ui.base.BaseActivity;
+import com.mamits.apnaonlines.ui.fragment.DashboardFragment;
 import com.mamits.apnaonlines.ui.navigator.activity.DashboardActivityNavigator;
+import com.mamits.apnaonlines.ui.notification.NotificationService;
 import com.mamits.apnaonlines.viewmodel.activity.DashboardActivityViewModel;
 
 import javax.inject.Inject;
@@ -80,6 +85,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
         binding.navDrawer.btnTransactions.setOnClickListener(this);
         binding.navDrawer.btnHelp.setOnClickListener(this);
         binding.navDrawer.btnProfile.setOnClickListener(this);
+        binding.home.setOnClickListener(this);
 
         /*set user data*/
         String[] nameSplit = mViewModel.getmDataManger().getUsername().split(" ");
@@ -91,6 +97,12 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
 
         if (savedInstanceState == null) {
             setUpNavigation();
+        }
+        try {
+            startService(new Intent(this, NotificationService.class));
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -110,7 +122,26 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
     public void onBackPressed() {
         try {
             if (mNavController != null && mNavController.getCurrentDestination() != null && mNavController.getCurrentDestination().getId() != 0) {
-                mNavController.popBackStack();
+                int current_page = mNavController.getCurrentDestination().getId();
+                if (current_page == R.id.nav_dashboard_fragment) {
+                    try {
+                        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().getPrimaryNavigationFragment();
+                        FragmentManager fragmentManager = navHostFragment.getChildFragmentManager();
+                        Fragment loginFragment = fragmentManager.getPrimaryNavigationFragment();
+
+                        if (loginFragment instanceof DashboardFragment) {
+                            DashboardFragment dashboardFragment = (DashboardFragment) loginFragment;
+                            if (dashboardFragment.setViewPagerToHome()) {
+                                super.onBackPressed();
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    mNavController.popBackStack();
+                }
+
             } else {
                 super.onBackPressed();
             }
@@ -155,18 +186,50 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
             case R.id.btn_profile:
                 binding.drawerLayout.closeDrawers();
                 if (navDestination != null && navDestination.getId() != R.id.nav_profile) {
-
                     mNavController.navigate(R.id.nav_profile, null, options);
                 }
                 break;
             case R.id.btn_logout:
 
                 new Handler().postDelayed(() -> {
-                    mViewModel.getmDataManger().clearAllPreference();
-                    startActivity(new Intent(this, MainActivity.class));
-                    finishAffinity();
+                    try {
+                        stopService(new Intent(this, NotificationService.class));
+                        mViewModel.getmDataManger().clearAllPreference();
+                        startActivity(new Intent(this, MainActivity.class));
+                        finishAffinity();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }, 200);
                 break;
+            case R.id.home:
+                goBackToHome();
+                break;
+        }
+    }
+
+    private void goBackToHome() {
+        try {
+            if (mNavController != null && mNavController.getCurrentDestination() != null && mNavController.getCurrentDestination().getId() != 0) {
+                if (mNavController.getCurrentDestination().getId() != R.id.nav_dashboard_fragment) {
+                    mNavController.popBackStack(mNavController.getCurrentDestination().getId(), true);
+                } else {
+                    try {
+                        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().getPrimaryNavigationFragment();
+                        FragmentManager fragmentManager = navHostFragment.getChildFragmentManager();
+                        Fragment loginFragment = fragmentManager.getPrimaryNavigationFragment();
+
+                        if (loginFragment instanceof DashboardFragment) {
+                            DashboardFragment dashboardFragment = (DashboardFragment) loginFragment;
+                            dashboardFragment.setViewPagerToHome();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

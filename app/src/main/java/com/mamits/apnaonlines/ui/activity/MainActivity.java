@@ -1,7 +1,6 @@
 package com.mamits.apnaonlines.ui.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -130,7 +129,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
         switch (v.getId()) {
             case R.id.btn_reg:
                 String url = "https://apnaonlines.com/register";
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                Intent browserIntent = new Intent(this, RegisterActivity.class);
                 startActivity(browserIntent);
                 break;
             case R.id.btn_login:
