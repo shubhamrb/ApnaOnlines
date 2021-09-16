@@ -157,7 +157,13 @@ public class CategoryFragment extends BaseFragment<FragmentCategoryBinding, Cate
                 }.getType();
                 categoryList = mGson.fromJson(jsonObject.get("data").getAsJsonArray().toString(), category);
                 if (categoryList != null && categoryList.size() > 0) {
-                    categoryAdapter.setList(categoryList);
+                    catList = new ArrayList<>();
+                    for (CategoryDataModel model : categoryList) {
+                        if (model.isStatus()) {
+                            catList.add(model.getId());
+                        }
+                    }
+                    categoryAdapter.setList(categoryList,catList);
                     binding.recyclerCategory.setVisibility(View.VISIBLE);
                 } else {
                     binding.recyclerCategory.setVisibility(View.GONE);
@@ -175,9 +181,9 @@ public class CategoryFragment extends BaseFragment<FragmentCategoryBinding, Cate
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
                 binding.btnSubmit.setVisibility(View.GONE);
-
                 String message = jsonObject.get("message").getAsString();
                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                fetchCategory();
             } else {
                 int messageId = jsonObject.get("messageId").getAsInt();
                 String message = jsonObject.get("message").getAsString();

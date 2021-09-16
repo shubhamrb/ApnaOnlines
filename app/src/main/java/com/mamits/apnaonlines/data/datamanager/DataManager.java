@@ -150,6 +150,11 @@ public class DataManager implements IDataManager {
     }
 
     @Override
+    public void fetchAllCategory(Activity mActivity, String accessToken, ResponseListener responseListener) {
+        mApiHelper.fetchAllCategory(mActivity, accessToken, responseListener);
+    }
+
+    @Override
     public void updateCategory(Activity mActivity, String accessToken, JSONObject jsonObject, ResponseListener responseListener) {
         mApiHelper.updateCategory(mActivity, accessToken, jsonObject, responseListener);
     }

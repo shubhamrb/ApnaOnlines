@@ -48,12 +48,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Orders
         if (list.size() > 0) {
             CategoryDataModel model = list.get(position);
             holder.txt_username.setText(model.getName());
+            holder.checkBox.setChecked(model.isStatus());
+
             holder.itemView.setOnClickListener(v -> {
                 holder.checkBox.setChecked(!holder.checkBox.isChecked());
-            });
-
-            holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (isChecked) {
+                if (holder.checkBox.isChecked()) {
                     catList.add(model.getId());
                 } else {
                     catList.remove((Integer) model.getId());
@@ -72,7 +71,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Orders
         return list.size();
     }
 
-    public void setList(List<CategoryDataModel> orderList) {
+    public void setList(List<CategoryDataModel> orderList, ArrayList<Integer> catList) {
+        this.catList = catList;
         list = orderList;
         notifyDataSetChanged();
     }

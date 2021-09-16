@@ -23,12 +23,11 @@ public class CategoryViewModel extends BaseViewModel<CategoryNavigator> {
 
     public void fetchCategory(Activity mActivity) {
         if (NetworkUtils.isNetworkConnected(mActivity)) {
-            getmDataManger().fetchCategorySubcategory(mActivity, getmDataManger().getAccessToken(), new ResponseListener() {
+            getmDataManger().fetchAllCategory(mActivity, getmDataManger().getAccessToken(), new ResponseListener() {
                 @Override
                 public void onSuccess(JsonObject jsonObject) {
                     try {
                         getmNavigator().get().hideProgressBars();
-
                         getmNavigator().get().onSuccessCategory(jsonObject);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -50,7 +49,6 @@ public class CategoryViewModel extends BaseViewModel<CategoryNavigator> {
                                     e.printStackTrace();
                                 }
                             }
-
                         } else {
                             throwable.printStackTrace();
                         }
@@ -69,7 +67,7 @@ public class CategoryViewModel extends BaseViewModel<CategoryNavigator> {
     public void updateCategory(Activity mActivity, JSONObject jsonObject) {
         if (NetworkUtils.isNetworkConnected(mActivity)) {
             getmNavigator().get().showProgressBars();
-            getmDataManger().updateCategory(mActivity, getmDataManger().getAccessToken(),jsonObject, new ResponseListener() {
+            getmDataManger().updateCategory(mActivity, getmDataManger().getAccessToken(), jsonObject, new ResponseListener() {
                 @Override
                 public void onSuccess(JsonObject jsonObject) {
                     try {

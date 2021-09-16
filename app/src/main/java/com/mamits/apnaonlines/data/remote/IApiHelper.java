@@ -54,6 +54,8 @@ public interface IApiHelper {
 
     void fetchCategorySubcategory(Activity mActivity, String accessToken, ResponseListener responseListener);
 
+    void fetchAllCategory(Activity mActivity, String accessToken, ResponseListener responseListener);
+
     void updateCategory(Activity mActivity, String accessToken, JSONObject jsonObject, ResponseListener responseListener);
 
     void deleteCoupon(Activity mActivity, String accessToken, String couponid, ResponseListener responseListener);

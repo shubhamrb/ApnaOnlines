@@ -15,7 +15,8 @@
         <CheckBox
             android:id="@+id/checkbox"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:clickable="false" />
 
         <com.mamits.apnaonlines.ui.customviews.CustomTextView
             android:id="@+id/txt_username"

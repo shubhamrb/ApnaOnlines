@@ -25,19 +25,19 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment;
         if (position == 0) {
-            fragment = new CategoryFragment();
-        } else if (position == 1) {
             fragment = new HomeFragment();
-        } else if (position == 2) {
+        } else if (position == 1) {
             fragment = new OrdersFragment();
-        } else if (position == 3) {
+        } else if (position == 2) {
             fragment = new InboxFragment();
-        } else if (position == 4) {
+        } else if (position == 3) {
             fragment = new ServicesFragment();
-        } else if (position == 5) {
+        } else if (position == 4) {
             fragment = new PaymentFragment();
-        } else {
+        } else if (position == 5) {
             fragment = new CouponFragment();
+        } else {
+            fragment = new CategoryFragment();
         }
         return fragment;
     }
@@ -51,19 +51,19 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         String title;
         if (position == 0) {
-            title = "Category";
-        } else if (position == 1) {
             title = "Home";
-        } else if (position == 2) {
+        } else if (position == 1) {
             title = "Orders";
-        } else if (position == 3) {
+        } else if (position == 2) {
             title = "Chat";
-        } else if (position == 4) {
+        } else if (position == 3) {
             title = "Services";
-        } else if (position == 5) {
+        } else if (position == 4) {
             title = "Payments";
-        } else {
+        } else if (position == 5) {
             title = "Coupons";
+        } else {
+            title = "Category";
         }
         return title;
     }

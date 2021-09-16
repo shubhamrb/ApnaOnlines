@@ -108,6 +108,9 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
 
     private void setUpNavigation() {
         mNavController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        Bundle bundle = new Bundle();
+        bundle.putString("action", getIntent().getStringExtra("action"));
+        mNavController.setGraph(R.navigation.mobile_navigation, bundle);
         mNavController.addOnDestinationChangedListener(this);
     }
 
@@ -116,7 +119,6 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
     protected DashboardActivityViewModel getMyViewModel() {
         return mViewModel;
     }
-
 
     @Override
     public void onBackPressed() {

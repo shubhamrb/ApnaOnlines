@@ -21,7 +21,7 @@ import com.mamits.apnaonlines.ui.activity.MainActivity;
 
 public class NotificationService extends FirebaseMessagingService {
     private static final String TAG = "NotificationService";
-    String title, message;
+    String title, message,action;
     private String CHANNEL_ID;
 
     @Override
@@ -34,7 +34,7 @@ public class NotificationService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         if (remoteMessage.getData().size() > 0) {
-
+            action = remoteMessage.getData().get("type");
         }
 
         // Check if message contains a notification payload.
@@ -44,7 +44,7 @@ public class NotificationService extends FirebaseMessagingService {
                 message = remoteMessage.getNotification().getBody(); //get message
                 Log.d("title ", title);
                 Log.d("message ", message);
-                notificationManager(title, message);
+                notificationManager(title, message,action);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -52,7 +52,7 @@ public class NotificationService extends FirebaseMessagingService {
         }
     }
 
-    private void notificationManager(String title, String notificationMsg) {
+    private void notificationManager(String title, String notificationMsg, String action) {
         int NOTIFICATION_ID = 234;
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -72,7 +72,7 @@ public class NotificationService extends FirebaseMessagingService {
 
 
             Intent resultIntent = new Intent(this, MainActivity.class);
-
+            resultIntent.putExtra("action", action);
             resultIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_ONE_SHOT);
@@ -89,6 +89,7 @@ public class NotificationService extends FirebaseMessagingService {
 
         } else {
             Intent resultIntent = new Intent(this, MainActivity.class);
+            resultIntent.putExtra("action", action);
             PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_ONE_SHOT);
             Notification n = new Notification.Builder(this)
                     .setContentTitle(title)

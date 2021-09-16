@@ -13,8 +13,19 @@ public class CategoryDataModel implements Serializable {
     @SerializedName("name")
     String name;
 
+    @SerializedName("status")
+    boolean status;
+
     @SerializedName("subcategory")
     List<SubCategoryDataModel> subcategory;
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
     public int getId() {
         return id;
@@ -45,6 +56,7 @@ public class CategoryDataModel implements Serializable {
         return "CategoryDataModel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", status=" + status +
                 ", subcategory=" + subcategory +
                 '}';
     }

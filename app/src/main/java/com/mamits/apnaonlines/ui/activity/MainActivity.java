@@ -57,6 +57,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
 
         if (mViewModel.getmDataManger().getCurrentUserId() != -1) {
             Intent dashboardIntent = new Intent(this, DashboardActivity.class);
+
+            if (getIntent().hasExtra("action")) {
+                String action = getIntent().getStringExtra("action");
+                dashboardIntent.putExtra("action", action);
+            }
             startActivity(dashboardIntent);
             finishAffinity();
         }

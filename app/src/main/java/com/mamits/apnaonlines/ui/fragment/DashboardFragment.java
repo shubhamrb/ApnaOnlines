@@ -1,6 +1,8 @@
 package com.mamits.apnaonlines.ui.fragment;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.viewpager.widget.ViewPager;
@@ -26,6 +28,7 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
     DashboardFragmentViewModel mViewModel;
     private Context mContext;
     private ViewPagerAdapter viewPagerAdapter;
+    private String action;
 
 
     @Override
@@ -46,6 +49,13 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
             mContext = view.getContext();
         }
         if (isRefresh) {
+            Bundle bundle = getArguments();
+            if (bundle != null) {
+                action = bundle.getString("action");
+                if (action != null) {
+                    Log.e(TAG, action);
+                }
+            }
             setUpViewPager();
             setWishText();
         }
@@ -76,6 +86,20 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
 
             }
         });
+
+        if (action != null) {
+            switch (action) {
+                case "order":
+                    binding.viewPager.setCurrentItem(1);
+                    break;
+                case "home":
+                    binding.viewPager.setCurrentItem(0);
+                    break;
+                case "chat":
+                    binding.viewPager.setCurrentItem(2);
+                    break;
+            }
+        }
     }
 
 

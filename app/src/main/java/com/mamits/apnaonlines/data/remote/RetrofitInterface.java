@@ -106,6 +106,10 @@ public interface RetrofitInterface {
     Call<JsonObject> fetchCatSubCategory(@Header("Authorization") String accessToken);
 
     @Headers("Content-Type: application/json")
+    @POST(ApiConstant.ALL_CATEGORY_END_POINT)
+    Call<JsonObject> fetchAllCategory(@Header("Authorization") String accessToken);
+
+    @Headers("Content-Type: application/json")
     @POST(ApiConstant.UPDATE_CATEGORY_END_POINT)
     Call<JsonObject> updateCategory(@Header("Authorization") String accessToken, @Body String jsonObject);
 
