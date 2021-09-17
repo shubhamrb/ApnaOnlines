@@ -44,7 +44,7 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
     private Gson mGson;
     private List<OrdersDataModel> ordersList;
     private OrdersAdapter ordersAdapter;
-
+    private int SELECTED_FILTER = 1;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -75,9 +75,9 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
             binding.txtFilter.setOnClickListener(this);
             binding.progressBar.setVisibility(View.VISIBLE);
             setUpOrders();
-            binding.swipe.setOnRefreshListener(() -> loadOrders(1, null));
+            binding.swipe.setOnRefreshListener(() -> loadOrders(SELECTED_FILTER, null));
         } else {
-            loadOrders(1, null);
+            loadOrders(SELECTED_FILTER, null);
         }
     }
 
@@ -88,10 +88,11 @@ public class OrdersFragment extends BaseFragment<FragmentOrdersBinding, OrdersVi
         ordersAdapter = new OrdersAdapter(getActivity(), mViewModel);
         binding.recyclerOrders.setAdapter(ordersAdapter);
 
-        loadOrders(1, null);
+        loadOrders(SELECTED_FILTER, null);
     }
 
     private void loadOrders(int status, PopupWindow popupWindow) {
+        SELECTED_FILTER=status;
         try {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();

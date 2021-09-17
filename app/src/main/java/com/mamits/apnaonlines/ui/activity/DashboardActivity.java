@@ -4,28 +4,31 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.mamits.apnaonlines.BR;
 import com.mamits.apnaonlines.R;
+import com.mamits.apnaonlines.data.model.login.LoginDataModel;
 import com.mamits.apnaonlines.databinding.ActivityDashboardBinding;
 import com.mamits.apnaonlines.ui.base.BaseActivity;
-import com.mamits.apnaonlines.ui.fragment.DashboardFragment;
 import com.mamits.apnaonlines.ui.navigator.activity.DashboardActivityNavigator;
 import com.mamits.apnaonlines.ui.notification.NotificationService;
 import com.mamits.apnaonlines.viewmodel.activity.DashboardActivityViewModel;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.inject.Inject;
 
@@ -95,6 +98,12 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
         String num = mViewModel.getmDataManger().getUserNumber().trim().substring(0, 7) + "XXX";
         binding.navDrawer.userNumber.setText(num);
 
+        String json = mViewModel.getmDataManger().getUserData();
+        LoginDataModel model = new Gson().fromJson(json, LoginDataModel.class);
+        if (model != null) {
+            binding.storeSwitch.setChecked(model.getStore().getIsAvailable() == 1);
+        }
+
         if (savedInstanceState == null) {
             setUpNavigation();
         }
@@ -104,6 +113,16 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        binding.storeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("status", isChecked ? "1" : "0");
+                mViewModel.openStore(this, jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void setUpNavigation() {
@@ -120,37 +139,6 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
         return mViewModel;
     }
 
-    @Override
-    public void onBackPressed() {
-        try {
-            if (mNavController != null && mNavController.getCurrentDestination() != null && mNavController.getCurrentDestination().getId() != 0) {
-                int current_page = mNavController.getCurrentDestination().getId();
-                if (current_page == R.id.nav_dashboard_fragment) {
-                    try {
-                        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().getPrimaryNavigationFragment();
-                        FragmentManager fragmentManager = navHostFragment.getChildFragmentManager();
-                        Fragment loginFragment = fragmentManager.getPrimaryNavigationFragment();
-
-                        if (loginFragment instanceof DashboardFragment) {
-                            DashboardFragment dashboardFragment = (DashboardFragment) loginFragment;
-                            if (dashboardFragment.setViewPagerToHome()) {
-                                super.onBackPressed();
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    mNavController.popBackStack();
-                }
-
-            } else {
-                super.onBackPressed();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onClick(View v) {
@@ -213,22 +201,33 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
     private void goBackToHome() {
         try {
             if (mNavController != null && mNavController.getCurrentDestination() != null && mNavController.getCurrentDestination().getId() != 0) {
-                if (mNavController.getCurrentDestination().getId() != R.id.nav_dashboard_fragment) {
-                    mNavController.popBackStack(mNavController.getCurrentDestination().getId(), true);
-                } else {
-                    try {
-                        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().getPrimaryNavigationFragment();
-                        FragmentManager fragmentManager = navHostFragment.getChildFragmentManager();
-                        Fragment loginFragment = fragmentManager.getPrimaryNavigationFragment();
 
-                        if (loginFragment instanceof DashboardFragment) {
-                            DashboardFragment dashboardFragment = (DashboardFragment) loginFragment;
-                            dashboardFragment.setViewPagerToHome();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                if (mNavController.getCurrentDestination().getId() == R.id.nav_dashboard_fragment) {
+                    return;
                 }
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setPopUpTo(mNavController.getCurrentDestination().getId(), true)
+                        .build();
+                mNavController.navigate(R.id.action_dashboard, null, navOptions);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        try {
+            if (mNavController != null && mNavController.getCurrentDestination() != null && mNavController.getCurrentDestination().getId() != 0) {
+
+                if (mNavController.getCurrentDestination().getId() == R.id.nav_dashboard_fragment) {
+                    super.onBackPressed();
+                } else {
+                    mNavController.popBackStack();
+                }
+            } else {
+                super.onBackPressed();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -237,31 +236,47 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
 
     @Override
     public void showLoader() {
-
+        showLoading();
     }
 
     @Override
     public void hideLoader() {
-
+        hideLoading();
     }
 
     @Override
     public void checkValidation(int type, String message) {
-
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void throwable(Throwable it) {
-
+        it.printStackTrace();
     }
 
     @Override
     public void checkInternetConnection(String message) {
-
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+    public void onSuccessStoreStatus(JsonObject jsonObject) {
+        if (jsonObject != null) {
+            if (jsonObject.get("status").getAsBoolean()) {
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            } else {
+                int messageId = jsonObject.get("messageId").getAsInt();
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    }
+
+    @Override
+    public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination
+            destination, @Nullable Bundle arguments) {
         hideKeyboard();
     }
 }

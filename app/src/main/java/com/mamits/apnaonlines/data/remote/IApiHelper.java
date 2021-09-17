@@ -70,4 +70,6 @@ public interface IApiHelper {
 
     void changePassword(Activity mActivity, String accessToken, JSONObject object, ResponseListener responseListener);
 
+    void openStore(Activity mActivity, String accessToken, JSONObject object, ResponseListener responseListener);
+
 }

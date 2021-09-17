@@ -62,7 +62,17 @@
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:weightSum="3">
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/store_switch"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:padding="@dimen/_5sdp"
+                        app:thumbTint="@color/sky_blue"
+                        app:trackTint="@color/tab_unselect" />
 
                     <ImageView
                         android:id="@+id/btn_search"
@@ -97,8 +107,7 @@
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/toolbar"
-                 />
+                android:layout_below="@id/toolbar" />
         </RelativeLayout>
 
         <include

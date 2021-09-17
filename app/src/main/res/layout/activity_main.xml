@@ -97,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="@dimen/_5sdp"
                         android:paddingTop="@dimen/_5sdp"
-                        android:text="@string/enter_your_pin"
+                        android:text="@string/enter_your_password"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_8ssp"
                         app:fontName="Raleway-Light.ttf" />
@@ -108,7 +108,7 @@
                         android:layout_height="wrap_content"
                         android:alpha="0.7"
                         android:background="@null"
-                        android:hint="@string/hint_pin"
+                        android:hint="@string/password_text"
                         android:inputType="numberPassword"
                         android:maxLength="6"
                         android:padding="@dimen/_5sdp"

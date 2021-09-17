@@ -221,6 +221,7 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
 
     private void loadMessages() {
         mViewModel.fetchMessages((Activity) mContext, user_id, order_id);
+        binding.recyclerMessages.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -240,7 +241,7 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
 
     @Override
     public void checkInternetConnection(String message) {
-
+        Log.e(TAG, message);
     }
 
     @Override
@@ -250,7 +251,7 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
 
     @Override
     public void checkValidation(int errorCode, String message) {
-
+        Log.e(TAG, message);
     }
 
     @Override
@@ -294,7 +295,6 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
     public void onSuccessMessageSend(JsonObject jsonObject) {
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
-
                 mGson = new Gson();
                 Type messages = new TypeToken<List<MessageDataModel>>() {
                 }.getType();
@@ -323,7 +323,6 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
 
     private void startTimer() {
         timer = new CountDownTimer(10000, 1000) {
-
             public void onTick(long millisUntilFinished) {
             }
 

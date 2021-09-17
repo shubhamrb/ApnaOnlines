@@ -1,5 +1,6 @@
 package com.mamits.apnaonlines.ui.navigator.activity;
 
+import com.google.gson.JsonObject;
 import com.mamits.apnaonlines.ui.navigator.base.BaseNavigator;
 
 public interface DashboardActivityNavigator extends BaseNavigator {
@@ -14,4 +15,5 @@ public interface DashboardActivityNavigator extends BaseNavigator {
 
     void checkInternetConnection(String message);
 
+    void onSuccessStoreStatus(JsonObject jsonObject);
 }

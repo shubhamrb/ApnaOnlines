@@ -595,10 +595,10 @@ public class ApiHelper implements IApiHelper {
     }
 
     @Override
-    public void updateCategory(Activity mActivity, String accessToken,JSONObject jsonObject, ResponseListener responseListener) {
+    public void updateCategory(Activity mActivity, String accessToken, JSONObject jsonObject, ResponseListener responseListener) {
         RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
 
-        call.updateCategory("Bearer " + accessToken,jsonObject.toString()).enqueue(new Callback<JsonObject>() {
+        call.updateCategory("Bearer " + accessToken, jsonObject.toString()).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null) {
@@ -735,6 +735,25 @@ public class ApiHelper implements IApiHelper {
         RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
 
         call.changePassword("Bearer " + accessToken, object.toString()).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    responseListener.onSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                responseListener.onFailed(t);
+            }
+        });
+    }
+
+    @Override
+    public void openStore(Activity mActivity, String accessToken, JSONObject object, ResponseListener responseListener) {
+        RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
+
+        call.storeOpen("Bearer " + accessToken, object.toString()).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null) {

@@ -51,15 +51,24 @@ public class FormDataAdapter extends RecyclerView.Adapter<FormDataAdapter.Orders
             if (model.getName() != null) {
                 if (model.getName().equalsIgnoreCase("upload your document")) {
                     holder.txt_label.setText("Uploaded Document");
-                    holder.txt_value.setText("");
-                    holder.btn_save.setVisibility(View.VISIBLE);
+
+                    if (model.getFiledata() != null && model.getFiledata().getUrl() != null && model.getFiledata().getUrl().trim().length() > 0) {
+                        holder.txt_value.setText("");
+                        holder.btn_save.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.txt_value.setText("NA");
+                    }
                 } else {
                     holder.txt_label.setText(model.getName());
-
                     if (model.getValue() != null) {
                         holder.txt_value.setText(model.getValue());
                     } else {
-                        holder.txt_value.setText("NA");
+                        if (model.getFiledata() != null && model.getFiledata().getUrl() != null && model.getFiledata().getUrl().trim().length() > 0) {
+                            holder.txt_value.setText("");
+                            holder.btn_save.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.txt_value.setText("NA");
+                        }
                     }
                 }
             } else {
@@ -67,10 +76,14 @@ public class FormDataAdapter extends RecyclerView.Adapter<FormDataAdapter.Orders
                 if (model.getValue() != null) {
                     holder.txt_value.setText(model.getValue());
                 } else {
-                    holder.txt_value.setText("NA");
+                    if (model.getFiledata() != null && model.getFiledata().getUrl() != null && model.getFiledata().getUrl().trim().length() > 0) {
+                        holder.txt_value.setText("");
+                        holder.btn_save.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.txt_value.setText("NA");
+                    }
                 }
             }
-
             holder.btn_save.setOnClickListener(v -> {
                 listener.downloadFile(model.getFiledata().getUrl());
             });

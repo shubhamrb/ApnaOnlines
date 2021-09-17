@@ -1,8 +1,16 @@
 package com.mamits.apnaonlines.ui.fragment.dashboard;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,10 +43,47 @@ public class InboxFragment extends BaseFragment<FragmentInboxBinding, OrdersView
     private Gson mGson;
     private List<OrdersDataModel> inboxList;
     private InboxAdapter inboxAdapter;
+    private int SELECTED_FILTER = 2;
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.txt_filter:
+                openFilterDialog(v);
+                break;
+        }
+    }
 
+    private void openFilterDialog(View v) {
+        LayoutInflater layoutInflater
+                = (LayoutInflater) mContext
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = layoutInflater.inflate(R.layout.orders_filter, null);
+
+        RelativeLayout rl_all = popupView.findViewById(R.id.rl_all);
+        RelativeLayout rl_pending = popupView.findViewById(R.id.rl_pending);
+        RelativeLayout rl_accept = popupView.findViewById(R.id.rl_accept);
+        RelativeLayout rl_reject = popupView.findViewById(R.id.rl_reject);
+        RelativeLayout rl_cancel = popupView.findViewById(R.id.rl_cancel);
+        RelativeLayout rl_complete = popupView.findViewById(R.id.rl_complete);
+
+
+        PopupWindow popupWindow = new PopupWindow(
+                popupView,
+                mContext.getResources().getDimensionPixelOffset(R.dimen._200sdp),
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        rl_pending.setOnClickListener(v1 -> loadInbox(1, popupWindow));
+        rl_accept.setOnClickListener(v1 -> loadInbox(2, popupWindow));
+        rl_complete.setOnClickListener(v1 -> loadInbox(5, popupWindow));
+        rl_cancel.setOnClickListener(v1 -> loadInbox(4, popupWindow));
+        rl_reject.setOnClickListener(v1 -> loadInbox(3, popupWindow));
+        rl_all.setOnClickListener(v1 -> loadInbox(0, popupWindow));
+
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popupWindow.showAsDropDown(v, 0, 0);
     }
 
     @Override
@@ -59,9 +104,10 @@ public class InboxFragment extends BaseFragment<FragmentInboxBinding, OrdersView
             mContext = view.getContext();
         }
         if (isRefresh) {
+            binding.txtFilter.setOnClickListener(this);
             binding.progressBar.setVisibility(View.VISIBLE);
             setUpInbox();
-            binding.swipe.setOnRefreshListener(this::loadInbox);
+            binding.swipe.setOnRefreshListener(() -> loadInbox(SELECTED_FILTER, null));
         }
     }
 
@@ -72,11 +118,40 @@ public class InboxFragment extends BaseFragment<FragmentInboxBinding, OrdersView
         inboxAdapter = new InboxAdapter(getActivity(), mViewModel);
         binding.recyclerChats.setAdapter(inboxAdapter);
 
-        loadInbox();
+        loadInbox(SELECTED_FILTER, null);
     }
 
-    private void loadInbox() {
-        mViewModel.fetchOrders((Activity) mContext, 0);
+    private void loadInbox(int status, PopupWindow popupWindow) {
+        SELECTED_FILTER = status;
+        try {
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
+                mViewModel.getmNavigator().get().showProgressBars();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        switch (status) {
+            case 1:
+                binding.txtFilter.setText("Pending");
+                break;
+            case 2:
+                binding.txtFilter.setText("Accept");
+                break;
+            case 5:
+                binding.txtFilter.setText("Complete");
+                break;
+            case 4:
+                binding.txtFilter.setText("Cancel");
+                break;
+            case 3:
+                binding.txtFilter.setText("Reject");
+                break;
+            case 0:
+                binding.txtFilter.setText("All");
+                break;
+        }
+        mViewModel.fetchOrders((Activity) mContext, status);
     }
 
     @Override
@@ -91,7 +166,7 @@ public class InboxFragment extends BaseFragment<FragmentInboxBinding, OrdersView
 
     @Override
     public void showProgressBars() {
-
+        showsLoading();
     }
 
     @Override
@@ -102,7 +177,7 @@ public class InboxFragment extends BaseFragment<FragmentInboxBinding, OrdersView
 
     @Override
     public void hideProgressBars() {
-
+        hidesLoading();
     }
 
     @Override

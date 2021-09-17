@@ -90,7 +90,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
 
     @Override
     public void checkValidation(int type, String message) {
-
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
 
     @Override
     public void checkInternetConnection(String message) {
-
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -123,7 +123,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
                 int messageId = jsonObject.get("messageId").getAsInt();
                 String message = jsonObject.get("message").getAsString();
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-
             }
 
         }
@@ -232,7 +231,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
     }
 
     private void startTimer() {
-        new CountDownTimer(30000, 1000) {
+        new CountDownTimer(59000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 txt_resend.setText("Resend OTP in " + millisUntilFinished / 1000);
@@ -259,7 +258,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
             txt_resend = loginOtpDialog.findViewById(R.id.txt_resend);
 
             if (label_otp_sent != null)
-                label_otp_sent.setText(String.format("Enter OTP Sent on +91%sXXX", number.substring(0, 7)));
+                label_otp_sent.setText(String.format("Enter OTP Sent on +91%s", number));
 
             if (btn_verify != null) {
                 btn_verify.setOnClickListener(v -> {
@@ -369,9 +368,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
                 int messageId = jsonObject.get("messageId").getAsInt();
                 String message = jsonObject.get("message").getAsString();
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-
             }
-
         }
     }
 }

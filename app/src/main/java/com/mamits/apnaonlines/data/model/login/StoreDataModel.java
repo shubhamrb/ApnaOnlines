@@ -50,6 +50,17 @@ public class StoreDataModel implements Serializable {
     @SerializedName("description")
     private String description;
 
+    @SerializedName("IsAvailable")
+    private int IsAvailable;
+
+    public int getIsAvailable() {
+        return IsAvailable;
+    }
+
+    public void setIsAvailable(int isAvailable) {
+        IsAvailable = isAvailable;
+    }
+
     public int getId() {
         return id;
     }
@@ -188,6 +199,7 @@ public class StoreDataModel implements Serializable {
                 ", bank_name='" + bank_name + '\'' +
                 ", ifsc_code='" + ifsc_code + '\'' +
                 ", description='" + description + '\'' +
+                ", IsAvailable=" + IsAvailable +
                 '}';
     }
 }

@@ -190,6 +190,11 @@ public class DataManager implements IDataManager {
     }
 
     @Override
+    public void openStore(Activity mActivity, String accessToken, JSONObject object, ResponseListener responseListener) {
+        mApiHelper.openStore(mActivity, accessToken, object, responseListener);
+    }
+
+    @Override
     public String getAccessToken() {
         return mPreferenceHelper.getAccessToken();
     }

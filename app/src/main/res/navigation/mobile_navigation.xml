@@ -8,51 +8,87 @@
     <fragment
         android:id="@+id/nav_dashboard_fragment"
         android:name="com.mamits.apnaonlines.ui.fragment.DashboardFragment"
-        tools:layout="@layout/fragment_dashboard"/>
+        tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/nav_order_details"
         android:name="com.mamits.apnaonlines.ui.fragment.orders.OrderDetailsFragment"
-        tools:layout="@layout/fragment_order_details"/>
+        tools:layout="@layout/fragment_order_details">
+        <action
+            android:id="@+id/action_dashboard"
+            app:destination="@id/nav_dashboard_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_transactions"
         android:name="com.mamits.apnaonlines.ui.fragment.dashboard.drawer.TransactionsFragment"
-        tools:layout="@layout/fragment_transactions" />
+        tools:layout="@layout/fragment_transactions" >
+        <action
+            android:id="@+id/action_dashboard"
+            app:destination="@id/nav_dashboard_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_help"
         android:name="com.mamits.apnaonlines.ui.fragment.dashboard.drawer.HelpSupportFragment"
-        tools:layout="@layout/fragment_help_support" />
+        tools:layout="@layout/fragment_help_support" >
+        <action
+            android:id="@+id/action_dashboard"
+            app:destination="@id/nav_dashboard_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_message"
         android:name="com.mamits.apnaonlines.ui.fragment.dashboard.MessageFragment"
-        tools:layout="@layout/fragment_message" />
+        tools:layout="@layout/fragment_message" >
+        <action
+            android:id="@+id/action_dashboard"
+            app:destination="@id/nav_dashboard_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_create_coupon"
         android:name="com.mamits.apnaonlines.ui.fragment.dashboard.coupons.CreateCouponFragment"
-        tools:layout="@layout/fragment_create_coupon" />
+        tools:layout="@layout/fragment_create_coupon" >
+        <action
+            android:id="@+id/action_dashboard"
+            app:destination="@id/nav_dashboard_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_add_service"
         android:name="com.mamits.apnaonlines.ui.fragment.dashboard.services.AddServiceFragment"
-        tools:layout="@layout/fragment_add_service" />
+        tools:layout="@layout/fragment_add_service" >
+        <action
+            android:id="@+id/action_dashboard"
+            app:destination="@id/nav_dashboard_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_change_pass"
         android:name="com.mamits.apnaonlines.ui.fragment.dashboard.drawer.ChangePasswordFragment"
-        tools:layout="@layout/fragment_change_password" />
+        tools:layout="@layout/fragment_change_password" >
+        <action
+            android:id="@+id/action_dashboard"
+            app:destination="@id/nav_dashboard_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.mamits.apnaonlines.ui.fragment.dashboard.drawer.ProfileFragment"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_dashboard"
+            app:destination="@id/nav_dashboard_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_category"
         android:name="com.mamits.apnaonlines.ui.fragment.dashboard.CategoryFragment"
-        tools:layout="@layout/fragment_category" />
+        tools:layout="@layout/fragment_category" >
+        <action
+            android:id="@+id/action_dashboard"
+            app:destination="@id/nav_dashboard_fragment" />
+    </fragment>
 
 </navigation>

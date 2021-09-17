@@ -149,15 +149,6 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
 
     }
 
-    public boolean setViewPagerToHome() {
-        if (binding.viewPager.getCurrentItem() == 0) {
-            return true;
-        } else {
-            binding.viewPager.setCurrentItem(0);
-            return false;
-        }
-    }
-
     @Override
     public void checkValidation(int errorCode, String message) {
 
