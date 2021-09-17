@@ -72,4 +72,6 @@ public interface IApiHelper {
 
     void openStore(Activity mActivity, String accessToken, JSONObject object, ResponseListener responseListener);
 
+    void fetchStoreStatus(Activity mActivity, String accessToken, ResponseListener responseListener);
+
 }

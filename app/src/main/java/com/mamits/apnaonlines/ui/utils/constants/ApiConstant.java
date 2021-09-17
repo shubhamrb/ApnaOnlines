@@ -34,4 +34,5 @@ public class ApiConstant {
     public static final String UPDATE_CATEGORY_END_POINT = BuildConfig.BASE_URL + "api/auth/updateCategory";
     public static final String ALL_CATEGORY_END_POINT = BuildConfig.BASE_URL + "api/auth/getVendorCategory";
     public static final String STORE_OPEN_END_POINT = BuildConfig.BASE_URL + "api/auth/storeStatusUpdate";
+    public static final String FETCH_VENDOR_PROFILE_END_POINT = BuildConfig.BASE_URL + "api/auth/vendorProfile";
 }

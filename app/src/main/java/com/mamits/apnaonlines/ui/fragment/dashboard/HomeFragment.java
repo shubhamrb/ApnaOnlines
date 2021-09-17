@@ -101,7 +101,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
 
             List<String> methodList = new ArrayList<>();
             methodList.add("Cashfree");
-            methodList.add("Paytm");
+            //methodList.add("Paytm");
 
             payMethodAdapter = new ArrayAdapter(mContext, R.layout.spinner_layout, methodList);
             spinner_method.setAdapter(payMethodAdapter);

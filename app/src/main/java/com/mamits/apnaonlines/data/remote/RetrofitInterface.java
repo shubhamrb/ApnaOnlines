@@ -137,6 +137,10 @@ public interface RetrofitInterface {
     @POST(ApiConstant.STORE_OPEN_END_POINT)
     Call<JsonObject> storeOpen(@Header("Authorization") String accessToken, @Body String jsonObject);
 
+    @Headers("Content-Type: application/json")
+    @POST(ApiConstant.FETCH_VENDOR_PROFILE_END_POINT)
+    Call<JsonObject> fetchStoreStatus(@Header("Authorization") String accessToken);
+
     @Multipart
     @POST(ApiConstant.COMPLETE_ORDER_END_POINT)
     Call<JsonObject> completeOrder(@Header("Authorization") String accessToken, @Part("orderid")RequestBody orderid, @Part("description")RequestBody description, @Part("payment_accept_mode")RequestBody payment_accept_mode, @Part MultipartBody.Part file);

@@ -102,6 +102,10 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
         }
     }
 
+    public void goToHome() {
+        binding.viewPager.setCurrentItem(0);
+    }
+
 
     private void setWishText() {
         Calendar c = Calendar.getInstance();

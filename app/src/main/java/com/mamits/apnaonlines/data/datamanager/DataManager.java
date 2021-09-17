@@ -195,6 +195,11 @@ public class DataManager implements IDataManager {
     }
 
     @Override
+    public void fetchStoreStatus(Activity mActivity, String accessToken, ResponseListener responseListener) {
+        mApiHelper.fetchStoreStatus(mActivity, accessToken, responseListener);
+    }
+
+    @Override
     public String getAccessToken() {
         return mPreferenceHelper.getAccessToken();
     }

@@ -16,4 +16,6 @@ public interface DashboardActivityNavigator extends BaseNavigator {
     void checkInternetConnection(String message);
 
     void onSuccessStoreStatus(JsonObject jsonObject);
+
+    void onSuccessFetchStoreStatus(JsonObject jsonObject);
 }

@@ -242,6 +242,7 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
     @Override
     public void checkInternetConnection(String message) {
         Log.e(TAG, message);
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -252,15 +253,18 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
     @Override
     public void checkValidation(int errorCode, String message) {
         Log.e(TAG, message);
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void throwable(Throwable throwable) {
         throwable.printStackTrace();
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onSuccessMessages(JsonObject jsonObject) {
+        binding.progressBar.setVisibility(View.GONE);
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
                 mGson = new Gson();

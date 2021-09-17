@@ -73,13 +73,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/bottom_card"
-            android:layout_below="@id/top_card"
-            android:gravity="bottom">
+            android:layout_below="@id/top_card">
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/_15sdp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_messages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="3"
                 tools:listitem="@layout/message_from_item" />

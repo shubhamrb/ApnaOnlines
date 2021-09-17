@@ -11,18 +11,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.mamits.apnaonlines.BR;
 import com.mamits.apnaonlines.R;
-import com.mamits.apnaonlines.data.model.login.LoginDataModel;
 import com.mamits.apnaonlines.databinding.ActivityDashboardBinding;
 import com.mamits.apnaonlines.ui.base.BaseActivity;
+import com.mamits.apnaonlines.ui.fragment.DashboardFragment;
 import com.mamits.apnaonlines.ui.navigator.activity.DashboardActivityNavigator;
 import com.mamits.apnaonlines.ui.notification.NotificationService;
 import com.mamits.apnaonlines.viewmodel.activity.DashboardActivityViewModel;
@@ -98,11 +98,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
         String num = mViewModel.getmDataManger().getUserNumber().trim().substring(0, 7) + "XXX";
         binding.navDrawer.userNumber.setText(num);
 
-        String json = mViewModel.getmDataManger().getUserData();
-        LoginDataModel model = new Gson().fromJson(json, LoginDataModel.class);
-        if (model != null) {
-            binding.storeSwitch.setChecked(model.getStore().getIsAvailable() == 1);
-        }
+        getStoreDetail();
 
         if (savedInstanceState == null) {
             setUpNavigation();
@@ -114,15 +110,19 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
             e.printStackTrace();
         }
 
-        binding.storeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        binding.storeSwitch.setOnClickListener(v -> {
             JSONObject jsonObject = new JSONObject();
             try {
-                jsonObject.put("status", isChecked ? "1" : "0");
+                jsonObject.put("status", binding.storeSwitch.isChecked() ? "1" : "0");
                 mViewModel.openStore(this, jsonObject);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void getStoreDetail() {
+        mViewModel.fetchStoreStatus(this);
     }
 
     private void setUpNavigation() {
@@ -203,12 +203,28 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
             if (mNavController != null && mNavController.getCurrentDestination() != null && mNavController.getCurrentDestination().getId() != 0) {
 
                 if (mNavController.getCurrentDestination().getId() == R.id.nav_dashboard_fragment) {
-                    return;
+                    try {
+                        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+
+                        if (navHostFragment != null) {
+                            Fragment fragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
+                            if (fragment instanceof DashboardFragment) {
+
+                                DashboardFragment dashboardFragment = (DashboardFragment) fragment;
+                                dashboardFragment.goToHome();
+                            }
+
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    NavOptions navOptions = new NavOptions.Builder()
+                            .setPopUpTo(mNavController.getCurrentDestination().getId(), true)
+                            .build();
+                    mNavController.navigate(R.id.action_dashboard, null, navOptions);
                 }
-                NavOptions navOptions = new NavOptions.Builder()
-                        .setPopUpTo(mNavController.getCurrentDestination().getId(), true)
-                        .build();
-                mNavController.navigate(R.id.action_dashboard, null, navOptions);
+
             }
 
         } catch (Exception e) {
@@ -269,7 +285,20 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
                 int messageId = jsonObject.get("messageId").getAsInt();
                 String message = jsonObject.get("message").getAsString();
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
+    @Override
+    public void onSuccessFetchStoreStatus(JsonObject jsonObject) {
+        if (jsonObject != null) {
+            if (jsonObject.get("status").getAsBoolean()) {
+                int store_status = jsonObject.get("data").getAsJsonArray().get(0).getAsJsonObject().get("is_available").getAsInt();
+                binding.storeSwitch.setChecked(store_status == 1);
+            } else {
+                int messageId = jsonObject.get("messageId").getAsInt();
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             }
         }
     }
