@@ -29,5 +29,9 @@ public interface IPreferenceHelper {
 
     void settUserEmail(String email);
 
+    String getNotificationType();
+
+    void setNotificationType(String type);
+
     void clearAllPreference();
 }

@@ -1,9 +1,9 @@
 package com.mamits.apnaonlines.ui.fragment;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.viewpager.widget.ViewPager;
 
@@ -29,7 +29,7 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
     private Context mContext;
     private ViewPagerAdapter viewPagerAdapter;
     private String action;
-
+    private int CURRENT_PAGE = 0;
 
     @Override
     public DashboardFragmentViewModel getMyViewModel() {
@@ -49,13 +49,6 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
             mContext = view.getContext();
         }
         if (isRefresh) {
-            Bundle bundle = getArguments();
-            if (bundle != null) {
-                action = bundle.getString("action");
-                if (action != null) {
-                    Log.e(TAG, action);
-                }
-            }
             setUpViewPager();
             setWishText();
         }
@@ -87,17 +80,28 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
             }
         });
 
-        if (action != null) {
+        action = mViewModel.getmDataManger().getNotificationType();
+        mViewModel.getmDataManger().setNotificationType(null);
+
+        if (action != null && action.trim().length() != 0) {
+            final Handler handler = new Handler();
             switch (action) {
                 case "order":
-                    binding.viewPager.setCurrentItem(1);
+                    handler.postDelayed(() -> {
+                        binding.viewPager.setCurrentItem(1);
+                    }, 2000);
                     break;
                 case "home":
-                    binding.viewPager.setCurrentItem(0);
+                    handler.postDelayed(() -> {
+                        binding.viewPager.setCurrentItem(0);
+                    }, 2000);
                     break;
                 case "chat":
-                    binding.viewPager.setCurrentItem(2);
+                    handler.postDelayed(() -> {
+                        binding.viewPager.setCurrentItem(2);
+                    }, 2000);
                     break;
+
             }
         }
     }

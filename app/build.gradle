@@ -17,11 +17,28 @@ android {
         multiDexEnabled true
     }
 
+    signingConfigs {
+        release {
+            storeFile file('keystore.jks')
+            storePassword "123456"
+            keyAlias "alias"
+            keyPassword "123456"
+        }
+        debug {
+            storeFile file('keystore.jks')
+            storePassword "123456"
+            keyAlias "alias"
+            keyPassword "123456"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             shrinkResources false
             debuggable false
+            signingConfig signingConfigs.release
+            buildConfigField("String", "BASE_URL", "\"https://apnaonlines.com/\"")
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -106,6 +123,7 @@ dependencies {
     /*firebase*/
     implementation platform('com.google.firebase:firebase-bom:28.4.0')
     implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
 
     /*glide*/
     implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
@@ -115,6 +133,8 @@ dependencies {
 
     /*paytm*/
     implementation 'com.paytm.appinvokesdk:appinvokesdk:1.6.0'
+
+    implementation 'com.github.HBiSoft:PickiT:0.1.14'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

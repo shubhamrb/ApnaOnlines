@@ -58,6 +58,8 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
         mViewModel = getMyViewModel();
         mViewModel.setNavigator(this);
 
+        setUpNavigation();
+
         /*drawer layout*/
         mDrawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, new Toolbar(this),
                 R.string.app_name, R.string.app_name) {
@@ -100,9 +102,6 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
 
         getStoreDetail();
 
-        if (savedInstanceState == null) {
-            setUpNavigation();
-        }
         try {
             startService(new Intent(this, NotificationService.class));
 
@@ -127,12 +126,9 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
 
     private void setUpNavigation() {
         mNavController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        Bundle bundle = new Bundle();
-        bundle.putString("action", getIntent().getStringExtra("action"));
-        mNavController.setGraph(R.navigation.mobile_navigation, bundle);
+        mNavController.setGraph(R.navigation.mobile_navigation);
         mNavController.addOnDestinationChangedListener(this);
     }
-
 
     @Override
     protected DashboardActivityViewModel getMyViewModel() {
@@ -142,60 +138,65 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
 
     @Override
     public void onClick(View v) {
-        NavDestination navDestination = mNavController.getCurrentDestination();
+        try {
+            NavDestination navDestination = mNavController.getCurrentDestination();
 
-        NavOptions options = new NavOptions.Builder()
-                .setEnterAnim(R.anim.slide_out_right)
-                .setExitAnim(R.anim.slide_in).setPopEnterAnim(0).setPopExitAnim(R.anim.slide_out1)
-                .build();
-        switch (v.getId()) {
-            case R.id.btn_toggle:
-                binding.drawerLayout.openDrawer(GravityCompat.START);
-                break;
-            case R.id.btn_close:
-                binding.drawerLayout.closeDrawers();
-                break;
-            case R.id.btn_change_pass:
-                binding.drawerLayout.closeDrawers();
-                if (navDestination != null && navDestination.getId() != R.id.nav_transactions) {
-                    mNavController.navigate(R.id.nav_change_pass, null, options);
-                }
-                break;
-            case R.id.btn_transactions:
-                binding.drawerLayout.closeDrawers();
-                if (navDestination != null && navDestination.getId() != R.id.nav_transactions) {
-                    mNavController.navigate(R.id.nav_transactions, null, options);
-                }
-                break;
-            case R.id.btn_help:
-                binding.drawerLayout.closeDrawers();
-                if (navDestination != null && navDestination.getId() != R.id.nav_help) {
-                    mNavController.navigate(R.id.nav_help, null, options);
-                }
-                break;
-            case R.id.btn_profile:
-                binding.drawerLayout.closeDrawers();
-                if (navDestination != null && navDestination.getId() != R.id.nav_profile) {
-                    mNavController.navigate(R.id.nav_profile, null, options);
-                }
-                break;
-            case R.id.btn_logout:
-
-                new Handler().postDelayed(() -> {
-                    try {
-                        stopService(new Intent(this, NotificationService.class));
-                        mViewModel.getmDataManger().clearAllPreference();
-                        startActivity(new Intent(this, MainActivity.class));
-                        finishAffinity();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+            NavOptions options = new NavOptions.Builder()
+                    .setEnterAnim(R.anim.slide_out_right)
+                    .setExitAnim(R.anim.slide_in).setPopEnterAnim(0).setPopExitAnim(R.anim.slide_out1)
+                    .build();
+            switch (v.getId()) {
+                case R.id.btn_toggle:
+                    binding.drawerLayout.openDrawer(GravityCompat.START);
+                    break;
+                case R.id.btn_close:
+                    binding.drawerLayout.closeDrawers();
+                    break;
+                case R.id.btn_change_pass:
+                    binding.drawerLayout.closeDrawers();
+                    if (navDestination != null && navDestination.getId() != R.id.nav_transactions) {
+                        mNavController.navigate(R.id.nav_change_pass, null, options);
                     }
-                }, 200);
-                break;
-            case R.id.home:
-                goBackToHome();
-                break;
+                    break;
+                case R.id.btn_transactions:
+                    binding.drawerLayout.closeDrawers();
+                    if (navDestination != null && navDestination.getId() != R.id.nav_transactions) {
+                        mNavController.navigate(R.id.nav_transactions, null, options);
+                    }
+                    break;
+                case R.id.btn_help:
+                    binding.drawerLayout.closeDrawers();
+                    if (navDestination != null && navDestination.getId() != R.id.nav_help) {
+                        mNavController.navigate(R.id.nav_help, null, options);
+                    }
+                    break;
+                case R.id.btn_profile:
+                    binding.drawerLayout.closeDrawers();
+                    if (navDestination != null && navDestination.getId() != R.id.nav_profile) {
+                        mNavController.navigate(R.id.nav_profile, null, options);
+                    }
+                    break;
+                case R.id.btn_logout:
+
+                    new Handler().postDelayed(() -> {
+                        try {
+                            stopService(new Intent(this, NotificationService.class));
+                            mViewModel.getmDataManger().clearAllPreference();
+                            startActivity(new Intent(this, MainActivity.class));
+                            finishAffinity();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }, 200);
+                    break;
+                case R.id.home:
+                    goBackToHome();
+                    break;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
     }
 
     private void goBackToHome() {
@@ -279,6 +280,11 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
     public void onSuccessStoreStatus(JsonObject jsonObject) {
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
+                if (binding.storeSwitch.isChecked()){
+                    binding.storeStatus.setText("Store is Open");
+                }else {
+                    binding.storeStatus.setText("Store is Closed");
+                }
                 String message = jsonObject.get("message").getAsString();
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             } else {
@@ -294,7 +300,13 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
                 int store_status = jsonObject.get("data").getAsJsonArray().get(0).getAsJsonObject().get("is_available").getAsInt();
-                binding.storeSwitch.setChecked(store_status == 1);
+                if (store_status==1){
+                    binding.storeSwitch.setChecked(true);
+                    binding.storeStatus.setText("Store is Open");
+                }else {
+                    binding.storeSwitch.setChecked(false);
+                    binding.storeStatus.setText("Store is Closed");
+                }
             } else {
                 int messageId = jsonObject.get("messageId").getAsInt();
                 String message = jsonObject.get("message").getAsString();

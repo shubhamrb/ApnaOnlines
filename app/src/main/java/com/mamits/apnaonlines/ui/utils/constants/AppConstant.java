@@ -18,4 +18,6 @@ public class AppConstant {
     public static final String PREF_KEY_USER_NUMBER = "PREF_KEY_USER_NUMBER";
     public static final String PREF_KEY_USER_EMAIL = "PREF_KEY_USER_EMAIL";
     public static final String PREF_KEY_USER_DATA = "PREF_KEY_USER_DATA";
+    public static final String APP_FILEPROVIDER = "com.mamits.apnaonlines.fileprovider";
+    public static final String PREF_NOTIFICATION_TYPE = "PREF_NOTIFICATION_TYPE";
 }

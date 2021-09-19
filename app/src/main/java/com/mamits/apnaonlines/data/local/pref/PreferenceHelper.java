@@ -81,6 +81,16 @@ public class PreferenceHelper implements IPreferenceHelper {
     }
 
     @Override
+    public String getNotificationType() {
+        return mSharedPreferences.getString(AppConstant.PREF_NOTIFICATION_TYPE, null);
+    }
+
+    @Override
+    public void setNotificationType(String type) {
+        mSharedPreferences.edit().putString(AppConstant.PREF_NOTIFICATION_TYPE, type).apply();
+    }
+
+    @Override
     public void clearAllPreference() {
         mSharedPreferences.edit().clear().apply();
     }

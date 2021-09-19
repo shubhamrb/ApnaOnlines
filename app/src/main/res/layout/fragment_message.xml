@@ -82,14 +82,21 @@
                 android:layout_centerInParent="true"
                 android:layout_margin="@dimen/_15sdp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_messages"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="3"
-                tools:listitem="@layout/message_from_item" />
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_messages"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/message_from_item" />
+            </ScrollView>
+
 
         </RelativeLayout>
 

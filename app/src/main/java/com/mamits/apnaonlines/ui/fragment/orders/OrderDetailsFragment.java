@@ -6,9 +6,12 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -31,6 +34,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.JsonObject;
+import com.hbisoft.pickit.PickiT;
+import com.hbisoft.pickit.PickiTCallbacks;
 import com.mamits.apnaonlines.BR;
 import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.data.model.orders.OrderDetailDataModel;
@@ -41,7 +46,6 @@ import com.mamits.apnaonlines.ui.base.BaseFragment;
 import com.mamits.apnaonlines.ui.customviews.CustomInputEditText;
 import com.mamits.apnaonlines.ui.customviews.CustomTextView;
 import com.mamits.apnaonlines.ui.navigator.fragment.OrderDetailNavigator;
-import com.mamits.apnaonlines.ui.utils.commonClasses.URIPathHelper;
 import com.mamits.apnaonlines.viewmodel.fragment.OrderDetailViewModel;
 
 import java.io.File;
@@ -52,7 +56,7 @@ import javax.inject.Inject;
 
 
 public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBinding, OrderDetailViewModel>
-        implements OrderDetailNavigator, View.OnClickListener, FormDataAdapter.downloadListener {
+        implements OrderDetailNavigator, View.OnClickListener, FormDataAdapter.downloadListener, PickiTCallbacks {
 
     private String TAG = "OrderDetailsFragment";
     private FragmentOrderDetailsBinding binding;
@@ -67,6 +71,7 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
     private ActivityResultLauncher<Intent> someActivityResultLauncher;
     private File uploadedFile = null;
     private CustomTextView et_upload;
+    private PickiT pickiT;
 
     @Override
     public void onClick(View v) {
@@ -100,10 +105,10 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
             AppCompatSpinner spin = completeOrderDialog.findViewById(R.id.spinner);
 
             ArrayList<String> payMethod = new ArrayList<>();
-            if (model.getPayment_type()==null || model.getPayment_type().equals("")){
+            if (model.getPayment_type() == null || model.getPayment_type().equals("")) {
                 payMethod.add("Pay on shop");
                 payMethod.add("Upi");
-            }else {
+            } else {
                 payMethod.add(model.getPayment_type());
             }
 
@@ -137,7 +142,7 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
                 }
                 completeOrder(des, pType);
             });
-            
+
             completeOrderDialog.setOnDismissListener(dialog -> {
                 completeOrderDialog = null;
             });
@@ -147,16 +152,11 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
 
     /*open file chooser*/
     private void openFileChooser() {
-
-        String[] mimeTypes = {"image/*", "audio/*", "video/*"};
-
         Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
-        //intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-        intent.putExtra(Intent.EXTRA_TITLE, "Image");
 
         chooserIntent.putExtra(Intent.EXTRA_INTENT, intent);
         chooserIntent.putExtra(Intent.EXTRA_TITLE, "Choose an action");
@@ -296,12 +296,11 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
                                 Intent data = result.getData();
 
                                 if (data != null) {
-
-                                    String finalFileName = URIPathHelper.getPath(mContext, data.getData());
-
+//                                    String finalFilePath = URIPathHelper.getLocalPath(mContext, data.getData());
+                                    pickiT.getPath(data.getData(), Build.VERSION.SDK_INT);
                                     /*create file*/
-                                    if (finalFileName != null) {
-                                        uploadedFile = new File(finalFileName);
+                                    /*if (finalFilePath != null) {
+                                        uploadedFile = new File(finalFilePath);
 
                                         long fileSizeInBytes = uploadedFile.length();
                                         long fileSizeInKB = fileSizeInBytes / 1024;
@@ -316,7 +315,7 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
                                         et_upload.setText(file.getLastPathSegment());
                                     } else {
                                         Log.e(TAG, "filename is null");
-                                    }
+                                    }*/
 
                                 } else {
                                     Log.e(TAG, "Data is null");
@@ -326,11 +325,34 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
                             }
                         }
                     });
+            pickiT = new PickiT(mContext, this, (Activity) mContext);
+
             binding.btnAccept.setOnClickListener(this);
             binding.btnReject.setOnClickListener(this);
             binding.btnChat.setOnClickListener(this);
             binding.btnComplete.setOnClickListener(this);
         }
+    }
+
+    private String getFileName(Intent data) {
+        String filename = null;
+        try {
+            Uri uri = data.getData();
+
+            Cursor cursor = mContext.getContentResolver().query(uri, null, null, null, null);
+
+            if (cursor == null) filename = uri.getPath();
+            else {
+                cursor.moveToFirst();
+                int idx = cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME);
+                filename = cursor.getString(idx);
+                cursor.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return filename;
     }
 
     private void permission() {
@@ -503,6 +525,47 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
         } else {
             requestPermissionLauncher.launch(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+    }
+
+    @Override
+    public void PickiTonUriReturned() {
+        mViewModel.getmNavigator().get().showProgressBars();
+    }
+
+    @Override
+    public void PickiTonStartListener() {
+
+    }
+
+    @Override
+    public void PickiTonProgressUpdate(int progress) {
+
+    }
+
+    @Override
+    public void PickiTonCompleteListener(String finalFilePath, boolean wasDriveFile, boolean wasUnknownProvider, boolean wasSuccessful, String Reason) {
+        mViewModel.getmNavigator().get().hideProgressBars();
+        if (wasSuccessful) {
+            if (finalFilePath != null) {
+                uploadedFile = new File(finalFilePath);
+
+                long fileSizeInBytes = uploadedFile.length();
+                long fileSizeInKB = fileSizeInBytes / 1024;
+                long fileSizeInMB = fileSizeInKB / 1024;
+
+                if (fileSizeInMB > 20) {
+                    Toast.makeText(mContext, "File size is too big. (Max : 20 MB)", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Uri file = Uri.fromFile(uploadedFile);
+
+                et_upload.setText(file.getLastPathSegment());
+            } else {
+                Log.e(TAG, "filename is null");
+            }
+        }else {
+            Toast.makeText(mContext,"Something went wrong.",Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -260,6 +260,16 @@ public class DataManager implements IDataManager {
     }
 
     @Override
+    public String getNotificationType() {
+        return mPreferenceHelper.getNotificationType();
+    }
+
+    @Override
+    public void setNotificationType(String type) {
+        mPreferenceHelper.setNotificationType(type);
+    }
+
+    @Override
     public void clearAllPreference() {
         mPreferenceHelper.clearAllPreference();
     }

@@ -37,7 +37,6 @@ import javax.inject.Inject;
 
 public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, PaymentActivityViewModel>
         implements PaymentActivityNavigator, View.OnClickListener, PaytmPaymentTransactionCallback {
-
     String TAG = "PaymentActivity";
     @Inject
     PaymentActivityViewModel mViewModel;
@@ -72,6 +71,7 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
             m_id = getIntent().getStringExtra("m_id");
         }
         startPayment();
+        binding.btnHome.setOnClickListener(this);
     }
 
     private void startPayment() {
@@ -87,7 +87,7 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
     }
 
     private void getPaytmToken() {
-        mViewModel.fetchPaytmToken(this, orderId, amount,customerPhone,customerEmail);
+        mViewModel.fetchPaytmToken(this, orderId, amount, customerPhone, customerEmail);
     }
 
     private void getCfsToken() {
@@ -113,16 +113,25 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
     @Override
     public void checkValidation(int type, String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        binding.imgStatus.setImageResource(R.drawable.cancel);
+        binding.imgStatus.setVisibility(View.VISIBLE);
+        binding.btnHome.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void throwable(Throwable it) {
         it.printStackTrace();
+        binding.imgStatus.setImageResource(R.drawable.cancel);
+        binding.imgStatus.setVisibility(View.VISIBLE);
+        binding.btnHome.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void checkInternetConnection(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        binding.imgStatus.setImageResource(R.drawable.cancel);
+        binding.imgStatus.setVisibility(View.VISIBLE);
+        binding.btnHome.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -138,7 +147,7 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
                 int messageId = jsonObject.get("messageId").getAsInt();
                 String message = jsonObject.get("message").getAsString();
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-
+                binding.btnHome.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -156,7 +165,6 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
             }
         } else {
             /*paytm*/
-
             PaytmOrder paytmOrder = new PaytmOrder(orderId, m_id, token, amount, PROD_CALLBACK_URL_PAYTM + orderId);
             TransactionManager transactionManager = new TransactionManager(paytmOrder, this);
             transactionManager.setAppInvokeEnabled(false);
@@ -168,18 +176,33 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         binding.progressBar.setVisibility(View.GONE);
+        binding.btnHome.setVisibility(View.VISIBLE);
         if (requestCode == CFPaymentService.REQ_CODE && data != null) {
+            try {
+                Bundle bundle = data.getExtras();
+                StringBuilder builder = new StringBuilder();
+                if (bundle != null) {
+                    String orderId = bundle.getString("orderId");
+                    builder.append("ORDER ID").append(" : #").append(orderId).append("\n");
 
-            Bundle bundle = data.getExtras();
-            StringBuilder builder = new StringBuilder();
-            if (bundle != null) {
-                for (String key : bundle.keySet()) {
-                    if (bundle.getString(key) != null) {
-                        builder.append(key).append(" : ").append(bundle.getString(key)).append("\n");
+                    String status = bundle.getString("txStatus");
+                    if (status.toLowerCase().contains("success")) {
+                        binding.imgStatus.setImageResource(R.drawable.checked);
+                        builder.append("PAYMENT STATUS").append(" : ").append("SUCCESS");
+                    } else {
+                        binding.imgStatus.setImageResource(R.drawable.cancel);
+                        builder.append("PAYMENT STATUS").append(" : ").append("FAILED");
                     }
+
+                    binding.imgStatus.setVisibility(View.VISIBLE);
+
+
+                    binding.txtMessage.setText(builder.toString());
                 }
-                binding.txtMessage.setText(builder.toString());
+            }catch (Exception e){
+                e.printStackTrace();
             }
+
         } else if (requestCode == 101 && data != null) {
             binding.txtMessage.setText(data.getStringExtra("nativeSdkForMerchantMessage") + "\n" + data.getStringExtra("response"));
         }
@@ -208,7 +231,10 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            case R.id.btn_home:
+                startActivity(new Intent(this, DashboardActivity.class));
+                finishAffinity();
+                break;
         }
     }
 
@@ -217,47 +243,73 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
         if (bundle != null) {
             binding.txtMessage.setText(bundle.toString());
         }
+        binding.btnHome.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void networkNotAvailable() {
         binding.progressBar.setVisibility(View.GONE);
+        binding.imgStatus.setImageResource(R.drawable.cancel);
+        binding.imgStatus.setVisibility(View.VISIBLE);
         binding.txtMessage.setText("PAYMENT ERROR : network not available");
+        binding.btnHome.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onErrorProceed(String s) {
         binding.progressBar.setVisibility(View.GONE);
+        binding.imgStatus.setImageResource(R.drawable.cancel);
+        binding.imgStatus.setVisibility(View.VISIBLE);
         binding.txtMessage.setText("PAYMENT ERROR : " + s);
+        binding.btnHome.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void clientAuthenticationFailed(String s) {
         binding.progressBar.setVisibility(View.GONE);
+        binding.imgStatus.setImageResource(R.drawable.cancel);
+        binding.imgStatus.setVisibility(View.VISIBLE);
         binding.txtMessage.setText("PAYMENT ERROR : " + s);
+        binding.btnHome.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void someUIErrorOccurred(String s) {
         binding.progressBar.setVisibility(View.GONE);
+        binding.imgStatus.setImageResource(R.drawable.cancel);
+        binding.imgStatus.setVisibility(View.VISIBLE);
         binding.txtMessage.setText("PAYMENT ERROR : " + s);
+        binding.btnHome.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onErrorLoadingWebPage(int i, String s, String s1) {
         binding.progressBar.setVisibility(View.GONE);
+        binding.imgStatus.setImageResource(R.drawable.cancel);
+        binding.imgStatus.setVisibility(View.VISIBLE);
         binding.txtMessage.setText("PAYMENT ERROR : " + s + " " + s1);
+        binding.btnHome.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onBackPressedCancelTransaction() {
         binding.progressBar.setVisibility(View.GONE);
+        binding.imgStatus.setImageResource(R.drawable.cancel);
+        binding.imgStatus.setVisibility(View.VISIBLE);
         binding.txtMessage.setText("PAYMENT ERROR : User cancelled");
+        binding.btnHome.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onTransactionCancel(String s, Bundle bundle) {
         binding.progressBar.setVisibility(View.GONE);
+        binding.imgStatus.setImageResource(R.drawable.cancel);
+        binding.imgStatus.setVisibility(View.VISIBLE);
         binding.txtMessage.setText("PAYMENT ERROR : " + s + " " + bundle.toString());
+        binding.btnHome.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

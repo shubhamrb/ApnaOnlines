@@ -21,7 +21,7 @@ import com.mamits.apnaonlines.ui.activity.MainActivity;
 
 public class NotificationService extends FirebaseMessagingService {
     private static final String TAG = "NotificationService";
-    String title, message,action;
+    String title, message, action;
     private String CHANNEL_ID;
 
     @Override
@@ -42,9 +42,19 @@ public class NotificationService extends FirebaseMessagingService {
             try {
                 title = remoteMessage.getNotification().getTitle(); //get title
                 message = remoteMessage.getNotification().getBody(); //get message
+                if (title == null) {
+                    title = "";
+                }
+                if (message == null) {
+                    message = "";
+                }
+                if (action == null) {
+                    action = "";
+                }
                 Log.d("title ", title);
                 Log.d("message ", message);
-                notificationManager(title, message,action);
+                Log.d("action ", action);
+                notificationManager(title, message, action);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -78,7 +88,7 @@ public class NotificationService extends FirebaseMessagingService {
             PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_ONE_SHOT);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.notification_icon)
+                    .setSmallIcon(R.drawable.logo)
                     .setColor(ContextCompat.getColor(this, R.color.sky_blue))
                     .setContentTitle(title)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(notificationMsg))
@@ -97,7 +107,7 @@ public class NotificationService extends FirebaseMessagingService {
                     .setContentText(notificationMsg)
                     .setAutoCancel(true)
                     .setContentIntent(resultPendingIntent)
-                    .setSmallIcon(R.drawable.notification_icon)
+                    .setSmallIcon(R.drawable.logo)
                     .build();
             NotificationManager notificationManager1 = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             notificationManager1.notify(NOTIFICATION_ID, n);

@@ -27,7 +27,7 @@
             <RelativeLayout
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp">
 
                 <ImageView
@@ -38,8 +38,7 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:src="@drawable/ic_menu" />
 
-                <com.mamits.apnaonlines.ui.customviews.CustomTextView
-                    android:id="@+id/btn_forgot"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -47,12 +46,30 @@
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:layout_toStartOf="@id/ll_actions"
                     android:layout_toEndOf="@id/btn_toggle"
-                    android:paddingBottom="@dimen/_4sdp"
-                    android:singleLine="true"
-                    android:text="@string/app_name"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_15ssp"
-                    app:fontName="Raleway-Regular.ttf" />
+                    android:orientation="vertical">
+
+                    <com.mamits.apnaonlines.ui.customviews.CustomTextView
+                        android:id="@+id/toolbar_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="@string/app_name"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_15ssp"
+                        app:fontName="Raleway-Regular.ttf" />
+
+                    <com.mamits.apnaonlines.ui.customviews.CustomTextView
+                        android:id="@+id/store_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/_4sdp"
+                        android:singleLine="true"
+                        android:text="Store is Open"
+                        android:textColor="@color/sky_blue"
+                        android:textSize="@dimen/_12ssp"
+                        app:fontName="Raleway-Regular.ttf" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/ll_actions"

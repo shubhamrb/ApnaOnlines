@@ -3,7 +3,6 @@ package com.mamits.apnaonlines.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -55,13 +54,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
         mViewModel = getMyViewModel();
         mViewModel.setNavigator(this);
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle!=null) {
+            String action = bundle.getString("action");
+            mViewModel.getmDataManger().setNotificationType(action);
+        }
         if (mViewModel.getmDataManger().getCurrentUserId() != -1) {
             Intent dashboardIntent = new Intent(this, DashboardActivity.class);
-
-            if (getIntent().hasExtra("action")) {
-                String action = getIntent().getStringExtra("action");
-                dashboardIntent.putExtra("action", action);
-            }
             startActivity(dashboardIntent);
             finishAffinity();
         }
@@ -90,7 +89,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
 
     @Override
     public void checkValidation(int type, String message) {
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -100,7 +99,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
 
     @Override
     public void checkInternetConnection(String message) {
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -154,29 +153,22 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
     }
 
     private void doLogin(String number, String pin) {
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                return;
-            }
-            // Get new FCM registration token
-            if (task.isSuccessful()) {
-                String device_id = task.getResult();
-
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token -> {
+            if (token != null && token.length() != 0) {
                 JSONObject jsonObject = new JSONObject();
                 try {
                     jsonObject.put("mobile", number);
                     jsonObject.put("pin", pin);
                     jsonObject.put("api_key", AppConstant.API_KEY);
                     jsonObject.put("device_type", AppConstant.DEVICE_TYPE);
-                    jsonObject.put("device_token", device_id);
+                    jsonObject.put("device_token", token);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 mViewModel.userLogin(this, jsonObject.toString());
-
             }
         });
+
     }
 
     private void showForgotOtpBottomDialog() {

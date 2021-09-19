@@ -2,6 +2,7 @@ package com.mamits.apnaonlines.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +11,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.mamits.apnaonlines.R;
@@ -121,20 +124,20 @@ public class MessengerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             Glide.with(mContext).load(message.getAttachment())
                                     .dontAnimate()
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .listener(new RequestListener<String, GlideDrawable>() {
+                                    .listener(new RequestListener<Drawable>() {
                                         @Override
-                                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                                             chatFromViewHolder.progress_bar.setVisibility(View.GONE);
                                             return false;
                                         }
 
                                         @Override
-                                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                                             chatFromViewHolder.progress_bar.setVisibility(View.GONE);
                                             return false;
                                         }
-                                    })
-                                    .into(chatFromViewHolder.img_msg);
+                                    }).into(chatFromViewHolder.img_msg);
+
                         }
 
                         chatFromViewHolder.card_img_msg.setVisibility(View.VISIBLE);
@@ -176,15 +179,15 @@ public class MessengerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             Glide.with(mContext).load(message.getAttachment())
                                     .dontAnimate()
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .listener(new RequestListener<String, GlideDrawable>() {
+                                    .listener(new RequestListener<Drawable>() {
                                         @Override
-                                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                                             chatToViewHolder.progress_bar.setVisibility(View.GONE);
                                             return false;
                                         }
 
                                         @Override
-                                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                                             chatToViewHolder.progress_bar.setVisibility(View.GONE);
                                             return false;
                                         }

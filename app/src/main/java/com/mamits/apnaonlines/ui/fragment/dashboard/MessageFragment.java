@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -20,6 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hbisoft.pickit.PickiT;
+import com.hbisoft.pickit.PickiTCallbacks;
 import com.mamits.apnaonlines.BR;
 import com.mamits.apnaonlines.R;
 import com.mamits.apnaonlines.data.model.chat.MessageDataModel;
@@ -27,7 +30,6 @@ import com.mamits.apnaonlines.databinding.FragmentMessageBinding;
 import com.mamits.apnaonlines.ui.adapter.MessengerAdapter;
 import com.mamits.apnaonlines.ui.base.BaseFragment;
 import com.mamits.apnaonlines.ui.navigator.fragment.MessageNavigator;
-import com.mamits.apnaonlines.ui.utils.commonClasses.URIPathHelper;
 import com.mamits.apnaonlines.viewmodel.fragment.MessageViewModel;
 
 import java.io.File;
@@ -37,7 +39,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class MessageFragment extends BaseFragment<FragmentMessageBinding, MessageViewModel> implements MessageNavigator, View.OnClickListener {
+public class MessageFragment extends BaseFragment<FragmentMessageBinding, MessageViewModel>
+        implements MessageNavigator, View.OnClickListener, PickiTCallbacks {
     private String TAG = "MessageFragment";
     private FragmentMessageBinding binding;
 
@@ -54,6 +57,7 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
     private File uploadedFile = null;
     private String message = "";
     private String name;
+    private PickiT pickiT;
 
     @Override
     public void onClick(View v) {
@@ -89,9 +93,9 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
     }
 
     public boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission((Activity) mContext,
+        int result = ContextCompat.checkSelfPermission(mContext,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int result2 = ContextCompat.checkSelfPermission((Activity) mContext,
+        int result2 = ContextCompat.checkSelfPermission(mContext,
                 Manifest.permission.READ_EXTERNAL_STORAGE);
 
         return result == PackageManager.PERMISSION_GRANTED
@@ -111,19 +115,12 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
     /*open file chooser*/
     private void openFileChooser() {
 
-        String[] mimeTypes = {"image/*", "audio/*", "video/*"};
-
         Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
-
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
-        //intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-        intent.putExtra(Intent.EXTRA_TITLE, "Image");
-
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         chooserIntent.putExtra(Intent.EXTRA_INTENT, intent);
         chooserIntent.putExtra(Intent.EXTRA_TITLE, "Choose an action");
-
         someActivityResultLauncher.launch(chooserIntent);
     }
 
@@ -176,11 +173,12 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
 
                                 if (data != null) {
 
-                                    String finalFileName = URIPathHelper.getPath(mContext, data.getData());
+//                                    String finalFilePath = FileUtils.getPath(mContext, data.getData());
+                                    pickiT.getPath(data.getData(), Build.VERSION.SDK_INT);
 
                                     /*create file*/
-                                    if (finalFileName != null) {
-                                        uploadedFile = new File(finalFileName);
+                                    /*if (finalFilePath != null) {
+                                        uploadedFile = new File(finalFilePath);
 
                                         long fileSizeInBytes = uploadedFile.length();
                                         long fileSizeInKB = fileSizeInBytes / 1024;
@@ -196,7 +194,7 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
                                         binding.rlFile.setVisibility(View.VISIBLE);
                                     } else {
                                         Log.e(TAG, "filename is null");
-                                    }
+                                    }*/
 
                                 } else {
                                     Log.e(TAG, "Data is null");
@@ -206,6 +204,7 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
                             }
                         }
                     });
+            pickiT = new PickiT(mContext, this, (Activity) mContext);
         }
     }
 
@@ -299,6 +298,7 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
     public void onSuccessMessageSend(JsonObject jsonObject) {
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
+                binding.recyclerMessages.setVisibility(View.VISIBLE);
                 mGson = new Gson();
                 Type messages = new TypeToken<List<MessageDataModel>>() {
                 }.getType();
@@ -358,6 +358,53 @@ public class MessageFragment extends BaseFragment<FragmentMessageBinding, Messag
         if (timer != null) {
             timer.cancel();
         }
+        if (pickiT != null) {
+            pickiT.deleteTemporaryFile(mContext);
+        }
         super.onDestroy();
     }
+
+    @Override
+    public void PickiTonUriReturned() {
+        mViewModel.getmNavigator().get().showProgressBars();
+    }
+
+    @Override
+    public void PickiTonStartListener() {
+
+    }
+
+    @Override
+    public void PickiTonProgressUpdate(int progress) {
+
+    }
+
+    @Override
+    public void PickiTonCompleteListener(String finalFilePath, boolean wasDriveFile, boolean wasUnknownProvider, boolean wasSuccessful, String Reason) {
+        mViewModel.getmNavigator().get().hideProgressBars();
+        if (wasSuccessful) {
+            if (finalFilePath != null) {
+                uploadedFile = new File(finalFilePath);
+
+                long fileSizeInBytes = uploadedFile.length();
+                long fileSizeInKB = fileSizeInBytes / 1024;
+                long fileSizeInMB = fileSizeInKB / 1024;
+
+                if (fileSizeInMB > 20) {
+                    Toast.makeText(mContext, "File size is too big. (Max : 20 MB)", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Uri file = Uri.fromFile(uploadedFile);
+
+                binding.txtFileName.setText(file.getLastPathSegment());
+                binding.rlFile.setVisibility(View.VISIBLE);
+            } else {
+                Log.e(TAG, "filename is null");
+            }
+        }
+        else {
+            Toast.makeText(mContext,"Something went wrong.",Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
