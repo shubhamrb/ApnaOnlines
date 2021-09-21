@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/accept_order_bottomsheet.xml" value="0.21" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/activity_dashboard.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/activity_payment.xml" value="0.22447916666666667" />
@@ -10,12 +11,16 @@
         <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/change_pin_bottomsheet.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/forgot_otp_bottomsheet.xml" value="0.22" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/fragment_change_password.xml" value="0.22447916666666667" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/fragment_help_support.xml" value="0.21" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/fragment_home.xml" value="0.10916919959473151" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/fragment_inbox.xml" value="0.22447916666666667" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/fragment_message.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/fragment_orders.xml" value="0.22447916666666667" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/fragment_profile.xml" value="0.22447916666666667" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/login_otp_bottomsheet.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/orders_list_item.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/layout/send_otp_bottomsheet.xml" value="0.33" />
+        <entry key="..\:/AndroidStudioProjects/MaMITs/Apnaonlines vendor/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.240625" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/drawable-xhdpi/message_from_box_shape.xml" value="0.21388888888888888" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/drawable/circle_box.xml" value="0.21388888888888888" />
         <entry key="..\:/AndroidStudioProjects/MaMITs/app/src/main/res/drawable/completed_order_box_layout.xml" value="0.19907407407407407" />

@@ -91,6 +91,16 @@ public class PreferenceHelper implements IPreferenceHelper {
     }
 
     @Override
+    public boolean isPaymentOpen() {
+        return mSharedPreferences.getBoolean(AppConstant.PREF_PAYMENT_ACTIVITY_OPEN, false);
+    }
+
+    @Override
+    public void setPaymentOpen(boolean isOpen) {
+        mSharedPreferences.edit().putBoolean(AppConstant.PREF_PAYMENT_ACTIVITY_OPEN, isOpen).apply();
+    }
+
+    @Override
     public void clearAllPreference() {
         mSharedPreferences.edit().clear().apply();
     }

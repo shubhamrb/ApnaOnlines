@@ -10,7 +10,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatSpinner;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
@@ -97,7 +96,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
             RelativeLayout btn_pay = paymentDialog.findViewById(R.id.btn_pay);
             AppCompatSpinner spinner_method = paymentDialog.findViewById(R.id.spinner_method);
             CustomInputEditText et_amount = paymentDialog.findViewById(R.id.et_amount);
-            et_amount.setText("₹ " + model.getPaytoadmin());
+            et_amount.setText(String.format("₹ %s", model.getPaytoadmin()));
 
             List<String> methodList = new ArrayList<>();
             methodList.add("Cashfree");
@@ -108,7 +107,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
 
             btn_pay.setOnClickListener(v -> {
                 try {
-                    int amount = model.getPaytoadmin();
+                    double amount = model.getPaytoadmin();
                     if (amount == 0) {
                         Log.e(TAG, "Amount is 0.");
                         return;

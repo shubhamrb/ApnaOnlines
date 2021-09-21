@@ -40,6 +40,8 @@ public interface IApiHelper {
 
     void updateOrderStatus(Activity mActivity, String accessToken, String status, int order_id, String time, String type, String order_amount, ResponseListener responseListener);
 
+    void checkPaymentStatus(Activity mActivity, String accessToken, String order_id, ResponseListener responseListener);
+
     void completeOrder(Activity mActivity, String accessToken, String des, int order_id, String pType, File uploadedFile, ResponseListener responseListener);
 
     void fetchMessage(Activity mActivity, String accessToken, int user_id, int order_id, ResponseListener responseListener);
@@ -74,4 +76,5 @@ public interface IApiHelper {
 
     void fetchStoreStatus(Activity mActivity, String accessToken, ResponseListener responseListener);
 
+    void savePaymentResponse(Activity mActivity, String accessToken, JSONObject object, ResponseListener responseListener);
 }

@@ -29,6 +29,8 @@ import com.paytm.pgsdk.PaytmOrder;
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback;
 import com.paytm.pgsdk.TransactionManager;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -61,17 +63,22 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
         mViewModel = getMyViewModel();
         mViewModel.setNavigator(this);
 
-        amount = getIntent().getStringExtra("amount");
-        customerName = mViewModel.getmDataManger().getUsername();
-        customerPhone = mViewModel.getmDataManger().getUserNumber();
-        customerEmail = mViewModel.getmDataManger().getUserEmail();
-        if (getIntent().hasExtra("appid")) {
-            appid = getIntent().getStringExtra("appid");
-        } else if (getIntent().hasExtra("m_id")) {
-            m_id = getIntent().getStringExtra("m_id");
-        }
-        startPayment();
         binding.btnHome.setOnClickListener(this);
+        if (!mViewModel.getmDataManger().isPaymentOpen()) {
+            mViewModel.getmDataManger().setPaymentOpen(true);
+
+            amount = getIntent().getStringExtra("amount");
+            customerName = mViewModel.getmDataManger().getUsername();
+            customerPhone = mViewModel.getmDataManger().getUserNumber();
+            customerEmail = mViewModel.getmDataManger().getUserEmail();
+            if (getIntent().hasExtra("appid")) {
+                appid = getIntent().getStringExtra("appid");
+            } else if (getIntent().hasExtra("m_id")) {
+                m_id = getIntent().getStringExtra("m_id");
+            }
+            startPayment();
+        }
+
     }
 
     private void startPayment() {
@@ -152,6 +159,19 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
         }
     }
 
+    @Override
+    public void onSuccessSavePaymentResponse(JsonObject jsonObject) {
+        if (jsonObject != null) {
+            if (jsonObject.get("status").getAsBoolean()) {
+
+            } else {
+                int messageId = jsonObject.get("messageId").getAsInt();
+                String message = jsonObject.get("message").getAsString();
+                Log.e(TAG, message);
+            }
+        }
+    }
+
     private void doPayment(String token) {
         if (appid != null) {
             /*cashfree*/
@@ -186,7 +206,28 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
                     builder.append("ORDER ID").append(" : #").append(orderId).append("\n");
 
                     String status = bundle.getString("txStatus");
+
                     if (status.toLowerCase().contains("success")) {
+                        JSONObject jsonObject = new JSONObject();
+
+                        String orderAmount = bundle.getString("orderAmount");
+                        String referenceId = bundle.getString("referenceId");
+                        String paymentMode = bundle.getString("paymentMode");
+                        String txMsg = bundle.getString("txMsg");
+                        String txTime = bundle.getString("txTime");
+                        String paymentMethod = bundle.getString("paymentMethod");
+
+                        jsonObject.put("orderId", orderId);
+                        jsonObject.put("orderAmount", orderAmount);
+                        jsonObject.put("referenceId", referenceId);
+                        jsonObject.put("txStatus", status);
+                        jsonObject.put("paymentMode", paymentMode);
+                        jsonObject.put("txMsg", txMsg);
+                        jsonObject.put("txTime", txTime);
+                        jsonObject.put("paymentMethod", paymentMethod != null ? paymentMethod : "");
+
+                        savePaymentResponse(jsonObject);
+
                         binding.imgStatus.setImageResource(R.drawable.checked);
                         builder.append("PAYMENT STATUS").append(" : ").append("SUCCESS");
                     } else {
@@ -199,13 +240,17 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
 
                     binding.txtMessage.setText(builder.toString());
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
         } else if (requestCode == 101 && data != null) {
             binding.txtMessage.setText(data.getStringExtra("nativeSdkForMerchantMessage") + "\n" + data.getStringExtra("response"));
         }
+    }
+
+    private void savePaymentResponse(JSONObject jsonObject) {
+        mViewModel.savePaymentResponse(this, jsonObject);
     }
 
     private Map<String, String> getInputParams() {
@@ -232,6 +277,7 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_home:
+                mViewModel.getmDataManger().setPaymentOpen(false);
                 startActivity(new Intent(this, DashboardActivity.class));
                 finishAffinity();
                 break;

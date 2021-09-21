@@ -398,6 +398,31 @@ public class ApiHelper implements IApiHelper {
     }
 
     @Override
+    public void checkPaymentStatus(Activity mActivity, String accessToken, String order_id, ResponseListener responseListener) {
+        RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("orderId", order_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        call.checkPaymentStatus("Bearer " + accessToken, jsonObject.toString()).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    responseListener.onSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                responseListener.onFailed(t);
+            }
+        });
+    }
+
+    @Override
     public void completeOrder(Activity mActivity, String accessToken, String des, int order_id, String pType, File uploadedFile, ResponseListener responseListener) {
         RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
 
@@ -773,6 +798,25 @@ public class ApiHelper implements IApiHelper {
         RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
 
         call.fetchStoreStatus("Bearer " + accessToken).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    responseListener.onSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                responseListener.onFailed(t);
+            }
+        });
+    }
+
+    @Override
+    public void savePaymentResponse(Activity mActivity, String accessToken, JSONObject object, ResponseListener responseListener) {
+        RetrofitInterface call = new RetrofitBase(mActivity, true).retrofit.create(RetrofitInterface.class);
+
+        call.savePaymentResponse("Bearer " + accessToken,object.toString()).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null) {

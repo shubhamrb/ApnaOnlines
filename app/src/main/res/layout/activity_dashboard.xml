@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/_4sdp"
                         android:singleLine="true"
-                        android:text="Store is Open"
+                        android:text="Shop is Open"
                         android:textColor="@color/sky_blue"
                         android:textSize="@dimen/_12ssp"
                         app:fontName="Raleway-Regular.ttf" />
@@ -79,7 +79,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:orientation="horizontal"
-                    android:weightSum="3">
+                    android:weightSum="2">
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/store_switch"
@@ -106,7 +106,8 @@
                         android:layout_height="@dimen/_30sdp"
                         android:layout_weight="1"
                         android:padding="@dimen/_6sdp"
-                        android:src="@drawable/notification" />
+                        android:src="@drawable/notification"
+                        android:visibility="gone"/>
 
                     <ImageView
                         android:id="@+id/home"

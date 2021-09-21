@@ -46,7 +46,7 @@
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:alpha="0.7"
                     android:lineSpacingExtra="0.5sp"
-                    android:text="The following data shown below is from January 01, 2021 to this date. This will be updated as per order request and your actions."
+                    android:text="The following data shown below is of till this date. This will be updated as per order request and your actions."
                     android:textColor="@color/black"
                     android:textSize="@dimen/_10ssp"
                     app:fontName="Raleway-Regular.ttf" />

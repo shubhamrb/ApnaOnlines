@@ -33,7 +33,7 @@
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".ui.activity.PaymentActivity"
-            android:exported="true" />
+            android:exported="true"/>
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="true"
@@ -51,7 +51,7 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/logo" />
+            android:resource="@drawable/ic_notification" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/sky_blue" />

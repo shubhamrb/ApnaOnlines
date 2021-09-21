@@ -58,6 +58,9 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
         mViewModel = getMyViewModel();
         mViewModel.setNavigator(this);
 
+        /*temp*/
+        mViewModel.getmDataManger().setPaymentOpen(false);
+
         setUpNavigation();
 
         /*drawer layout*/
@@ -193,7 +196,7 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
                     goBackToHome();
                     break;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -239,7 +242,20 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
             if (mNavController != null && mNavController.getCurrentDestination() != null && mNavController.getCurrentDestination().getId() != 0) {
 
                 if (mNavController.getCurrentDestination().getId() == R.id.nav_dashboard_fragment) {
-                    super.onBackPressed();
+                    try {
+                        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                        if (navHostFragment != null) {
+                            Fragment fragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
+                            if (fragment instanceof DashboardFragment) {
+                                DashboardFragment dashboardFragment = (DashboardFragment) fragment;
+                                if (!dashboardFragment.goToHome()) {
+                                    super.onBackPressed();
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     mNavController.popBackStack();
                 }
@@ -280,10 +296,10 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
     public void onSuccessStoreStatus(JsonObject jsonObject) {
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
-                if (binding.storeSwitch.isChecked()){
-                    binding.storeStatus.setText("Store is Open");
-                }else {
-                    binding.storeStatus.setText("Store is Closed");
+                if (binding.storeSwitch.isChecked()) {
+                    binding.storeStatus.setText("Shop is Open");
+                } else {
+                    binding.storeStatus.setText("Shop is Closed");
                 }
                 String message = jsonObject.get("message").getAsString();
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
@@ -300,12 +316,12 @@ public class DashboardActivity extends BaseActivity<ActivityDashboardBinding, Da
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
                 int store_status = jsonObject.get("data").getAsJsonArray().get(0).getAsJsonObject().get("is_available").getAsInt();
-                if (store_status==1){
+                if (store_status == 1) {
                     binding.storeSwitch.setChecked(true);
-                    binding.storeStatus.setText("Store is Open");
-                }else {
+                    binding.storeStatus.setText("Shop is Open");
+                } else {
                     binding.storeSwitch.setChecked(false);
-                    binding.storeStatus.setText("Store is Closed");
+                    binding.storeStatus.setText("Shop is Closed");
                 }
             } else {
                 int messageId = jsonObject.get("messageId").getAsInt();

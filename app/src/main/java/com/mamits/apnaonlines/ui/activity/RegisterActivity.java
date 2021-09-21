@@ -1,5 +1,7 @@
 package com.mamits.apnaonlines.ui.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -17,6 +19,7 @@ import com.mamits.apnaonlines.ui.base.BaseActivity;
 import com.mamits.apnaonlines.ui.customviews.CustomInputEditText;
 import com.mamits.apnaonlines.ui.customviews.CustomTextView;
 import com.mamits.apnaonlines.ui.navigator.activity.RegisterActivityNavigator;
+import com.mamits.apnaonlines.ui.utils.commonClasses.CommonUtils;
 import com.mamits.apnaonlines.ui.utils.constants.AppConstant;
 import com.mamits.apnaonlines.viewmodel.activity.RegisterActivityViewModel;
 
@@ -55,6 +58,7 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding, Regi
 
         binding.btnLogin.setOnClickListener(this);
         binding.btnRegister.setOnClickListener(this);
+        binding.txtTerms.setOnClickListener(this);
     }
 
     @Override
@@ -76,17 +80,17 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding, Regi
 
     @Override
     public void checkValidation(int type, String message) {
-
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void throwable(Throwable it) {
-
+    public void throwable(Throwable throwable) {
+        throwable.printStackTrace();
     }
 
     @Override
     public void checkInternetConnection(String message) {
-
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -94,6 +98,10 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding, Regi
         switch (v.getId()) {
             case R.id.btn_login:
                 onBackPressed();
+                break;
+            case R.id.txt_terms:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://apnaonlines.com/vendor-term-condition"));
+                startActivity(browserIntent);
                 break;
             case R.id.btn_register:
                 name = binding.etName.getText().toString();
@@ -108,6 +116,10 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding, Regi
                 }
                 if (email.trim().length() == 0) {
                     Toast.makeText(this, "Please enter your email.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!CommonUtils.isEmailValid(email)) {
+                    Toast.makeText(this, "Please enter valid email.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (mobile.trim().length() == 0) {
@@ -125,6 +137,10 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding, Regi
 
                 if (!pass.equals(cnf_pass)) {
                     Toast.makeText(this, "Password did not match.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!binding.termsCheckbox.isChecked()) {
+                    Toast.makeText(this, "Please accept the terms & conditions.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 sendOtp(mobile, false);

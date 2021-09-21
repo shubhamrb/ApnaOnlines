@@ -53,6 +53,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrdersView
     public void onBindViewHolder(@NonNull OrdersViewHolder holder, int position) {
         if (list.size() > 0) {
             OrdersDataModel model = list.get(position);
+            holder.txt_pay_method.setVisibility(View.GONE);
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             try {
                 Date d1 = formatter.parse(model.getCreated_at());
@@ -85,6 +86,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrdersView
                     break;
                 case 5:
                     holder.txt_status.setText("Complete");
+                    holder.txt_pay_method.setText(model.getPayment_type());
+                    holder.txt_pay_method.setVisibility(View.VISIBLE);
                     holder.txt_status.setTextColor(mContext.getResources().getColor(R.color.green_39ae00));
                     break;
             }
@@ -119,7 +122,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrdersView
     }
 
     public static class OrdersViewHolder extends RecyclerView.ViewHolder {
-        private CustomTextView txt_date, txt_order_id, txt_username, txt_service_category, txt_status, txt_price;
+        private CustomTextView txt_date, txt_order_id, txt_username, txt_service_category, txt_status, txt_price, txt_pay_method;
         private CustomCircularImageView img;
 
         public OrdersViewHolder(@NonNull View itemView) {
@@ -131,6 +134,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrdersView
             txt_status = itemView.findViewById(R.id.txt_status);
             txt_price = itemView.findViewById(R.id.txt_price);
             img = itemView.findViewById(R.id.img);
+            txt_pay_method = itemView.findViewById(R.id.txt_pay_method);
 
         }
     }

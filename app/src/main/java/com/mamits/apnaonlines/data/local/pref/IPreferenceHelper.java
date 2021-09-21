@@ -33,5 +33,9 @@ public interface IPreferenceHelper {
 
     void setNotificationType(String type);
 
+    boolean isPaymentOpen();
+
+    void setPaymentOpen(boolean isOpen);
+
     void clearAllPreference();
 }

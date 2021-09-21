@@ -20,4 +20,5 @@ public class AppConstant {
     public static final String PREF_KEY_USER_DATA = "PREF_KEY_USER_DATA";
     public static final String APP_FILEPROVIDER = "com.mamits.apnaonlines.fileprovider";
     public static final String PREF_NOTIFICATION_TYPE = "PREF_NOTIFICATION_TYPE";
+    public static final String PREF_PAYMENT_ACTIVITY_OPEN = "PREF_PAYMENT_ACTIVITY_OPEN";
 }

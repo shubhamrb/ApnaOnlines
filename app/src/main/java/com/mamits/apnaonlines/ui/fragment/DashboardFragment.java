@@ -3,7 +3,6 @@ package com.mamits.apnaonlines.ui.fragment;
 import android.content.Context;
 import android.os.Handler;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.viewpager.widget.ViewPager;
 
@@ -89,25 +88,30 @@ public class DashboardFragment extends BaseFragment<FragmentDashboardBinding, Da
                 case "order":
                     handler.postDelayed(() -> {
                         binding.viewPager.setCurrentItem(1);
-                    }, 2000);
+                    }, 1000);
                     break;
                 case "home":
                     handler.postDelayed(() -> {
                         binding.viewPager.setCurrentItem(0);
-                    }, 2000);
+                    }, 1000);
                     break;
                 case "chat":
                     handler.postDelayed(() -> {
                         binding.viewPager.setCurrentItem(2);
-                    }, 2000);
+                    }, 1000);
                     break;
 
             }
         }
     }
 
-    public void goToHome() {
-        binding.viewPager.setCurrentItem(0);
+    public boolean goToHome() {
+        if (binding.viewPager.getCurrentItem() == 0) {
+            return false;
+        } else {
+            binding.viewPager.setCurrentItem(0);
+            return true;
+        }
     }
 
 

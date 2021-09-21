@@ -72,6 +72,8 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
     private File uploadedFile = null;
     private CustomTextView et_upload;
     private PickiT pickiT;
+    private ArrayList<String> payMethod;
+    private ArrayAdapter<String> payMethodAdapter;
 
     @Override
     public void onClick(View v) {
@@ -104,7 +106,7 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
             RelativeLayout btn_submit = completeOrderDialog.findViewById(R.id.btn_submit);
             AppCompatSpinner spin = completeOrderDialog.findViewById(R.id.spinner);
 
-            ArrayList<String> payMethod = new ArrayList<>();
+            payMethod = new ArrayList<>();
             if (model.getPayment_type() == null || model.getPayment_type().equals("")) {
                 payMethod.add("Pay on shop");
                 payMethod.add("Upi");
@@ -113,19 +115,8 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
             }
 
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, R.layout.spinner_layout, payMethod);
-            spin.setAdapter(adapter);
-            spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    pType = adapterView.getItemAtPosition(i).toString();
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-                    pType = "";
-                }
-            });
+            payMethodAdapter = new ArrayAdapter<>(mContext, R.layout.spinner_layout, payMethod);
+            spin.setAdapter(payMethodAdapter);
 
             btn_upload.setOnClickListener(v -> {
                 if (checkPermission()) {
@@ -140,7 +131,15 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
                     Toast.makeText(mContext, "Please enter the description.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                completeOrder(des, pType);
+                pType=spin.getSelectedItem().toString();
+
+                if (model.getPayment_type() == null || model.getPayment_type().equals("")) {
+                    /*fetch current status*/
+                    checkPaymentStatus(String.valueOf(model.getId()), des, pType);
+                } else {
+                    completeOrder(des, pType);
+                }
+
             });
 
             completeOrderDialog.setOnDismissListener(dialog -> {
@@ -148,6 +147,10 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
             });
             completeOrderDialog.show();
         }
+    }
+
+    private void checkPaymentStatus(String order_id, String des, String pType) {
+        mViewModel.checkPaymentStatus((Activity) mContext, order_id, des, pType);
     }
 
     /*open file chooser*/
@@ -446,7 +449,7 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
 
     @Override
     public void checkInternetConnection(String message) {
-
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -456,12 +459,12 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
 
     @Override
     public void checkValidation(int errorCode, String message) {
-
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void throwable(Throwable throwable) {
-
+        throwable.printStackTrace();
     }
 
     @Override
@@ -477,6 +480,34 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
                 }
                 binding.bottom.setVisibility(View.GONE);
                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            } else {
+                int messageId = jsonObject.get("messageId").getAsInt();
+                String message = jsonObject.get("message").getAsString();
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onSuccessPaymentStatus(JsonObject jsonObject, String des, String pType) {
+        if (jsonObject != null) {
+            if (jsonObject.get("status").getAsBoolean()) {
+                try {
+                    int paymentStatus = jsonObject.get("data").getAsJsonArray().get(0).getAsJsonObject().get("payment_status").getAsInt();
+                    if (paymentStatus == 1) {
+                        /*payment already made*/
+                        payMethod.clear();
+                        payMethod.add("Online");
+                        payMethodAdapter.notifyDataSetChanged();
+                        model.setPayment_type("Online");
+                        Toast.makeText(mContext, "Payment has been already made by user through online mode. Please continue.", Toast.LENGTH_LONG).show();
+                    } else {
+                        completeOrder(des, pType);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             } else {
                 int messageId = jsonObject.get("messageId").getAsInt();
                 String message = jsonObject.get("message").getAsString();
@@ -564,8 +595,8 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
             } else {
                 Log.e(TAG, "filename is null");
             }
-        }else {
-            Toast.makeText(mContext,"Something went wrong.",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(mContext, "Something went wrong.", Toast.LENGTH_SHORT).show();
         }
     }
 }

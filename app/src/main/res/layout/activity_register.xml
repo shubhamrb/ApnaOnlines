@@ -223,6 +223,31 @@
                         app:fontName="Raleway-Light.ttf" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/terms_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:buttonTint="@color/sky_blue"
+                        android:text="I accept the "
+                        android:textColor="@color/black" />
+
+                    <com.mamits.apnaonlines.ui.customviews.CustomTextView
+                        android:id="@+id/txt_terms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:text="terms &amp; conditions."
+                        android:textColor="@color/sky_blue"
+                        app:fontName="Raleway-Medium.ttf" />
+                </LinearLayout>
+
+
                 <RelativeLayout
                     android:id="@+id/btn_register"
                     android:layout_width="match_parent"

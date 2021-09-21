@@ -18,5 +18,8 @@ public interface OrderDetailNavigator extends BaseNavigator {
     void throwable(Throwable throwable);
 
     void onSuccessOrderStatusUpdated(JsonObject jsonObject, String status);
+
+    void onSuccessPaymentStatus(JsonObject jsonObject, String des, String pType);
+
     void onSuccessOrderCompleted(JsonObject jsonObject);
 }

@@ -56,8 +56,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!=null) {
-            String action = bundle.getString("action");
-            mViewModel.getmDataManger().setNotificationType(action);
+            String type = bundle.getString("type");
+            mViewModel.getmDataManger().setNotificationType(type);
         }
         if (mViewModel.getmDataManger().getCurrentUserId() != -1) {
             Intent dashboardIntent = new Intent(this, DashboardActivity.class);
@@ -131,8 +131,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_reg:
-                String url = "https://apnaonlines.com/register";
-//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 Intent browserIntent = new Intent(this, RegisterActivity.class);
                 startActivity(browserIntent);
                 break;

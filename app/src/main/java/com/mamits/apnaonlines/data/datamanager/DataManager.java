@@ -115,6 +115,11 @@ public class DataManager implements IDataManager {
     }
 
     @Override
+    public void checkPaymentStatus(Activity mActivity, String accessToken, String order_id, ResponseListener responseListener) {
+        mApiHelper.checkPaymentStatus(mActivity, accessToken, order_id, responseListener);
+    }
+
+    @Override
     public void completeOrder(Activity mActivity, String accessToken, String des, int order_id, String pType, File uploadedFile, ResponseListener responseListener) {
         mApiHelper.completeOrder(mActivity, accessToken, des, order_id, pType, uploadedFile, responseListener);
     }
@@ -200,6 +205,11 @@ public class DataManager implements IDataManager {
     }
 
     @Override
+    public void savePaymentResponse(Activity mActivity, String accessToken, JSONObject object, ResponseListener responseListener) {
+        mApiHelper.savePaymentResponse(mActivity, accessToken, object, responseListener);
+    }
+
+    @Override
     public String getAccessToken() {
         return mPreferenceHelper.getAccessToken();
     }
@@ -267,6 +277,16 @@ public class DataManager implements IDataManager {
     @Override
     public void setNotificationType(String type) {
         mPreferenceHelper.setNotificationType(type);
+    }
+
+    @Override
+    public boolean isPaymentOpen() {
+        return mPreferenceHelper.isPaymentOpen();
+    }
+
+    @Override
+    public void setPaymentOpen(boolean isOpen) {
+        mPreferenceHelper.setPaymentOpen(isOpen);
     }
 
     @Override

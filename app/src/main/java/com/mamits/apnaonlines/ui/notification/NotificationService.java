@@ -21,7 +21,7 @@ import com.mamits.apnaonlines.ui.activity.MainActivity;
 
 public class NotificationService extends FirebaseMessagingService {
     private static final String TAG = "NotificationService";
-    String title, message, action;
+    String title, message, type;
     private String CHANNEL_ID;
 
     @Override
@@ -34,7 +34,7 @@ public class NotificationService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         if (remoteMessage.getData().size() > 0) {
-            action = remoteMessage.getData().get("type");
+            type = remoteMessage.getData().get("type");
         }
 
         // Check if message contains a notification payload.
@@ -48,13 +48,13 @@ public class NotificationService extends FirebaseMessagingService {
                 if (message == null) {
                     message = "";
                 }
-                if (action == null) {
-                    action = "";
+                if (type == null) {
+                    type = "";
                 }
                 Log.d("title ", title);
                 Log.d("message ", message);
-                Log.d("action ", action);
-                notificationManager(title, message, action);
+                Log.d("type ", type);
+                notificationManager(title, message, type);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -62,7 +62,7 @@ public class NotificationService extends FirebaseMessagingService {
         }
     }
 
-    private void notificationManager(String title, String notificationMsg, String action) {
+    private void notificationManager(String title, String notificationMsg, String type) {
         int NOTIFICATION_ID = 234;
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -82,13 +82,13 @@ public class NotificationService extends FirebaseMessagingService {
 
 
             Intent resultIntent = new Intent(this, MainActivity.class);
-            resultIntent.putExtra("action", action);
+            resultIntent.putExtra("type", type);
             resultIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_ONE_SHOT);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.logo)
+                    .setSmallIcon(R.drawable.ic_notification)
                     .setColor(ContextCompat.getColor(this, R.color.sky_blue))
                     .setContentTitle(title)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(notificationMsg))
@@ -99,7 +99,7 @@ public class NotificationService extends FirebaseMessagingService {
 
         } else {
             Intent resultIntent = new Intent(this, MainActivity.class);
-            resultIntent.putExtra("action", action);
+            resultIntent.putExtra("type", type);
             PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_ONE_SHOT);
             Notification n = new Notification.Builder(this)
                     .setContentTitle(title)
@@ -107,7 +107,7 @@ public class NotificationService extends FirebaseMessagingService {
                     .setContentText(notificationMsg)
                     .setAutoCancel(true)
                     .setContentIntent(resultPendingIntent)
-                    .setSmallIcon(R.drawable.logo)
+                    .setSmallIcon(R.drawable.ic_notification)
                     .build();
             NotificationManager notificationManager1 = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             notificationManager1.notify(NOTIFICATION_ID, n);

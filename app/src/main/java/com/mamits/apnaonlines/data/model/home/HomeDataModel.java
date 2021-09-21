@@ -25,13 +25,13 @@ public class HomeDataModel implements Serializable {
     private int totalcomplete;
 
     @SerializedName("paytoadmin")
-    private int paytoadmin;
+    private double paytoadmin;
 
-    public int getPaytoadmin() {
+    public double getPaytoadmin() {
         return paytoadmin;
     }
 
-    public void setPaytoadmin(int paytoadmin) {
+    public void setPaytoadmin(double paytoadmin) {
         this.paytoadmin = paytoadmin;
     }
 

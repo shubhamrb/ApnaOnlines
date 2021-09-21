@@ -74,7 +74,7 @@ public class OrderDetailViewModel extends BaseViewModel<OrderDetailNavigator> {
 
         if (NetworkUtils.isNetworkConnected(mActivity)) {
             getmNavigator().get().showProgressBars();
-            getmDataManger().completeOrder(mActivity, getmDataManger().getAccessToken(), des, order_id, pType,uploadedFile, new ResponseListener() {
+            getmDataManger().completeOrder(mActivity, getmDataManger().getAccessToken(), des, order_id, pType, uploadedFile, new ResponseListener() {
                 @Override
                 public void onSuccess(JsonObject jsonObject) {
                     try {
@@ -117,4 +117,50 @@ public class OrderDetailViewModel extends BaseViewModel<OrderDetailNavigator> {
         }
     }
 
+    public void checkPaymentStatus(Activity mActivity, String order_id, String des, String pType) {
+
+        if (NetworkUtils.isNetworkConnected(mActivity)) {
+            getmNavigator().get().showProgressBars();
+            getmDataManger().checkPaymentStatus(mActivity, getmDataManger().getAccessToken(), order_id, new ResponseListener() {
+                @Override
+                public void onSuccess(JsonObject jsonObject) {
+                    try {
+                        getmNavigator().get().hideProgressBars();
+
+                        getmNavigator().get().onSuccessPaymentStatus(jsonObject, des, pType);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailed(Throwable throwable) {
+                    try {
+                        getmNavigator().get().hideProgressBars();
+
+                        if (throwable instanceof ANError) {
+                            ANError anError = (ANError) throwable;
+                            if (anError.getErrorBody() != null) {
+                                JSONObject object = new JSONObject(anError.getErrorBody());
+                                try {
+                                    getmNavigator().get().checkValidation(anError.getErrorCode(), object.optString("message"));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                        } else {
+                            throwable.printStackTrace();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+        } else {
+            getmNavigator().get().checkInternetConnection(mActivity.getResources().getString(R.string.check_internet_connection));
+
+        }
+    }
 }

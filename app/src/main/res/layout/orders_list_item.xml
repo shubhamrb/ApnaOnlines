@@ -117,6 +117,17 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/_9ssp"
                     app:fontName="Montserrat-SemiBold.ttf" />
+
+                <com.mamits.apnaonlines.ui.customviews.CustomTextView
+                    android:id="@+id/txt_pay_method"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:singleLine="true"
+                    android:text="Online"
+                    android:textColor="@color/sky_blue"
+                    android:textSize="@dimen/_9ssp"
+                    app:fontName="Montserrat-SemiBold.ttf" />
             </LinearLayout>
 
         </RelativeLayout>

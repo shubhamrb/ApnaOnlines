@@ -16,4 +16,6 @@ public interface PaymentActivityNavigator extends BaseNavigator {
     void checkInternetConnection(String message);
 
     void onSuccessCfsToken(JsonObject jsonObject);
+
+    void onSuccessSavePaymentResponse(JsonObject jsonObject);
 }

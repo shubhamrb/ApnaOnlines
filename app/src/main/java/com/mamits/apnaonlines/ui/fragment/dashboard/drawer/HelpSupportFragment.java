@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.mamits.apnaonlines.BR;
 import com.mamits.apnaonlines.R;
@@ -91,13 +90,23 @@ public class HelpSupportFragment extends BaseFragment<FragmentHelpSupportBinding
     public void onSuccessHelp(JsonObject jsonObject) {
         if (jsonObject != null) {
             if (jsonObject.get("status").getAsBoolean()) {
-                JsonObject data=jsonObject.get("data").getAsJsonObject();
-                String name=data.get("name").getAsString();
-                String email=data.get("Email").getAsString();
-                String number=data.get("phone").getAsString();
-                binding.txtName.setText(name);
-                binding.txtEmail.setText(email);
-                binding.txtNumber.setText(number);
+                JsonObject data = jsonObject.get("data").getAsJsonObject();
+                String number = data.get("phone").getAsString();
+                String name = data.get("name").getAsString();
+                String email = data.get("Email").getAsString();
+
+                if (number != null && number.trim().length() != 0) {
+                    binding.txtName.setText(name);
+                    binding.txtEmail.setText(email);
+                    binding.txtNumber.setText(number);
+                    binding.llForm.setVisibility(View.VISIBLE);
+                } else {
+                    String message = data.get("message").getAsString();
+                    binding.txtLabel.setText(name);
+                    binding.txtMsg.setText(message);
+                    binding.llSub.setVisibility(View.VISIBLE);
+                }
+
 
             } else {
                 int messageId = jsonObject.get("messageId").getAsInt();
