@@ -98,7 +98,6 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.OrdersViewHo
                 gotoOrderDetail(v, position);
             });
         }
-
     }
 
     private void gotoOrderDetail(View v, int position) {

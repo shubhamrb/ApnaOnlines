@@ -476,6 +476,8 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
                     if (acceptOrderDialog != null && acceptOrderDialog.isShowing()) {
                         acceptOrderDialog.dismiss();
                     }
+                    binding.txtStatus.setText("Accept");
+                    binding.txtH1.setText("Accepted Order");
                     binding.chatBottom.setVisibility(View.VISIBLE);
                 }
                 binding.bottom.setVisibility(View.GONE);
@@ -524,6 +526,9 @@ public class OrderDetailsFragment extends BaseFragment<FragmentOrderDetailsBindi
                 if (completeOrderDialog != null && completeOrderDialog.isShowing()) {
                     completeOrderDialog.dismiss();
                 }
+                binding.txtStatus.setText("Complete");
+                binding.txtH1.setText("Completed Order");
+
                 binding.btnComplete.setVisibility(View.GONE);
                 binding.chatBottom.setWeightSum(1);
                 Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
