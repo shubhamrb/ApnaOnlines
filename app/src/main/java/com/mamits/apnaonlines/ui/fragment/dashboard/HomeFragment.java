@@ -101,6 +101,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
             List<String> methodList = new ArrayList<>();
             methodList.add("Cashfree");
             //methodList.add("Paytm");
+//            methodList.add("Phonepe");
 
             payMethodAdapter = new ArrayAdapter(mContext, R.layout.spinner_layout, methodList);
             spinner_method.setAdapter(payMethodAdapter);
@@ -115,14 +116,17 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding, HomeViewMode
                     int position = spinner_method.getSelectedItemPosition();
                     Intent payIntent = new Intent(mContext, PaymentActivity.class);
                     payIntent.putExtra("amount", String.valueOf(model.getPaytoadmin()));
-                    if (position == 0) {
+                    if (spinner_method.getSelectedItem().equals("Cashfree")) {
                         paymentDialog.dismiss();
                         /*cashfree*/
 
                         payIntent.putExtra("appid", keyModel.getAppid());//"936476e4b0e75a0300a64fc14639"
-                    } else {
+                    } else if (spinner_method.getSelectedItem().equals("Paytm")) {
                         /*paytm*/
                         payIntent.putExtra("m_id", keyModel.getPaytm_merchant_mid());
+                    } else if (spinner_method.getSelectedItem().equals("Phonepe")) {
+                        /*paytm*/
+                        payIntent.putExtra("phonepe_m_id", "MERCHANTUAT");
                     }
 
                     startActivity(payIntent);

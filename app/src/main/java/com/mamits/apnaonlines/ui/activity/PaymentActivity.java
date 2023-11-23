@@ -28,17 +28,26 @@ import com.mamits.apnaonlines.viewmodel.activity.PaymentActivityViewModel;
 import com.paytm.pgsdk.PaytmOrder;
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback;
 import com.paytm.pgsdk.TransactionManager;
+import com.phonepe.intent.sdk.api.B2BPGRequest;
+import com.phonepe.intent.sdk.api.B2BPGRequestBuilder;
+import com.phonepe.intent.sdk.api.PhonePe;
+import com.phonepe.intent.sdk.api.PhonePeInitException;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import javax.inject.Inject;
 
-public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, PaymentActivityViewModel>
-        implements PaymentActivityNavigator, View.OnClickListener, PaytmPaymentTransactionCallback {
+public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, PaymentActivityViewModel> implements PaymentActivityNavigator, View.OnClickListener, PaytmPaymentTransactionCallback {
     String TAG = "PaymentActivity";
     @Inject
     PaymentActivityViewModel mViewModel;
@@ -46,6 +55,9 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
     private String orderId, customerName, customerPhone, customerEmail, amount, appid, m_id;
     private static final String STAGE_CALLBACK_URL_PAYTM = "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=";
     private static final String PROD_CALLBACK_URL_PAYTM = "https://securegw.paytm.in/theia/paytmCallback?ORDER_ID=";
+    private String PHONEPE_MERCHANT_ID = "APNAONLINES";
+    private String PHONEPE_SALT = "331a8273-c2d5-4590-9369-2b12f1bb1e1e";
+    private String apiEndPoint = "/pg/v1/pay";
 
     @Override
     public int getBindingVariable() {
@@ -63,6 +75,9 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
         mViewModel = getMyViewModel();
         mViewModel.setNavigator(this);
 
+        /*phonepe sdk initialized*/
+        PhonePe.init(this);
+
         binding.btnHome.setOnClickListener(this);
         if (!mViewModel.getmDataManger().isPaymentOpen()) {
             mViewModel.getmDataManger().setPaymentOpen(true);
@@ -75,6 +90,8 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
                 appid = getIntent().getStringExtra("appid");
             } else if (getIntent().hasExtra("m_id")) {
                 m_id = getIntent().getStringExtra("m_id");
+            } else if (getIntent().hasExtra("phonepe_m_id")) {
+                PHONEPE_MERCHANT_ID = getIntent().getStringExtra("phonepe_m_id");
             }
             startPayment();
         }
@@ -89,6 +106,70 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
             getCfsToken();
         } else if (m_id != null) {
             getPaytmToken();
+        } else if (PHONEPE_MERCHANT_ID != null) {
+            JSONObject data = new JSONObject();
+            try {
+                data.put("merchantTransactionId", orderId);
+                data.put("merchantId", PHONEPE_MERCHANT_ID);
+                data.put("amount", 100);
+                data.put("mobileNumber", customerPhone);
+                data.put("callbackUrl", "https://webhook.site/callback-url");
+
+                JSONObject paymentInstrument = new JSONObject();
+                paymentInstrument.put("type", "UPI_INTENT");
+                paymentInstrument.put("targetApp", "com.phonepe.app");
+                data.put("paymentInstrument", paymentInstrument);
+
+                JSONObject deviceContext = new JSONObject();
+                deviceContext.put("deviceOS", "ANDROID");
+
+                data.put("deviceContext", deviceContext);
+                String payloadBase64;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    payloadBase64 = Base64.getEncoder().encodeToString(data.toString().getBytes(Charset.defaultCharset()));
+                } else {
+                    payloadBase64 = android.util.Base64.encodeToString(data.toString().getBytes(), android.util.Base64.DEFAULT);
+                }
+                String checksum = sha256(payloadBase64 + apiEndPoint + PHONEPE_SALT) + "###1";
+                String checksum1 = sha256("/pg/v1/status/" + PHONEPE_MERCHANT_ID + "/" + orderId + PHONEPE_SALT) + "###1";
+
+                Log.d(TAG, "merchantTransactionId : " + orderId);
+                Log.d(TAG, "payloadBase64 : " + payloadBase64);
+                Log.d(TAG, "checksum : " + checksum);
+                Log.d(TAG, "checksum1 : " + checksum1);
+
+                B2BPGRequest b2BPGRequest = new B2BPGRequestBuilder()
+                        .setData(payloadBase64)
+                        .setChecksum(checksum)
+                        .setUrl(apiEndPoint)
+                        .build();
+
+                try {
+                    Intent intent = PhonePe.getImplicitIntent(this, b2BPGRequest, "com.phonepe.app");
+                    startActivityForResult(intent, 1);
+                } catch (PhonePeInitException e) {
+                    e.printStackTrace();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private String sha256(String base64) {
+        try {
+            byte[] bytes = base64.getBytes(StandardCharsets.UTF_8);
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] digest = md.digest(bytes);
+            StringBuilder result = new StringBuilder();
+            for (byte b : digest) {
+                result.append(String.format("%02x", b));
+            }
+            return result.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
         }
 
     }
@@ -246,6 +327,25 @@ public class PaymentActivity extends BaseActivity<ActivityPaymentBinding, Paymen
 
         } else if (requestCode == 101 && data != null) {
             binding.txtMessage.setText(data.getStringExtra("nativeSdkForMerchantMessage") + "\n" + data.getStringExtra("response"));
+        } else if (requestCode == 1 && data != null) {
+            if (resultCode == RESULT_OK) {
+                // The transaction was successful
+                String response = data.getStringExtra("response");
+                Log.d("response : ", "PhonePe Transaction Success. Response: " + response);
+
+                // Parse the response and handle it as needed
+                // Example: You might want to check the status and other details
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    String status = jsonResponse.optString("status");
+                    // Handle the status and other details accordingly
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // The transaction was not successful
+                Log.d("response : ", "PhonePe Transaction Failed.");
+            }
         }
     }
 

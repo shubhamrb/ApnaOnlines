@@ -5,10 +5,13 @@
 
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <application
         android:name=".Application"
         android:allowBackup="true"
@@ -76,6 +79,25 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider_paths" />
         </provider>
+
+        <!-- Keep it true in UAT environment for both the flags-->
+        <meta-data
+            android:name="com.phonepe.android.sdk.isUAT"
+            android:value="false"/>
+        <meta-data
+            android:name="com.phonepe.android.sdk.isSimulator"
+            android:value="false"/>
+
+        <!-- The value will be the MID-->
+        <meta-data
+            android:name="com.phonepe.android.sdk.MerchantId"
+            android:value="APNAONLINES"/>
+
+        <!-- For UAT, App Id is not required.
+        Make sure to add the following and you get the APP Id for Production after UAT Sign-off -->
+        <!--<meta-data
+            android:name="com.phonepe.android.sdk.AppId"
+            android:value="<your app id given by PhonePe>"/>-->
     </application>
 
 </manifest>
